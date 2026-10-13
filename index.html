@@ -1937,14 +1937,38 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   function scrollBottom(){ output.scrollTop = output.scrollHeight; }
   // On a phone a tall panel scrolled to the bottom hides its own beginning,
   // so bring the panel's top into view instead.
+  function smoothScrollOutput(top){
+    output.scrollTo({ top: Math.max(0, top), behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
+  }
+  let panelScrollWatch = null;
   function scrollToPanel(panel){
-    if(!isNarrow()){ scrollBottom(); return; }
-    // wait a frame so the panel's content exists and the output can scroll that far
-    requestAnimationFrame(() => {
+    if(panelScrollWatch){ panelScrollWatch.stop(); panelScrollWatch = null; }
+    const aim = () => {
       const echo = panel.previousElementSibling;
       const anchor = (echo && echo.classList.contains('entry')) ? echo : panel;
-      output.scrollTop = Math.max(0, anchor.offsetTop - 6);
-    });
+      const top = anchor.getBoundingClientRect().top - output.getBoundingClientRect().top + output.scrollTop - 6;
+      smoothScrollOutput(top);
+    };
+    // wait a frame so the panel's content exists and the output can scroll that far
+    requestAnimationFrame(aim);
+
+    // content (thumbnails, images) can still be growing for a moment after the panel
+    // opens; re-aim while it settles so the panel never ends up off screen.
+    if(typeof ResizeObserver === 'undefined') return;
+    let done = false;
+    const ro = new ResizeObserver(() => { if(!done) aim(); });
+    ro.observe(panel);
+    const stop = () => {
+      if(done) return;
+      done = true;
+      ro.disconnect();
+      clearTimeout(timer);
+      ['wheel', 'touchstart', 'keydown'].forEach(t => output.removeEventListener(t, stop));
+    };
+    const timer = setTimeout(stop, 1500);
+    // the person scrolling themselves always wins
+    ['wheel', 'touchstart', 'keydown'].forEach(t => output.addEventListener(t, stop, { passive: true }));
+    panelScrollWatch = { stop };
   }
 
   function el(tag, cls, html){
@@ -2730,7 +2754,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     box.appendChild(rowButton('work/', 'ls work', 'tag-dir', 'dir · 3 items'));
     box.appendChild(rowButton('journal/', 'ls journal', 'tag-dir', 'dir · 3 items'));
     rootPanelBody.appendChild(box);
-    if(isNarrow()) output.scrollTop = 0; else scrollBottom();
+    if(isNarrow()) smoothScrollOutput(0); else scrollBottom();
   }
 
   function printDirListing(pathStr){
