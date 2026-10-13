@@ -418,6 +418,7 @@
     flex:1 1 auto;
     overflow-y:auto;
     padding:18px 0;
+    padding-bottom:calc(18px + var(--room, 0px));
   }
 
   /* minimal scrollbars that only show while scrolling */
@@ -907,7 +908,7 @@
     body{ font-size:14px; -webkit-text-size-adjust:100%; }
     .term{ padding:0 14px; }
     .topbar{ padding:calc(12px + env(safe-area-inset-top)) 0 10px; }
-    .output{ padding:14px 0; position:relative; -webkit-overflow-scrolling:touch; }
+    .output{ padding:14px 0; padding-bottom:calc(14px + var(--room, 0px)); position:relative; -webkit-overflow-scrolling:touch; }
     .output::-webkit-scrollbar{ width:0; }
 
     .boot-intro-text{ padding-right:68px; }
@@ -1934,7 +1935,17 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     a.remove();
   }
 
-  function scrollBottom(){ output.scrollTop = output.scrollHeight; }
+  // extra blank room (px) added under the output so a short panel at the very end
+  // of the page still has somewhere to scroll to and can sit in the middle of the view
+  let centerRoom = 0;
+  function setCenterRoom(px){
+    centerRoom = px;
+    output.style.setProperty('--room', px + 'px');
+  }
+  function scrollBottom(){
+    if(centerRoom) setCenterRoom(0);
+    output.scrollTop = output.scrollHeight;
+  }
   // On a phone a tall panel scrolled to the bottom hides its own beginning,
   // so bring the panel's top into view instead.
   function smoothScrollOutput(top){
@@ -1944,9 +1955,25 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   function scrollToPanel(panel){
     if(panelScrollWatch){ panelScrollWatch.stop(); panelScrollWatch = null; }
     const aim = () => {
-      const echo = panel.previousElementSibling;
-      const anchor = (echo && echo.classList.contains('entry')) ? echo : panel;
-      const top = anchor.getBoundingClientRect().top - output.getBoundingClientRect().top + output.scrollTop - 6;
+      if(!panel.isConnected) return;
+      const oRect = output.getBoundingClientRect();
+      const pRect = panel.getBoundingClientRect();
+      const viewH = output.clientHeight;
+      const panelTop = pRect.top - oRect.top + output.scrollTop;
+      let top;
+      if(pRect.height >= viewH - 24){
+        // too tall to centre: show its beginning (starting from the command that opened it)
+        const echo = panel.previousElementSibling;
+        const anchor = (echo && echo.classList.contains('entry')) ? echo : panel;
+        top = anchor.getBoundingClientRect().top - oRect.top + output.scrollTop - 6;
+      } else {
+        top = panelTop + pRect.height / 2 - viewH / 2;
+      }
+      top = Math.max(0, top);
+      // make sure the page is long enough to scroll that far
+      const natural = output.scrollHeight - centerRoom;
+      const need = Math.max(0, Math.ceil(top + viewH - natural));
+      if(need !== centerRoom) setCenterRoom(need);
       smoothScrollOutput(top);
     };
     // wait a frame so the panel's content exists and the output can scroll that far
