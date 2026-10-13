@@ -941,26 +941,6 @@
     .compose-send{ padding:10px 18px; }
     .compose-type{ padding:5px 12px; }
 
-    .mobile-dock{
-      flex:none;
-      display:flex;
-      gap:6px;
-      overflow-x:auto;
-      padding:10px 0 8px;
-      border-top:1px solid var(--line);
-      scrollbar-width:none;
-    }
-    .mobile-dock::-webkit-scrollbar{ display:none; }
-    .dock-btn{
-      flex:none;
-      border:1px solid var(--line);
-      color:var(--fg-dim);
-      padding:7px 12px;
-      line-height:1.2;
-    }
-    .dock-btn:active, .dock-btn:focus-visible{ color:var(--fg); border-color:var(--fg-dim); }
-    .dock-btn.kbd{ color:var(--dir); border-color:var(--dir); }
-
     .inputrow{ padding:8px 0 calc(12px + env(safe-area-inset-bottom)); border-top:none; }
     .inputrow input{ font-size:16px; }
     .inputrow.collapsed{ display:none; }
@@ -1010,16 +990,6 @@
   </div>
 
   <div class="output" id="output" aria-live="polite"></div>
-
-  <nav class="mobile-dock" id="mobileDock" aria-label="quick commands">
-    <button class="dock-btn" type="button" data-cmd="about">about</button>
-    <button class="dock-btn" type="button" data-cmd="contact">contact</button>
-    <button class="dock-btn" type="button" data-cmd="ls work/photography">photo</button>
-    <button class="dock-btn" type="button" data-cmd="ls work/videography">video</button>
-    <button class="dock-btn" type="button" data-cmd="ls work">work</button>
-    <button class="dock-btn" type="button" data-cmd="ls journal">journal</button>
-    <button class="dock-btn" type="button" data-cmd="help">help</button>
-  </nav>
 
   <div class="inputrow" id="inputForm">
     <label class="promptlabel" id="promptLabel" for="cmdInput">visitor@elijahhalford:~$</label>
@@ -2826,7 +2796,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     });
     body.appendChild(sc);
     if(isNarrow()){
-      body.appendChild(el('div', 'line dim help-hint', esc('on a phone? tap any file or folder, or use the row of buttons at the bottom.')));
+      body.appendChild(el('div', 'line dim help-hint', esc('on a phone? tap any file or folder, or type a command below.')));
     }
     body.appendChild(el('div', 'line dim help-hint', esc('p.s. not everything here is a command. some words want to be clicked, and some commands mean more than they say.')));
   }
@@ -3465,6 +3435,11 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   function surprise(){
     if(surpriseUp) return;
     surpriseUp = true;
+    // on phones, drop the on-screen keyboard so the whole image is visible
+    input.blur();
+    if(document.activeElement && document.activeElement !== document.body){
+      document.activeElement.blur();
+    }
     const o = el('div', 'surprise');
     const img = document.createElement('img');
     img.src = SURPRISE_DATA_URI;
