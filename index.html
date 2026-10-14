@@ -268,10 +268,18 @@
   .lightbox-next{ right:20px; }
 
   @media (max-width: 760px){
-    .app-shell.gallery-open .term,
-    .app-shell.video-gallery-open .term{ display:none; }
+    .gallery-pane, .video-gallery-pane{
+      position:fixed; top:0; left:0; z-index:40; width:100vw; border:none; background:var(--bg);
+      transition:transform 0.4s cubic-bezier(.4,0,.2,1), visibility 0s linear 0.4s;
+      visibility:hidden;
+    }
+    .gallery-pane{ transform:translateX(100%); }
+    .video-gallery-pane{ transform:translateX(-100%); }
     .app-shell.gallery-open .gallery-pane,
-    .app-shell.video-gallery-open .video-gallery-pane{ width:100vw; border:none; }
+    .app-shell.video-gallery-open .video-gallery-pane{
+      width:100vw; border:none; transform:none; visibility:visible;
+      transition:transform 0.4s cubic-bezier(.4,0,.2,1), visibility 0s;
+    }
     .gallerybody{ min-width:0; padding:14px 14px calc(24px + env(safe-area-inset-bottom)); }
     .galleryhead{ padding:calc(12px + env(safe-area-inset-top)) 14px 10px; }
     .gallery-grid, .video-list{ column-gap:8px; }
@@ -807,6 +815,18 @@
   .crt-line{ flex:none; white-space:nowrap; overflow:hidden; text-overflow:clip; padding:1px 0; }
   @media (max-width: 1100px){ .crt-gutter{ display:none; } }
 
+  /* ---- gallery: back to top ---- */
+  @media (min-width: 761px){ .gallery-pane, .video-gallery-pane{ position:relative; } }
+  .gallery-top{
+    position:absolute; right:18px; bottom:calc(18px + env(safe-area-inset-bottom));
+    padding:7px 12px; border:1px solid var(--fg-dim); background:var(--bg); color:var(--fg);
+    opacity:0; transform:translateY(8px); pointer-events:none;
+    transition:opacity 0.25s ease, transform 0.25s ease;
+    z-index:2;
+  }
+  .gallery-top.show{ opacity:1; transform:none; pointer-events:auto; }
+  .gallery-top:hover, .gallery-top:focus-visible{ border-color:var(--fg); }
+
   /* ---- settings dropdown ---- */
   .listing .settings-toggle{ display:flex; align-items:baseline; gap:0; }
   .listing .tag-settings{ color:var(--dir); }
@@ -965,6 +985,7 @@
     <button class="closebtn" id="videoGalleryClose" type="button" aria-label="close videography">×</button>
   </div>
   <div class="gallerybody" id="videoGalleryBody"></div>
+  <button class="gallery-top" type="button" aria-label="back to top of videography">↑ top</button>
 </div>
 
 <div class="term">
@@ -987,6 +1008,7 @@
     <button class="closebtn" id="galleryClose" type="button" aria-label="close photography">×</button>
   </div>
   <div class="gallerybody" id="galleryBody"></div>
+  <button class="gallery-top" type="button" aria-label="back to top of photography">↑ top</button>
 </div>
 </div>
 
@@ -1893,6 +1915,16 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   const videoGalleryTitle = document.getElementById('videoGalleryTitle');
   const videoGalleryClose = document.getElementById('videoGalleryClose');
   const videoGalleryBody = document.getElementById('videoGalleryBody');
+  // "↑ top" buttons: appear once you've scrolled a gallery down a bit
+  [galleryPane, videoGalleryPane].forEach(pane => {
+    const body = pane.querySelector('.gallerybody');
+    const btn = pane.querySelector('.gallery-top');
+    if(!body || !btn) return;
+    const sync = () => btn.classList.toggle('show', body.scrollTop > 500);
+    body.addEventListener('scroll', sync, { passive: true });
+    btn.addEventListener('click', () => body.scrollTo({ top: 0, behavior: REDUCED_MOTION ? 'auto' : 'smooth' }));
+    sync();
+  });
 
   // narrow = phone-sized layout; coarse = touch-first device. On either, never
   // auto-focus the command line (it would pop the on-screen keyboard on every tap).
@@ -1935,7 +1967,8 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     output.style.setProperty('--room', px + 'px');
   }
   function scrollBottom(){
-    if(centerRoom) setCenterRoom(0);
+    // on phones the extra room is still holding a centred panel in place; leave it
+    if(centerRoom && !isNarrow()) setCenterRoom(0);
     output.scrollTop = output.scrollHeight;
   }
   // On a phone a tall panel scrolled to the bottom hides its own beginning,
@@ -1944,8 +1977,23 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     output.scrollTo({ top: Math.max(0, top), behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
   }
   let panelScrollWatch = null;
+  let trimTimer = null;
   function scrollToPanel(panel){
     if(panelScrollWatch){ panelScrollWatch.stop(); panelScrollWatch = null; }
+    if(!isNarrow()){
+      // desktop: no auto-centring. Only scroll if the new panel would open out of sight.
+      if(centerRoom) setCenterRoom(0);
+      requestAnimationFrame(() => {
+        if(!panel.isConnected) return;
+        const oRect = output.getBoundingClientRect();
+        const pRect = panel.getBoundingClientRect();
+        if(pRect.top >= oRect.top && pRect.top < oRect.bottom - 80) return; // already in view
+        const echo = panel.previousElementSibling;
+        const anchor = (echo && echo.classList.contains('entry')) ? echo : panel;
+        smoothScrollOutput(anchor.getBoundingClientRect().top - oRect.top + output.scrollTop - 6);
+      });
+      return;
+    }
     const aim = () => {
       if(!panel.isConnected) return;
       const oRect = output.getBoundingClientRect();
@@ -1965,8 +2013,17 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       // make sure the page is long enough to scroll that far
       const natural = output.scrollHeight - centerRoom;
       const need = Math.max(0, Math.ceil(top + viewH - natural));
-      if(need !== centerRoom) setCenterRoom(need);
+      // never shrink the room below where the view is right now, or it would snap;
+      // trim it to the exact amount once the glide has finished
+      const holdNow = Math.max(0, Math.ceil(output.scrollTop + viewH - natural));
+      setCenterRoom(Math.max(need, holdNow));
       smoothScrollOutput(top);
+      clearTimeout(trimTimer);
+      trimTimer = setTimeout(() => {
+        const nat = output.scrollHeight - centerRoom;
+        const exact = Math.max(0, Math.ceil(output.scrollTop + viewH - nat));
+        if(exact < centerRoom) setCenterRoom(exact);
+      }, REDUCED_MOTION ? 0 : 900);
     };
     // wait a frame so the panel's content exists and the output can scroll that far
     requestAnimationFrame(aim);
@@ -2003,8 +2060,14 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
 
   let currentEntry = null;
 
+  // on phones, removing the old panel would shrink the page and snap the scroll up;
+  // hold its space as extra room until the new panel has been centred
+  function holdSpace(elm){
+    if(isNarrow() && elm && elm.isConnected) setCenterRoom(centerRoom + elm.offsetHeight);
+  }
+
   function newEntry(){
-    if(currentEntry){ currentEntry.remove(); currentEntry = null; }
+    if(currentEntry){ holdSpace(currentEntry); currentEntry.remove(); currentEntry = null; }
     currentEntry = el('div', 'entry');
     output.appendChild(currentEntry);
     return currentEntry;
@@ -2022,7 +2085,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     const line = el('div', 'line echo');
     line.innerHTML = '<span class="prompt">' + esc(promptText()) + '</span> ' + esc(cmdText);
     currentEntry.appendChild(line);
-    scrollBottom();
   }
 
   const flashEl = document.getElementById('flash');
@@ -2043,6 +2105,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       if(!navigatingBack && currentPanelCmd){
         panelNavStack.push(currentPanelCmd);
       }
+      holdSpace(currentPanel);
       currentPanel.remove();
       currentPanel = null;
     }
@@ -2070,10 +2133,13 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       closeBtn.type = 'button';
       closeBtn.setAttribute('aria-label', 'close ' + label);
       closeBtn.addEventListener('click', () => {
-        panel.remove();
         if(currentPanel === panel) currentPanel = null;
         panelNavStack = [];
         currentPanelCmd = null;
+        collapseAway(panel);
+        if(currentEntry && currentEntry === panel.previousElementSibling){
+          collapseAway(currentEntry); currentEntry = null;
+        }
         focusInput();
       });
       actions.appendChild(closeBtn);
@@ -2084,8 +2150,26 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     panel.appendChild(body);
     output.appendChild(panel);
     currentPanel = panel;
+    if(!REDUCED_MOTION){
+      panel.animate([{ opacity:0, transform:'translateY(6px)' }, { opacity:1, transform:'none' }],
+        { duration:260, easing:'cubic-bezier(.2,.7,.2,1)' });
+    }
     scrollToPanel(panel);
     return body;
+  }
+
+  // shrink an element's height to nothing while fading it, then remove it
+  function collapseAway(elm){
+    if(REDUCED_MOTION || !elm.isConnected){ elm.remove(); return; }
+    const h = elm.offsetHeight;
+    const cs = getComputedStyle(elm);
+    elm.style.overflow = 'hidden';
+    elm.style.pointerEvents = 'none';
+    const a = elm.animate([
+      { height:h + 'px', opacity:1, marginTop:cs.marginTop, marginBottom:cs.marginBottom },
+      { height:'0px', opacity:0, marginTop:'0px', marginBottom:'0px' }
+    ], { duration:280, easing:'cubic-bezier(.4,0,.2,1)', fill:'forwards' });
+    a.finished.then(() => elm.remove()).catch(() => elm.remove());
   }
 
   function printFile(name, content, originCmd){
@@ -2450,6 +2534,12 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   let G = G_DEFAULT;           // gravity strength, px / s^2 (settings slider)
   let BOUNCE = BOUNCE_DEFAULT; // how much speed survives a bounce (settings slider)
 
+  // a window's "mass" from its area: ~1 for a typical pop-out, up to ~2.2 for the biggest
+  const MASS_REF_AREA = 420 * 300;
+  function winMass(ww, hh){
+    return Math.max(0.55, Math.min(2.2, Math.sqrt((ww * hh) / MASS_REF_AREA)));
+  }
+
   function floatTick(t){
     const dt = Math.min(0.05, (t - floatLastT) / 1000);
     floatLastT = t;
@@ -2477,15 +2567,18 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
         }
         damp = sp > w.cruise * 1.5 ? 0.82 : 1;
       } else if(floatPhysics === 'gravity' || floatPhysics === 'antigravity'){
-        if(w.speedF > 0.05) w.vy += (floatPhysics === 'gravity' ? G : -G) * dt;
+        // heavier (bigger) windows are pulled harder
+        if(w.speedF > 0.05) w.vy += (floatPhysics === 'gravity' ? G : -G) * winMass(ww, hh) * dt;
         const floor = floatPhysics === 'gravity' ? (w.y + hh >= H - 0.5) : (w.y <= 0.5);
         if(floor){ w.vx *= Math.exp(-2.5 * dt); }
         damp = BOUNCE;
       } else if(floatPhysics === 'magnet'){
         const dx = mouseX - (w.x + ww / 2), dy = mouseY - (w.y + hh / 2);
         const d = Math.hypot(dx, dy) || 1;
-        w.vx += dx / d * 900 * dt;
-        w.vy += dy / d * 900 * dt;
+        // the same pull moves a heavy window less
+        const m = winMass(ww, hh);
+        w.vx += dx / d * 900 / m * dt;
+        w.vy += dy / d * 900 / m * dt;
         w.vx *= Math.exp(-1.2 * dt); w.vy *= Math.exp(-1.2 * dt);
         damp = 0.7;
       }
