@@ -34,16 +34,6 @@ window.SITE_CONTENT = {
     "description": "Another landmark on my commute in Groveland."
    },
    {
-    "id": "1rXJmEp9DkZZMl72YzRh44coTb-WJDKQ6",
-    "file": "06-16-26_Portra160 (33).jpg",
-    "date": "2026-06-16",
-    "camera": "canon eos 650",
-    "lens": "canon ef 50mm f/1.4",
-    "film": "kodak portra 160",
-    "format": "35mm",
-    "description": "These cows even have children as they wait for the land they graze to appreciate."
-   },
-   {
     "id": "1JZB7l8UqWFi-qXqwv31sZYvRksrw-02F",
     "file": "06-16-26_Portra160 (31).jpg",
     "date": "2026-06-16",
