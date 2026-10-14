@@ -40,11 +40,18 @@ def ids_in_site():
     s = open(HTML, encoding='utf-8').read()
     roles = {}
     names = {}
-    for arr in ('FILM_RAW', 'DIGITAL_RAW', 'STILLS_RAW'):
-        m = re.search(r'const %s = \[(.*?)\n  \];' % arr, s, re.S)
-        for i, fn in re.findall(r"\['([A-Za-z0-9_-]{20,})','([^']+)'\]", m.group(1) if m else ''):
-            roles[i] = 'photo'
-            names[i] = fn
+    # photos and album covers live in content/content.js (written by /admin)
+    content_path = os.path.join(ROOT, 'content', 'content.js')
+    if os.path.exists(content_path):
+        raw = open(content_path, encoding='utf-8').read()
+        c = json.loads(raw[raw.index('SITE_CONTENT =') + len('SITE_CONTENT ='):].strip().rstrip(';'))
+        for cat in ('film', 'digital', 'stills'):
+            for p in c.get('photos', {}).get(cat, []):
+                roles[p['id']] = 'photo'
+                names[p['id']] = p.get('file', '')
+        for a in c.get('music', []):
+            if a.get('coverId'):
+                roles.setdefault(a['coverId'], 'cover')
     for i in re.findall(r"driveThumb\('([A-Za-z0-9_-]{20,})',\s*\d+\)", s):
         roles.setdefault(i, 'cover')
     for i in re.findall(r"driveThumbId:'([A-Za-z0-9_-]{20,})'", s):

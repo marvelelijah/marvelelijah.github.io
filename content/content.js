@@ -1,0 +1,1676 @@
+/* Site content, edited by the admin page (/admin). Everything after SITE_CONTENT must stay valid JSON. */
+window.SITE_CONTENT = {
+ "version": 1,
+ "photos": {
+  "film": [
+   {
+    "id": "1wzf7ZtOvk24zAsLCWptWxFBXHwejFQnI",
+    "file": "06-30-26_CineStill500T (34).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "cinestill 500t",
+    "format": "35mm",
+    "description": "Pro tip: if you shoot CineStill at 500 you don't have to pull in development because it's repackaged Kodak Vision3 500T — don't listen to what CineStill says."
+   },
+   {
+    "id": "1Ob_RMKsHi-kvduYAGI2tsemRXTdJG4aJ",
+    "file": "06-30-26_CineStill500T (11).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "cinestill 500t",
+    "format": "35mm",
+    "description": "I shot this on CineStill 800T but you can (and should) shoot on its intended box speed, 500."
+   },
+   {
+    "id": "1FVaYBzv-kTJDROWjP5zz2q6-Dl4gtpey",
+    "file": "06-14-26_KodakVision3500T (8).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak vision3 500t",
+    "format": "35mm",
+    "description": "Another landmark on my commute in Groveland."
+   },
+   {
+    "id": "1rXJmEp9DkZZMl72YzRh44coTb-WJDKQ6",
+    "file": "06-16-26_Portra160 (33).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak portra 160",
+    "format": "35mm",
+    "description": "These cows even have children as they wait for the land they graze to appreciate."
+   },
+   {
+    "id": "1JZB7l8UqWFi-qXqwv31sZYvRksrw-02F",
+    "file": "06-16-26_Portra160 (31).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak portra 160",
+    "format": "35mm",
+    "description": "Dozens of cows live on this land for tax reasons."
+   },
+   {
+    "id": "1OhCXL-wQQDNV3sFOYL4RsMybldaoVBay",
+    "file": "06-16-26_Portra160 (27).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak portra 160",
+    "format": "35mm",
+    "description": "Cattle near my house."
+   },
+   {
+    "id": "1T0fXcUTwE6bxoohKGcTParN8pZ8FYdVJ",
+    "file": "06-16-26_Portra160 (15).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak portra 160",
+    "format": "35mm",
+    "description": "Interesting gentleman."
+   },
+   {
+    "id": "1gYpFmT59sepJuxaoeogFVIS7AvuM3ipE",
+    "file": "05-17-26_Portra400 (8-9).jpg.png",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak portra 400",
+    "format": "35mm",
+    "description": "Very much intentional double exposure."
+   },
+   {
+    "id": "1Z58AJXsbgA1QtO7aXQWIgtebByDExO2I",
+    "file": "05-17-26_Portra400 (28).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak portra 400",
+    "format": "35mm"
+   },
+   {
+    "id": "16f6jLCmpYvtO3znrOemn03LwHm0Ju56Q",
+    "file": "05-17-26_Portra400 (4).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak portra 400",
+    "format": "35mm",
+    "description": "Epcot International Flower & Garden Festival."
+   },
+   {
+    "id": "1bhtivlnPfwMCP4Ai-2F9iYtGN87CuYWd",
+    "file": "05-06-26_Portra160 (34).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak portra 160",
+    "format": "35mm",
+    "description": "Everybody was taking graduation photos and I found a sweet spot where no sorority girls were swimming in the water."
+   },
+   {
+    "id": "1BmuJCryxFygE38RwNZ5ZB7S_3BC3SuCC",
+    "file": "05-06-26_Portra160 (15).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak portra 160",
+    "format": "35mm",
+    "description": "Graduation photos at the University of Central Florida."
+   },
+   {
+    "id": "1hk26vzEY0aO4ymOdFXsFborFp_r-Cn1E",
+    "file": "04-17-26_Portra400 (34).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak portra 400",
+    "format": "35mm",
+    "description": "Does this belong to any of you?"
+   },
+   {
+    "id": "1-M4f-dfmCVmjvmaUIAI0d0L3nBcNc6sN",
+    "file": "03-29-26_Portra800 (34).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak portra 800",
+    "format": "35mm"
+   },
+   {
+    "id": "1eukdvKmCr7BSlDDj3Yo88uupkkbgSCCz",
+    "file": "03-29-26_Portra800 (32).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak portra 800",
+    "format": "35mm",
+    "description": "Your local city-approved protest screams parade more than civil disobedience."
+   },
+   {
+    "id": "138yN-lbRnc_D1xsEKS3YPb7Pnw41rBF1",
+    "file": "03-29-26_Portra800 (28).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak portra 800",
+    "format": "35mm",
+    "description": "Worst spot to get stuck in traffic with your favorite hat on."
+   },
+   {
+    "id": "1oSVO9bYzqzaZHfk_xDtYDEKmPRbRm2OG",
+    "file": "03-29-26_Portra800 (16).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak portra 800",
+    "format": "35mm",
+    "description": "Bird? Plane. Ringling Museum of Art, Sarasota."
+   },
+   {
+    "id": "1SXG1l9N2T6d5ImGvm2QikoUGp5wvnUBn",
+    "file": "03-25-26_Delta100 (36).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "ilford delta 100",
+    "format": "35mm",
+    "description": "Same spot two months earlier."
+   },
+   {
+    "id": "1pZCnXLdQ0YGZqJE6it60B8F2kz2XqGam",
+    "file": "03-25-26_Delta100 (32).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "ilford delta 100",
+    "format": "35mm",
+    "description": "The commute has a nice view across the lake."
+   },
+   {
+    "id": "1Z3t09d2TwNUMTn6XwTYKwxen2rElCqWV",
+    "file": "03-25-26_Delta100 (14).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "ilford delta 100",
+    "format": "35mm",
+    "description": "Orlando public library."
+   },
+   {
+    "id": "1zg9hF4SBJfIBhP2pFybOBmQgrd0Ng3tz",
+    "file": "02-24-26_Fuji400 (26).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "I received some bad news before I took this."
+   },
+   {
+    "id": "1VYcSR82Kre7FJDOyoj3_pJIr2XTB1S7r",
+    "file": "02-24-26_Fuji400 (17).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "I really like this photo."
+   },
+   {
+    "id": "1N9kdS3rv7Vxi5vJpcFP86CARa9DBRh4y",
+    "file": "02-24-26_Fuji400 (16).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Guilty culprit."
+   },
+   {
+    "id": "13k-Jv2wN78VF6lnAlsMgARuF9853TN64",
+    "file": "02-24-26_Fuji400 (15).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Thanks for staying still."
+   },
+   {
+    "id": "1G7qkU-oAmwk7UXGXUns_wtPW2H-y4HFj",
+    "file": "02-24-26_Fuji400 (11).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "No, I didn't come in with this."
+   },
+   {
+    "id": "19EehxpFW70xipDVjZPV3JUXmWEBC7gci",
+    "file": "02-24-26_Fuji400 (8).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "For you upon your returnal."
+   },
+   {
+    "id": "1q7k7XqS2fj3xKgDPzP0uM7JpUa-2ahZ7",
+    "file": "02-24-26_Fuji400 (6).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Lake Eola in Orlando is a strange spot because it's a public park with parking meters and third spaces, but between the two is a large homeless population."
+   },
+   {
+    "id": "1mafl45brzegkVSAnqNlj9fjiqbf3pUcy",
+    "file": "02-01-26_Fuji400 (32).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "I went to high school behind that side of the park. We constantly heard the screams from that rollercoaster."
+   },
+   {
+    "id": "1ViBfIkOX8owT0-GWOtze75p-wNm1yO_z",
+    "file": "02-01-26_Fuji400 (16).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Street facade, nothing you see is real, this is nothing, you are nothing."
+   },
+   {
+    "id": "1JynNZSr7xCdiQSYNXUubBVn6Dp9vTB6e",
+    "file": "02-01-26_Fuji400 (15).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Millions come through Universal Studios every year. Most are seagulls."
+   },
+   {
+    "id": "1oEYEbASAj0EvMDssAnaCWhcY3wOufALd",
+    "file": "01-25-26_Fuji400 (14).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Black Israelites posting up on a corner in the city. They had security and their own videographer. I had a better camera than him."
+   },
+   {
+    "id": "1RZzf0SEEPWDqM6cztL91VgQJirpUkCNp",
+    "file": "01-25-26_Fuji400 (11).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Sunny, but still cold. Looking forward to this temperature in the city again."
+   },
+   {
+    "id": "1f1jK343-v9WGa62J4CehHDB1KZm0OmgJ",
+    "file": "01-25-26_Fuji400 (7).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Walt Disney World has residential roads that run behind every park with security on every corner. Shots like these get you in a lot of trouble. Good news for me because I legally took this photo within the park. The backroad detail was just a fun fact."
+   },
+   {
+    "id": "1VjbSmihtb-VvH0f97Vy6P2LFIq1YQi29",
+    "file": "01-09-26_Fuji400 (37).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "I hate being that one guy in the very front of a crowd but I don't mind being the asshole if I get a shot like this."
+   },
+   {
+    "id": "1NVVDbPpaZiyfki1K0Wr6ajuUB7eTcp1-",
+    "file": "01-09-26_Fuji400 (35).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "Shirt reads, “SORRY YOU HAD A BAD DAY YOU CAN TOUCH MY DICK IF YOU WANT”"
+   },
+   {
+    "id": "1WNUs1MigAKI-2yTLDDS6vjZfob_0AymR",
+    "file": "01-09-26_Fuji400 (26).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 50mm f/1.4",
+    "film": "fujifilm 400",
+    "format": "35mm",
+    "description": "There's this huge cross on my way back from the city and I always get reminded of Neon Genesis Evangelion. As if that's not even inspired by religion at all, it just looks cool."
+   },
+   {
+    "id": "1iEAMFQ9VdoOk79h0wiGxJg3I6vesIRy4",
+    "file": "01-04-26_CineStill400D (4).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "cinestill 400d",
+    "format": "35mm",
+    "description": "While I was driving down the interstate, my passenger accidentally took a long exposure of the SunTrust Center. It's currently my favorite photo of Orlando."
+   },
+   {
+    "id": "15zxFpLGBF6Vu2B84z5a5iEdk-R58aIte",
+    "file": "01-06-26_AmberT200 (18).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "amber t200",
+    "format": "35mm",
+    "description": "I was listening to Vanities by Malibu throughout my year long obsession with long exposure film photography."
+   },
+   {
+    "id": "1KkkACSUCDL9PtimkJ4HCWRueRGlpcdH0",
+    "file": "01-06-26_AmberT200 (15).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "amber t200",
+    "format": "35mm",
+    "description": "An itch I needed to scratch in early 2026 was trying my hand at self-timed long exposures on my commute."
+   },
+   {
+    "id": "1evCDOiEKdTh6JPbGAaWuBmHuVaAvi8dd",
+    "file": "01-09-25_KentmerePan400 (4).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "ilford kentmere pan 400",
+    "format": "35mm",
+    "description": "We're at the age where local shows aren't worth the noise, we'd rather smoke outside the venue."
+   },
+   {
+    "id": "1-U4A9YWx4UnpHZQVUmwFHAaOjcoZbobW",
+    "file": "01-09-25_KentmerePan400 (36).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "ilford kentmere pan 400",
+    "format": "35mm",
+    "description": "Karaoke."
+   },
+   {
+    "id": "17-cVdCELJra3qPpiAzKCREfmlyy_JuBa",
+    "file": "11-21-25 (1).jpg",
+    "displayName": "11-21-25_CineStill800T (1).jpg",
+    "camera": "pentax 645",
+    "lens": "wide angle (exact lens unknown)",
+    "film": "cinestill 800t",
+    "format": "medium format",
+    "description": "Taken on a wedding shoot in Miami."
+   },
+   {
+    "id": "1hqit_mxtrTPPkuybNZTn7isFyYiT8d13",
+    "file": "12-25-25 (2).jpg",
+    "displayName": "12-25-25_CineStill800T (2).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "cinestill 800t",
+    "format": "35mm",
+    "description": "Arcade on Christmas Night."
+   },
+   {
+    "id": "128pzZXPPB-jkwVwbeZDcvX1kNQxOafwD",
+    "file": "11-29-25 (1).png",
+    "displayName": "11-29-25_KodakEktar100 (1).png",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak ektar 100",
+    "format": "35mm",
+    "description": "Artist vending at an art market."
+   },
+   {
+    "id": "1EYHeIve1S1NZQOSXmCbZ9iBZ0_1jp6x4",
+    "file": "12-25-25 (1).jpg",
+    "displayName": "12-25-25_CineStill800T (1).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "cinestill 800t",
+    "format": "35mm",
+    "description": "Arcade on Christmas Night."
+   },
+   {
+    "id": "1fmGxtgSD9nxZXpJc07tx9D7mU-tcxL5H",
+    "file": "12-15-25 (2).jpg",
+    "displayName": "12-15-25_CineStill400D (2).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "cinestill 400d",
+    "format": "35mm",
+    "description": "Lying around like they pay the bills. smh."
+   },
+   {
+    "id": "1zllDEbspr42ysj4sbuYhNhSmTWFzJGQG",
+    "file": "09-12-25 (1).jpg",
+    "displayName": "09-12-25_CineStill800T (1).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "cinestill 800t",
+    "format": "35mm",
+    "description": "This belonged to my first roll of film. Nice shot."
+   },
+   {
+    "id": "1If-Wnan5Lm52a_Nza6MMZO4swXLhVoXp",
+    "file": "12-20-25 (4).png",
+    "displayName": "12-20-25_Portra800 (4).png",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak portra 800",
+    "format": "35mm",
+    "description": "Cows."
+   },
+   {
+    "id": "1Lu8PjPiavgmJL8UdiFjA0d7okzPYCNQ_",
+    "file": "12-15-25 (1).jpg",
+    "displayName": "12-15-25_CineStill400D (1).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "cinestill 400d",
+    "format": "35mm",
+    "description": "Whose dog is this?"
+   },
+   {
+    "id": "1DRz8lJZW-RWzvV9c7H2UNG6vX4d1VlFo",
+    "file": "12-06-25 (1).jpg",
+    "displayName": "12-06-25_KodakEktar100 (1).jpg",
+    "camera": "canon ae-1 program",
+    "lens": "canon fd 28mm f/2.8",
+    "film": "kodak ektar 100",
+    "format": "35mm",
+    "description": "Christmas parade. I go every year."
+   },
+   {
+    "id": "11a1PacgLDLmVd5VF8J82jpZSa1i9LsQZ",
+    "file": "12-20-25 (1).jpg",
+    "displayName": "12-20-25_Portra800 (1).jpg",
+    "camera": "canon eos 650",
+    "lens": "canon ef 50mm f/1.4",
+    "film": "kodak portra 800",
+    "format": "35mm",
+    "description": "Cows."
+   }
+  ],
+  "digital": [
+   {
+    "id": "18kkiwDnuTxGntJbfLf3-IGXA08-N1KVi",
+    "file": "10-09-26 (84).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Evanora Unlimited."
+   },
+   {
+    "id": "1NmX_QS0Rcl3SZeJ8mIW44oLG5dDgZ0PZ",
+    "file": "10-09-26 (100).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "The promoter."
+   },
+   {
+    "id": "1I2i9itY1NlUY7ems_7lw32VUTXVlfDty",
+    "file": "10-09-26 (121).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Couple of gents on the decks."
+   },
+   {
+    "id": "1smd2NAe4XqUsR3ZS10QxkKJ4ev5bU0lv",
+    "file": "10-09-26 (139).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Man on right was named Cash, man on left was named Lincoln. True story."
+   },
+   {
+    "id": "1a6T3O3I5AGR4cMEmwEq9spj3i1HG7ggJ",
+    "file": "10-09-26 (179).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Brain melting bass has done its job."
+   },
+   {
+    "id": "1sGUUDodg7Bz6_xjdB7uHAWK8NMgVvkw5",
+    "file": "10-09-26 (215).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "DJ."
+   },
+   {
+    "id": "19z7ABOcYAcOdiU91yVk9Q_JrEman1DsI",
+    "file": "10-09-26 (247).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Alley cat."
+   },
+   {
+    "id": "1erUxEV7QE7bgjzgecAnGrheVHqi8sRQz",
+    "file": "10-09-26 (276).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Ravers."
+   },
+   {
+    "id": "1dvGNoBFOS1dx_eMWOkf2aBKJovhOWKeG",
+    "file": "10-09-26 (278).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Big Ass Fans."
+   },
+   {
+    "id": "1T4SCafkjhPnpDy3oTzluPW19dA6gPa2F",
+    "file": "10-09-26 (315).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Painter and the painted."
+   },
+   {
+    "id": "17ZYbpnXLCsAaMe22y3KD-TN9y1nSiZ2n",
+    "file": "10-09-26 (317).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Airbrush refill."
+   },
+   {
+    "id": "1O47lhoak5oFm1u51tkgkgPEYOMd_MJTE",
+    "file": "10-09-26 (353).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "I was experimenting with light trying to get the “hero shot”."
+   },
+   {
+    "id": "1EPBtdnzZDPnmNk4xthLwxa1uPyGHvN6D",
+    "file": "10-09-26 (360).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "“If you share any of these and my nose looks big, I’m going to find you and kill you.” - Unknown Raver."
+   },
+   {
+    "id": "1eJVf9S-ZjOSJGGueU3swsT34PI0HoVsz",
+    "file": "10-09-26 (381).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Evanora looks through."
+   },
+   {
+    "id": "14l7UpD0bsBgbqfjm3Q6Rw3PU875uX8ah",
+    "file": "10-09-26 (394).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "The kickflip nobody notices is usually the best you’ve accomplished."
+   },
+   {
+    "id": "18pipJMka7Fi_hNoFDySomLng0QnQAbYM",
+    "file": "10-09-26 (397).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Nonchalant af."
+   },
+   {
+    "id": "1jd-W9y1h2rufzFupu77mwU09Fc64zyrf",
+    "file": "10-09-26 (416).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Everything you’re looking for is in this image."
+   },
+   {
+    "id": "1uHaIKpOZwHm4OUX0Yk5QVyAlSc8wrSdP",
+    "file": "10-09-26 (475).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Performance."
+   },
+   {
+    "id": "1U2iIGDe3Ydnz13kWuGr6xpNDIt01jH-K",
+    "file": "10-09-26 (534).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Rose colored glasses on, party on."
+   },
+   {
+    "id": "1TDaj-C2ZbuxkqdW3dsr34CLcuEHmgMTd",
+    "file": "10-09-26 (550).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Performance."
+   },
+   {
+    "id": "1ewkGlpiiDXXtzGx5sQ6H9tuRH9t9EPzV",
+    "file": "10-09-26 (566).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Hot and humid stage but nobody cared."
+   },
+   {
+    "id": "1FtZ0uItSxH7HlawJZWsiuugIR2N0SwaA",
+    "file": "10-09-26 (637).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Parking lot portrait."
+   },
+   {
+    "id": "1L230yaGsE5p4wZHp8xu05iZ4I6KYsgqs",
+    "file": "10-09-26 (672).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Like an angel who pulled their own wings off."
+   },
+   {
+    "id": "1vGwmxJUPF1ZCj9K5-GUXxHj-2A1voR7h",
+    "file": "10-09-26 (687).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Evanora."
+   },
+   {
+    "id": "11dbgFVxGXZvLnvvcEvrbvtRAcC37m5NJ",
+    "file": "10-09-26 (710).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "How it feels sometimes."
+   },
+   {
+    "id": "1Txj1qNlqalvxMbp-ycsqWkiIKcR0M3Pt",
+    "file": "10-09-26 (823).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Obscura."
+   },
+   {
+    "id": "1qGPTUQOc7j2LQOOLvNnFyp47k6Vw-4RC",
+    "file": "10-09-26 (859).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Prismatic glass."
+   },
+   {
+    "id": "1_WlMG-4-kM3PxGM8QXloJX9vJbRqyPvX",
+    "file": "10-09-26 (939).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "WILL."
+   },
+   {
+    "id": "1CY9va0iqWpU1_99tAsUBGfzLaJK7X9dX",
+    "file": "10-09-26 (985).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Worship."
+   },
+   {
+    "id": "1XZx-tvvtGMqHRMdJDCfSF7YbeNvDhzMT",
+    "file": "10-09-26 (1071).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "The face of a weary world."
+   },
+   {
+    "id": "1qwDUcUHdfp6PZxlyGSUpf3rX8lRyDpI5",
+    "file": "10-09-26 (1105).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "After I took this, I felt compelled to speak. “Not only have I now met the most interesting person in the world, but you’re going to become a myth among men.” That got a big smile out of them. I think I’ll keep that photo."
+   },
+   {
+    "id": "1m4JeRhcf4wKfA7Vbuwdo4GCegTxMiwx5",
+    "file": "10-03-26 (6).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Can’t park there, mate."
+   },
+   {
+    "id": "1aYGCsN3sfkhtN1gZ8lvkoVHZjrJg3ZIR",
+    "file": "10-03-26 (7).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Forgotten at sea."
+   },
+   {
+    "id": "1BalQqp3eqBlr1schKx_09jgDUWRMrB4K",
+    "file": "10-03-26 (8).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "PROPHET’S REVENGE."
+   },
+   {
+    "id": "1wersvGg8uaDEkH38R8_Z8M95uT4QEaIY",
+    "file": "10-03-26 (10).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "The beach."
+   },
+   {
+    "id": "1rwHjHaZZvd8aYw3ykhpqcThrxYZzHhVG",
+    "file": "10-03-26 (16).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "New Oasis."
+   },
+   {
+    "id": "1byrth5M8duLob_xnciTe9OZvWvizOPSy",
+    "file": "09-27-26 (3).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Get a room."
+   },
+   {
+    "id": "1n7G108T6yGo8SGnkCwW7FK6h2-OpkvBq",
+    "file": "09-27-26 (32).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Another view of that building."
+   },
+   {
+    "id": "1HKDGgcPmIMMMkP9OrM4_VTrV-xWjApA0",
+    "file": "09-27-26 (44).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Falun Gong."
+   },
+   {
+    "id": "1zUOmefU25zzyug30enIHVqas6M-5EzL_",
+    "file": "09-27-26 (48).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "The view one gets from below."
+   },
+   {
+    "id": "1Dy6WJUHmCax4q251-Bd88kB7Qb0L9FWX",
+    "file": "09-27-26 (58).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "description": "Setting sun, frigid shadow."
+   },
+   {
+    "id": "1f-4zB-KGz6u58rEgkuVABnH1cYSeyzjS",
+    "file": "09-13-26 (69).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Big fan of this photo op, I intend to shoot there every visit to Universal Studios."
+   },
+   {
+    "id": "1buDg_VOJyymrn77spJjShcm4bC58Dxbk",
+    "file": "09-13-26 (218).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Precious."
+   },
+   {
+    "id": "1zPapHRAfWwTaIemjAsdyXEw-xGNTuabK",
+    "file": "09-06-26 (46).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Waiting, waiting."
+   },
+   {
+    "id": "1wmb_qe2asa4MYXw_IjXcxDfKL-C5rXEC",
+    "file": "09-06-26 (147).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "F5 tornado, you just had to be there, dude."
+   },
+   {
+    "id": "1L1A65xsiLIigPP75sQ-MIrjC3lXMydOP",
+    "file": "09-06-26 (142).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Another gorgeous passenger photo, thank you."
+   },
+   {
+    "id": "1gjNd9mNxaD8RmYBXb_uzgfi_66wdKCMg",
+    "file": "09-06-26 (111).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Tasteful side-balls."
+   },
+   {
+    "id": "1ZrId_M0eT8EpaeQwj26au35ccYk5iUAm",
+    "file": "09-02-26 (33).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Parrot. Thank god its owner didn't charge me to take this photo because I haven't carried change since I worked in food service."
+   },
+   {
+    "id": "1Cp-v_XfSYaF7FUxEOg50QWK-oLTnYo8y",
+    "file": "09-02-26 (390).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Big fan of this lady's side profile."
+   },
+   {
+    "id": "1lyHoMA4wP95fkwJ6ji8lp6z-t-2HjuUS",
+    "file": "09-02-26 (343).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "What are you looking at?"
+   },
+   {
+    "id": "1XZp-Kb5p06QKpn4jDVU7rA7F9zCN1bu2",
+    "file": "09-02-26 (318).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "I'm related to Rob Halford of Judas Priest. I like telling the owner of this record store because he always recalls the same story: meeting Rob in Orlando and being asked by him where the nearest gay bar is."
+   },
+   {
+    "id": "1IwwyoDQLzVzk6wXUn1sln7BiJn_zgyay",
+    "file": "09-02-26 (244).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Sometimes you just need to rest your camera on your knee, turn off your flash, and get shots without anyone noticing."
+   },
+   {
+    "id": "1B1qmOOT_DJ99wABYBIEasbx5nhlHK1X_",
+    "file": "09-02-26 (163).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Do you know how long it took me to make this lady smile? She hates me!"
+   },
+   {
+    "id": "1GI5H_U8PDjypa2a9pJLtHYyeVqq-9Gmb",
+    "file": "09-02-26 (106).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Professional headshots for my hairdresser. I came in to take her photos shortly after shaving my head, I'm sure she felt betrayed."
+   },
+   {
+    "id": "1likmMKN_uQHi_yIMPnEpfPJqfoYtWTxl",
+    "file": "08-22-26 (30).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Apparently turning your hazards on in thick rainfall is illegal."
+   },
+   {
+    "id": "1G-8k23eUCxJW2IC2qXRs8NbJfzInzzU5",
+    "file": "08-20-26 (70).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Sister in the hospital — again."
+   },
+   {
+    "id": "1zLFUVl6HD-eIAqN7blAp2x5loTQvgpn8",
+    "file": "08-20-26 (34).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "How you grade your photos is very important. This was a nice sunny day, too. I'm just hella emo when I drive."
+   },
+   {
+    "id": "1Hm_OXulpRHubwqxuccq1AWyVLIIDCSVE",
+    "file": "08-20-26 (17).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "I've always been told I shoot too tight. How about fuck you? Do you even see this fucking bee?"
+   },
+   {
+    "id": "14BSrjF6RJPgu1NyUclTZPBCj-JLGa8_9",
+    "file": "08-21-26 (5).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "I got bit by a lot of mosquitoes for this shot, frame it or something."
+   },
+   {
+    "id": "1ogUdJejwQWSx3zh9avC1QP7jK2Fob24R",
+    "file": "08-21-26 (3).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Is it betraying the quality of digital to still grade like film?"
+   },
+   {
+    "id": "1Fcqt2tkEko2XWk-ZkHevz1ys6oAPxt3R",
+    "file": "08-21-26 (2).jpg",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Took a stab at shooting the same spot with digital. My professional peers can't tell the difference."
+   },
+   {
+    "id": "195kAVA-iWkDRPvf-Q-jfs4ZknmWSTrXd",
+    "file": "04-07-26 (4).jpg",
+    "camera": "canon eos r5 mark ii",
+    "lens": "canon rf 24-70mm f/2.8l is usm",
+    "description": "Choose a family."
+   },
+   {
+    "id": "1-QMiEk4m7JWeTrtjU3dUsPwcszlWng0d",
+    "file": "04-07-26 (3).jpg",
+    "camera": "canon eos r5 mark ii",
+    "lens": "canon rf 24-70mm f/2.8l is usm",
+    "description": "Choose a career."
+   },
+   {
+    "id": "1p6TxB7L1pSTXYUDpZmWRDp5Xo4_pnZs1",
+    "file": "04-07-26 (1).jpg",
+    "camera": "canon eos r5 mark ii",
+    "lens": "canon rf 24-70mm f/2.8l is usm",
+    "description": "Choose life."
+   },
+   {
+    "id": "1lBUPw_qKvIZUohOG-2lh_L2m1NkHeqcp",
+    "file": "04-07-26 (2).jpg",
+    "camera": "canon eos r5 mark ii",
+    "lens": "canon rf 24-70mm f/2.8l is usm",
+    "description": "Choose a job."
+   },
+   {
+    "id": "1_dg6ExBBnIjhYzkzHlDNZyzgIXvpKgQ1",
+    "file": "07-17-26 (1).jpg",
+    "camera": "canon eos r5 mark ii",
+    "lens": "canon rf 24-70mm f/2.8l is usm",
+    "description": "What the fuck r u looking at?"
+   },
+   {
+    "id": "1_kiD94QeS3r7Y5LEO0SOcKyRyN_ypl5L",
+    "file": "09-18-23 (1).jpg",
+    "camera": "canon eos m50 mark ii",
+    "lens": "meike mk-6.5mm f/2",
+    "description": "Two men holding hands."
+   },
+   {
+    "id": "1lpw0oqXAySt75vhWZ1i9OpHkwjs5-OFA",
+    "file": "10-31-23 (1).jpg",
+    "camera": "canon eos m50 mark ii",
+    "lens": "meike mk-6.5mm f/2",
+    "description": "That one guy."
+   },
+   {
+    "id": "1hGPXxNXOSCgF3QwcsdjkP172rEIRYEX6",
+    "file": "10-31-23 (2).jpg",
+    "camera": "canon eos m50 mark ii",
+    "lens": "meike mk-6.5mm f/2",
+    "description": "Checkmate."
+   }
+  ],
+  "stills": [
+   {
+    "id": "16FCd02gM9ADFyeTclBiMQeuJNY0gu9Hc",
+    "file": "01-25-24 (2).jpg",
+    "camera": "canon eos m50 mark ii",
+    "lens": "meike mk-6.5mm f/2",
+    "description": "Went on a date with another photographer, we both shot each other in our styles."
+   },
+   {
+    "id": "1eOp7Q5HcAqD3ONWbJPWSTZ4eWYe7X76O",
+    "file": "01-25-24 (1).jpg",
+    "camera": "canon eos m50 mark ii",
+    "lens": "meike mk-6.5mm f/2",
+    "description": "Look here."
+   },
+   {
+    "id": "1sdoO-iN9lWn0q_DkfzDwv1k1NJLYLUcD",
+    "file": "08-29-24 (2).png",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
+   },
+   {
+    "id": "1SsKvhQEABpquUqyEVwHUkeuhuWx_8Euz",
+    "file": "08-29-24 (1).png",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
+   },
+   {
+    "id": "11qUdlDGcfwR35p10SsTko1shzSuo1U7I",
+    "file": "08-29-24 (3).png",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
+   },
+   {
+    "id": "16zRFhaqbTXLBEPBsS2aBlaBaHA1fespK",
+    "file": "08-29-24 (4).png",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
+   },
+   {
+    "id": "1ixabA9IqJgyRssfIaAMUDRvwgU9QABZS",
+    "file": "08-29-24 (5).png",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
+   },
+   {
+    "id": "1EcI_3X3badCyqf8AYGbC0li5kCmQLNaT",
+    "file": "08-29-24 (6).png",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
+   },
+   {
+    "id": "1Tu6J3ts6kHYrwKrSjaqzaI2sWQTgvk1K",
+    "file": "12-31-23 (1).png",
+    "camera": "canon eos m50 mark ii",
+    "lens": "meike mk-6.5mm f/2",
+    "description": "Woman notices camera, woman behind inspects sword."
+   },
+   {
+    "id": "1pA4dfMepQ3S2d2NiaTk8rKNjiEpv6C25",
+    "file": "12-31-23 (2).jpg",
+    "camera": "canon eos m50 mark ii",
+    "lens": "meike mk-6.5mm f/2",
+    "description": "Cheeky smoke."
+   },
+   {
+    "id": "1EIk6AGPrgV8813VfDq-0ZWCfsT4FVEWi",
+    "file": "05-10-24 (1).png",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "Before it goes to shit."
+   },
+   {
+    "id": "1cOAXXBNAsX1zwpzKtme7P9Z5CQ23-yPq",
+    "file": "04-05-24 (3).jpg",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "I remember this \"venue\" being really cramped, it was in a smoke shop."
+   },
+   {
+    "id": "1ys7zGyfsxJVCYFMb6NvNRAVsxrXTxUu_",
+    "file": "04-05-24 (1).jpg",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "Music event. Lot of clowns involved."
+   },
+   {
+    "id": "1iSvWs9K5dYvunmGeYw6LQsHHxQHdQ5Qo",
+    "file": "04-05-24 (2).jpg",
+    "camera": "canon eos r5c",
+    "lens": "canon rf 15-35mm f2.8l is usm",
+    "description": "A gentleman destroyed his guitar on stage, fans kept souvenirs."
+   },
+   {
+    "id": "1D2nRRzLR2W4WdhekqI8RnagOQpubSmvv",
+    "file": "11-22-25 (1).png",
+    "camera": "sony alpha fx3",
+    "lens": "sony fe 16-35mm f/2.8 g",
+    "description": "Still from a wedding I shot at the Ancient Spanish Monastery in Miami Beach. It was a filming location for Miami Vice and Ace Ventura: Pet Detective."
+   }
+  ]
+ },
+ "links": [
+  {
+   "slug": "testpattern-scanning-pool",
+   "kind": "video",
+   "title": "TESTPATTERN — \"Modern Living\" / \"Crescent Moon\" @ Scanning Pool Vol.2 (1983)",
+   "author": "scanning-pool",
+   "category": "video art · live performance archive",
+   "url": "https://www.youtube.com/watch?v=TnJQq7OH4xs"
+  },
+  {
+   "slug": "prime-intellect",
+   "kind": "article",
+   "title": "The Metamorphosis of Prime Intellect",
+   "author": "Roger Williams",
+   "category": "novel",
+   "url": "https://localroger.com/prime-intellect/"
+  },
+  {
+   "slug": "divine-machinery-analysis",
+   "kind": "video",
+   "title": "Analyzing Divine Machinery as an \"Art Movement\"",
+   "author": "Joshua Bushman",
+   "category": "video essay · art criticism",
+   "url": "https://www.youtube.com/watch?v=nJx9POvQ894"
+  },
+  {
+   "slug": "clavicular-incel-culture",
+   "kind": "video",
+   "title": "Clavicular and the Evolution of Incel Culture",
+   "author": "Jarrett Moore",
+   "category": "video essay · internet culture",
+   "url": "https://www.youtube.com/watch?v=SqdtRnjK_qM"
+  },
+  {
+   "slug": "afterlife-minecraft-credits",
+   "kind": "video",
+   "title": "Afterlife | Minecraft Infinite Credits Theme",
+   "author": "Legacy Plus",
+   "category": "music · soundtrack",
+   "url": "https://www.youtube.com/watch?v=99fyhaz8Rsc"
+  },
+  {
+   "slug": "sadboys-drain-gang-locations",
+   "kind": "article",
+   "title": "Sadboys and Drain Gang Music Video Locations Compilation",
+   "author": "r/sadboys",
+   "category": "reddit thread · music trivia",
+   "url": "https://www.reddit.com/r/sadboys/comments/10f7exo/sadboys_and_drain_gang_music_video_locations/"
+  },
+  {
+   "slug": "9m9h9e9-wiki-index",
+   "kind": "article",
+   "title": "r/9M9H9E9 Wiki: Index of Resources",
+   "author": "r/9M9H9E9",
+   "category": "reddit wiki · resource index",
+   "url": "https://www.reddit.com/r/9M9H9E9/wiki/index/"
+  },
+  {
+   "slug": "chaos-charles-manson-cia",
+   "kind": "article",
+   "title": "Chaos: Charles Manson",
+   "author": "CIA",
+   "category": "declassified document · history",
+   "url": "https://www.cia.gov/resources/csi/static/Review-Chaos-CharlesManson-25-Sep.pdf"
+  },
+  {
+   "slug": "9-11-dashboard",
+   "kind": "video",
+   "title": "9/11 Attacks Real Time Dashboard — All Major News Coverage, Sept 11 2001 06:00–10:00 EDT",
+   "author": "Elia Bordin",
+   "category": "archival news compilation",
+   "url": "https://www.youtube.com/watch?v=0XSMBqeIVPI"
+  },
+  {
+   "slug": "sigil-magic-psychology",
+   "kind": "article",
+   "title": "The Science Behind Sigil Magic: Psychology Meets Mysticism",
+   "author": "Mystic Ryst",
+   "category": "esoterica · psychology",
+   "url": "https://mysticryst.com/blogs/the-mystic-journal/science-behind-sigil-magic-psychology-meets-mysticism"
+  },
+  {
+   "slug": "rise-of-online-cruelty",
+   "kind": "video",
+   "title": "The Rise of Online Cruelty",
+   "author": "Ben Hoerman",
+   "category": "video essay · internet culture",
+   "url": "https://www.youtube.com/watch?v=adlH1MC2qI0"
+  },
+  {
+   "slug": "most-horrifying-sci-fi-story",
+   "kind": "video",
+   "title": "The Most Horrifying Sci-Fi Story Ever Written",
+   "author": "AtunSheiFilms",
+   "category": "video essay · literature",
+   "url": "https://www.youtube.com/watch?v=JXAsdsHXZ5c"
+  },
+  {
+   "slug": "florida",
+   "kind": "video",
+   "title": "FLORIDA",
+   "author": "HorsesOnYT",
+   "category": "comedy · internet culture",
+   "url": "https://www.youtube.com/watch?v=-hlkzIaF0nU"
+  },
+  {
+   "slug": "polish-movie-posters",
+   "kind": "video",
+   "title": "The Weird Rebellion of Polish Movie Posters",
+   "author": "Pyramid Peak",
+   "category": "video essay · design history",
+   "url": "https://www.youtube.com/watch?v=KpPBQvjesQ8"
+  },
+  {
+   "slug": "humanitys-greatest-sin",
+   "kind": "video",
+   "title": "Humanity's Greatest Sin",
+   "author": "Solar Sands",
+   "category": "video essay · philosophy",
+   "url": "https://www.youtube.com/watch?v=DA9nVP479pw"
+  },
+  {
+   "slug": "sanctuary-domain",
+   "kind": "article",
+   "title": "sanctuary-domain.net",
+   "author": "",
+   "category": "website",
+   "url": "https://www.sanctuary-domain.net"
+  },
+  {
+   "slug": "gauss-gos-sodclod2",
+   "kind": "video",
+   "title": "gauss - gos sodclod2",
+   "author": "Yem",
+   "category": "music · experimental",
+   "url": "https://www.youtube.com/watch?v=0490asqg5Io"
+  },
+  {
+   "slug": "disciples-mollison-portraits",
+   "kind": "article",
+   "title": "The Disciples: James Mollison's Portraits of Music Fans",
+   "author": "Ridiculously Interesting",
+   "category": "photography · music culture",
+   "url": "https://ridiculouslyinteresting.com/2011/10/29/the-disciples-james-mollisons-portraits-of-music-fans-2/"
+  },
+  {
+   "slug": "ewen-spencer-dance-photography",
+   "kind": "article",
+   "title": "While You Were Sleeping: Ewen Spencer's Dance Club Photography",
+   "author": "The Guardian",
+   "category": "photography · interview",
+   "url": "https://www.theguardian.com/artanddesign/2022/feb/20/ewen-spencer-dance-club-photography-while-you-were-sleeping-interview"
+  },
+  {
+   "slug": "mike-brodie-juvenile-prosperity",
+   "kind": "article",
+   "title": "Mike Brodie: A Period of Juvenile Prosperity",
+   "author": "Daylight Books",
+   "category": "photography · photobook",
+   "url": "https://daylightbooks.org/blogs/stories/mike-brodie-a-period-of-juvenile-prosperity"
+  },
+  {
+   "slug": "civil-war-photojournalism",
+   "kind": "article",
+   "title": "'Civil War': Does Alex Garland's Film Get Photojournalism Right?",
+   "author": "LA Times",
+   "category": "film · photojournalism",
+   "url": "https://www.latimes.com/entertainment-arts/movies/story/2024-04-16/civil-war-a24-alex-garland-photojournalism-right-wrong"
+  },
+  {
+   "slug": "marvel-and-9-11",
+   "kind": "video",
+   "title": "Marvel and 9/11",
+   "author": "GDF",
+   "category": "video essay · comics history",
+   "url": "https://www.youtube.com/watch?v=pM9Cr9mhsAo"
+  }
+ ],
+ "music": [
+  {
+   "slug": "good-time-ost",
+   "title": "Good Time (Original Motion Picture Soundtrack)",
+   "artist": "Oneohtrix Point Never",
+   "year": 2017,
+   "category": "soundtrack / electronic",
+   "releaseType": "album",
+   "released": "11 August 2017",
+   "length": "46:02",
+   "cover": "https://th.bing.com/th/id/R.cdf1268ef97bfa901386359db0ba0ea4?rik=yV%2fnu%2boE57JjlA&riu=http%3a%2f%2fcdn.shopify.com%2fs%2ffiles%2f1%2f0558%2f2081%2fproducts%2fGTFC_1024x.jpg%3fv%3d1654726384&ehk=lv%2bUwc5oqivaEYMETZf1skv4zHNdDtIqd1d3e8ZWQaM%3d&risl=&pid=ImgRaw&r=0",
+   "spotify": "https://open.spotify.com/album/5BaEzcY1rllt67qPiupUmA"
+  },
+  {
+   "slug": "homework",
+   "title": "Homework",
+   "artist": "Daft Punk",
+   "year": 1997,
+   "category": "house / electronic",
+   "releaseType": "album",
+   "released": "20 January 1997",
+   "length": "73:53",
+   "cover": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/dc/68/45/dc684589-af57-6895-1177-4f2acbb93e47/190296240911.jpg/1200x1200bf-60.jpg",
+   "spotify": "https://open.spotify.com/album/6JRaPcrT3cMBEmkgSqEPhI"
+  },
+  {
+   "slug": "revengeseekerz",
+   "title": "Revengeseekerz",
+   "artist": "Jane Remover",
+   "year": 2025,
+   "category": "digicore / hyperpop",
+   "releaseType": "album",
+   "released": "4 April 2025",
+   "length": "49:26",
+   "cover": "https://media.pitchfork.com/photos/67f3cf3e9c1c5cea3038a50f/1:1/w_450%2Cc_limit/Jane-Remover-Revengeseekerz.jpeg",
+   "spotify": "https://open.spotify.com/album/21b4cDNse2AMpj94ykfuON"
+  },
+  {
+   "slug": "portal-2-songs-to-test-by",
+   "title": "Portal 2: Songs to Test By (Collectors Edition)",
+   "artist": "Aperture Science Psychoacoustic Laboratories",
+   "year": 2011,
+   "category": "soundtrack / electronic",
+   "releaseType": "album",
+   "released": "25 May 2011",
+   "length": "202:34",
+   "cover": "https://theongaku.s3.amazonaws.com/uploads/post/cover/200/portal-2-cover.png",
+   "spotify": "https://open.spotify.com/album/5l1BFWphq5XiWlpbYUjrhr"
+  },
+  {
+   "slug": "eversince",
+   "title": "Eversince",
+   "artist": "Bladee",
+   "year": 2016,
+   "category": "cloud rap",
+   "releaseType": "album",
+   "released": "25 May 2016",
+   "length": "39:29",
+   "cover": "https://th.bing.com/th/id/R.c01c637d0d6a5ba6d661cac67ff665ef?rik=W3NIgaJiYF4QFA&riu=http%3a%2f%2fimages.genius.com%2f2df0dbd58a387615bd7ac5ea9a8378c6.1000x1000x1.jpg&ehk=BPaCxYznbQiE8IVRptejCZ%2fYsUcMGHtsMffqOzx0WLY%3d&risl=&pid=ImgRaw&r=0",
+   "spotify": "https://open.spotify.com/album/0ZyoyTZbl3g0IwkNlpg633"
+  },
+  {
+   "slug": "red-light",
+   "title": "Red Light",
+   "artist": "Bladee",
+   "year": 2018,
+   "category": "cloud rap",
+   "releaseType": "album",
+   "released": "11 May 2018",
+   "length": "40:08",
+   "cover": "https://images.genius.com/b81222e5d6dfc81874e7a120daefc163.1000x1000x1.jpg",
+   "spotify": "https://open.spotify.com/album/2aOPyH6k96e4TDJkEivOC9"
+  },
+  {
+   "slug": "vanities",
+   "title": "Vanities",
+   "artist": "Malibu",
+   "year": 2025,
+   "category": "ambient",
+   "releaseType": "album",
+   "released": "3 October 2025",
+   "length": "48:35",
+   "cover": "https://e.snmc.io/i/1200/s/29defc3f4cd88c8a11274a2141b97fa4/13850154",
+   "spotify": "https://open.spotify.com/album/7ePZ3EZLrbIXyms6fc9hJd"
+  },
+  {
+   "slug": "flight-of-the-conchords",
+   "title": "Flight of the Conchords",
+   "artist": "Flight of the Conchords",
+   "year": 2008,
+   "category": "comedy / folk",
+   "releaseType": "album",
+   "released": "21 April 2008",
+   "length": "42:06",
+   "cover": "https://magnetmagazine.com/wp-content/uploads/2023/04/FOTC.jpg",
+   "spotify": "https://open.spotify.com/album/0YFBrqatMlyDCqqYhhoizO"
+  },
+  {
+   "slug": "two-star-and-the-dream-police",
+   "title": "Two Star & The Dream Police",
+   "artist": "Mk.gee",
+   "year": 2024,
+   "category": "alt R&B / rock",
+   "releaseType": "album",
+   "released": "9 February 2024",
+   "length": "33:12",
+   "cover": "https://tse1.mm.bing.net/th/id/OIP.gQOt_OtE7T1jda4x2QbMfAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+   "spotify": "https://open.spotify.com/album/6DlLdXBGCsSDPOV8R2pCl7"
+  },
+  {
+   "slug": "betrayed-in-the-octagon",
+   "title": "Betrayed in the Octagon",
+   "artist": "Oneohtrix Point Never",
+   "year": 2007,
+   "category": "ambient / electronic",
+   "releaseType": "album",
+   "released": "20 November 2007",
+   "length": "39:16",
+   "cover": "https://i.discogs.com/Ca8D4aP_VxIDuk_I7XfwU2gLY6U0Q9dzt5A5cu3UZI4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTMzMjU1/NDg2LTE3NDA1ODk3/MDgtNTAzMi5qcGVn.jpeg",
+   "spotify": "https://open.spotify.com/album/0Ld4zIJyNK5UDcCfBkHXbN"
+  },
+  {
+   "slug": "replica",
+   "title": "Replica",
+   "artist": "Oneohtrix Point Never",
+   "year": 2011,
+   "category": "electronic / plunderphonics",
+   "releaseType": "album",
+   "released": "8 November 2011",
+   "length": "40:54",
+   "cover": "https://tse1.mm.bing.net/th/id/OIP.gHPYGRBkZ1_XgL9ebGvLegHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+   "spotify": "https://open.spotify.com/album/7H6gso8aBfKK7mlouLCsW3"
+  },
+  {
+   "slug": "discokommitten",
+   "title": "Discokommittén",
+   "artist": "Max Peezay",
+   "year": 2005,
+   "category": "grime / swedish hip-hop",
+   "releaseType": "album",
+   "released": "28 December 2005",
+   "length": "43:22",
+   "cover": "https://i.scdn.co/image/ab67616d0000b273c6804e46aaa4e863d563f519",
+   "spotify": "https://open.spotify.com/album/7d5PNUdGFFyARg4f5rNLkL"
+  },
+  {
+   "slug": "sandy-nevermore",
+   "title": "sandy nevermore",
+   "artist": "kurtains",
+   "year": 2025,
+   "category": "indie pop / alt rock",
+   "releaseType": "album",
+   "released": "28 March 2025",
+   "length": "15:26",
+   "coverId": "1skYf7kRXxrlPAOmRuHQTzt-Nu4hPr55V",
+   "spotify": "https://open.spotify.com/album/0rsrly3wkirq1bo91IORJ8"
+  },
+  {
+   "slug": "unmusique",
+   "title": "Unmusique",
+   "artist": "Lucy Bedroque",
+   "year": 2025,
+   "category": "digicore / rage",
+   "releaseType": "album",
+   "released": "16 May 2025",
+   "length": "39:55",
+   "cover": "https://coverartarchive.org/release/3263b0d4-7255-4f01-a65a-d1a44af38aa1/front-500",
+   "spotify": "https://open.spotify.com/album/4hP6GKbrQjCCeJ8B0MfBXQ"
+  },
+  {
+   "slug": "yall",
+   "title": "Y'all",
+   "artist": "glaive",
+   "year": 2025,
+   "category": "hyperpop / digicore",
+   "releaseType": "album",
+   "released": "26 September 2025",
+   "length": "38:40",
+   "coverId": "13xSY-D1WrbTJJwO6mcDyfPM2X17RxGu7",
+   "spotify": "https://open.spotify.com/album/3QliGTfl4dbkKLI17VkbVl"
+  },
+  {
+   "slug": "tripwire",
+   "title": "tripwire",
+   "artist": "Endie",
+   "year": 2025,
+   "category": "pop rap / digicore / trap",
+   "releaseType": "album",
+   "released": "27 June 2025",
+   "length": "40:00",
+   "coverId": "1eE73c1lTrXWtsrvN-UR8h-_7R6hkGL5N",
+   "spotify": "https://open.spotify.com/album/3eSXocOYHCEXXmmN0DqK5t"
+  },
+  {
+   "slug": "marty-supreme-ost",
+   "title": "Marty Supreme (Original Soundtrack)",
+   "artist": "Daniel Lopatin",
+   "year": 2025,
+   "category": "electronic / film score",
+   "releaseType": "album",
+   "released": "25 December 2025",
+   "length": "46:15",
+   "cover": "https://coverartarchive.org/release-group/76182837-24ae-4057-8a30-49d5d24fd275/front-500",
+   "spotify": "https://open.spotify.com/album/4ACAVXXQYUTmlZgdg0aG8U"
+  },
+  {
+   "slug": "russian-mind",
+   "title": "Russian Mind",
+   "artist": "Oneohtrix Point Never",
+   "year": 2009,
+   "category": "ambient / kosmische",
+   "releaseType": "album",
+   "released": "2009",
+   "length": "24:38",
+   "coverId": "12w36D0HFdhS3Eh0xhNPN94Dlsa7GQcvm",
+   "spotify": "https://open.spotify.com/album/0VwbF2G4D6iEX38Z8Z9QEN"
+  },
+  {
+   "slug": "zones-without-people",
+   "title": "Zones Without People",
+   "artist": "Oneohtrix Point Never",
+   "year": 2009,
+   "category": "ambient",
+   "releaseType": "album",
+   "released": "6 August 2009",
+   "length": "31:20",
+   "cover": "https://coverartarchive.org/release/82a5fee2-69eb-4bd6-9dce-d4cc62bfad9a/front-500",
+   "spotify": "https://open.spotify.com/album/5dyKW0zHFCaW5HJcZQ3QK0"
+  },
+  {
+   "slug": "returnal",
+   "title": "Returnal",
+   "artist": "Oneohtrix Point Never",
+   "year": 2010,
+   "category": "electronic / drone / kosmische",
+   "releaseType": "album",
+   "released": "22 June 2010",
+   "length": "41:59",
+   "cover": "https://coverartarchive.org/release/a96ee369-9d38-4b13-a8c4-dab190519fc0/front-500",
+   "spotify": "https://open.spotify.com/album/0cJJRJRZJlrTKQBZBoDZ7j"
+  },
+  {
+   "slug": "the-fall-into-time",
+   "title": "The Fall Into Time",
+   "artist": "Oneohtrix Point Never",
+   "year": 2013,
+   "category": "electronic / ambient",
+   "releaseType": "compilation",
+   "released": "2013",
+   "length": "43:17",
+   "coverId": "1qr-Non4K12ltAgn0oU3pL_ALVCNquJ18",
+   "spotify": "https://open.spotify.com/album/4RF54XCPiLaVmZu9KWmzxd"
+  },
+  {
+   "slug": "filthy-tongue-of-gods-and-griots",
+   "title": "From Filthy Tongue of Gods and Griots",
+   "artist": "dälek",
+   "year": 2002,
+   "category": "experimental / industrial hip-hop",
+   "releaseType": "album",
+   "released": "6 August 2002",
+   "length": "56:40",
+   "cover": "https://coverartarchive.org/release/beca37c6-9b32-4ac4-ac2a-e480cd71d46c/front-500",
+   "spotify": "https://open.spotify.com/album/4ZifLmCPfzhOCocXAMP9Ny"
+  },
+  {
+   "slug": "falling",
+   "title": "Falling",
+   "artist": "Frost Children",
+   "year": 2025,
+   "category": "hyperpop / electro house",
+   "releaseType": "single",
+   "released": "1 July 2025",
+   "length": "3:47",
+   "coverId": "1qELLm6wXrEKp_7E0Bya7tOC--B5eVp5b",
+   "spotify": "https://open.spotify.com/album/4RDqQEo4Wc5mAQHavIIH0f"
+  },
+  {
+   "slug": "stay-true-forever",
+   "title": "Stay true forever",
+   "artist": "kuru",
+   "year": 2025,
+   "category": "lo-fi / bedroom",
+   "releaseType": "album",
+   "coverId": "14r6nHlS0Ja8ah8NtH6vagV1eCyswytnv",
+   "spotify": "https://open.spotify.com/album/7sfzt6opjPYVupZDX0bMUB"
+  },
+  {
+   "slug": "tiger",
+   "title": "Tiger",
+   "artist": "Thaiboy Digital",
+   "year": 2025,
+   "category": "cloud rap",
+   "releaseType": "album",
+   "coverId": "17nKG7q6ksygqxP1mZJSyvx8B8RROU5c0",
+   "spotify": "https://open.spotify.com/album/0MTTE1UtmLcN9Tm2GooEfZ"
+  },
+  {
+   "slug": "sos",
+   "title": "S.O.S",
+   "artist": "Thaiboy Digital",
+   "year": 2025,
+   "category": "cloud rap",
+   "releaseType": "ep",
+   "coverId": "1c_fDXtEYlQKRa0opunjX-mH1ZwcYwCzh",
+   "spotify": "https://open.spotify.com/album/12CZOt2CvQgq9JepaXR4h5"
+  },
+  {
+   "slug": "fm-thoughts",
+   "title": "FM Thoughts",
+   "artist": "Slater",
+   "year": 2025,
+   "category": "hyperpop",
+   "releaseType": "album",
+   "coverId": "1iSJDxrLH-herVxQJ1_-xS3VIP2667xqm",
+   "spotify": "https://open.spotify.com/album/4VLADJHOrl32zNqeN0Kxot"
+  },
+  {
+   "slug": "afterlife-flatbush-zombies",
+   "title": "Afterlife",
+   "artist": "Flatbush Zombies",
+   "year": 2025,
+   "category": "hip-hop",
+   "releaseType": "single",
+   "coverId": "1sV1tc44B7FH9k2L9kykIMCwO5sEPzkod",
+   "spotify": "https://open.spotify.com/album/7ziMuGcC9aJh8HCHQltupF"
+  },
+  {
+   "slug": "add-it-up",
+   "title": "Add it UP",
+   "artist": "Harto Falión",
+   "year": 2025,
+   "category": "reggaeton / latin trap",
+   "releaseType": "single",
+   "coverId": "1M3rJIHuNhxyrhYULDF6qQzdBR-Fd6J2t",
+   "spotify": "https://open.spotify.com/track/06VtTvHR9QlLMYfuDbTFhc"
+  },
+  {
+   "slug": "galore",
+   "title": "Galore",
+   "artist": "Oklou",
+   "year": 2025,
+   "category": "art pop / electronic",
+   "releaseType": "album",
+   "coverId": "1876X7NYR2_cRlCdXwDjI0NU-JeKBEXw5",
+   "spotify": "https://open.spotify.com/album/6s7TtMHRcoy8D0ipc0wmjE"
+  },
+  {
+   "slug": "inferno",
+   "title": "Inferno",
+   "artist": "Boards of Canada",
+   "year": 2026,
+   "category": "electronic / ambient / IDM / hauntology",
+   "releaseType": "album",
+   "released": "29 May 2026",
+   "length": "69:51",
+   "coverId": "1wqGDc3WIL6mviaan5qrrkjecy6FPdM7T",
+   "spotify": "https://open.spotify.com/album/0mu3EvWYfNwBfISSg0q03p"
+  },
+  {
+   "slug": "symbol",
+   "title": "Symbol",
+   "artist": "Susumu Yokota",
+   "year": 2005,
+   "category": "ambient / electronic",
+   "releaseType": "album",
+   "coverId": "173sdV2HJyBflimKw9HZu_ZFlSUOq90aR",
+   "spotify": "https://open.spotify.com/album/0ntm3YaiXVkkGitWl2XASV"
+  },
+  {
+   "slug": "tweaker-poem",
+   "title": "Tweaker Poem",
+   "artist": "Frost Children",
+   "year": 2025,
+   "category": "hyperpop",
+   "releaseType": "ep",
+   "coverId": "12Y6X5uRG2t_jTBB9c9Kvmio0ZPoEM88A",
+   "spotify": "https://open.spotify.com/album/2fzKiP2hfzKll1QlXNzojx"
+  },
+  {
+   "slug": "i-cant-wait-to-use-the-internet",
+   "title": "I Can't Wait to Use the Internet",
+   "artist": "Kane Parsons",
+   "year": 2025,
+   "category": "ambient / experimental",
+   "releaseType": "album",
+   "coverId": "1CRusQg5eZqWrTpMx_I8Dgbp2h-97LS3x",
+   "spotify": "https://open.spotify.com/album/6LEuxaOuDFUdlmikfHd8WW"
+  },
+  {
+   "slug": "1992-2012",
+   "title": "1992 - 2012",
+   "artist": "Underworld",
+   "year": 2011,
+   "category": "electronic / techno",
+   "releaseType": "compilation",
+   "coverId": "1Vn7UzTPMBac6vGxQL6jbm5FCpbl_MQKM",
+   "spotify": "https://open.spotify.com/album/68wdXsJmyuDfbozV2rDjXq"
+  },
+  {
+   "slug": "complex-skoolio",
+   "title": "COMPLEX (september 2022)",
+   "artist": "skoolio",
+   "year": 2022,
+   "category": "lo-fi / plunderphonics",
+   "releaseType": "album",
+   "coverId": "1fzN-weddXEOi3kUW3_MQsaxWwABpSJAH",
+   "spotify": "https://open.spotify.com/album/2qkokAFYT54n3nFTTrkbn5"
+  },
+  {
+   "slug": "atmos-skoolio",
+   "title": "atmos (final 2023)",
+   "artist": "skoolio",
+   "year": 2023,
+   "category": "lo-fi / plunderphonics",
+   "releaseType": "album",
+   "coverId": "1BpVcpqeoShZ4KtbmbNI3My7mYQeDdhBI",
+   "spotify": "https://open.spotify.com/album/72Q0GSDS70bQeSNHE1Jekl"
+  },
+  {
+   "slug": "jul-mix-21-skoolio",
+   "title": "Jul Mix 21 (2k19 tribute)",
+   "artist": "skoolio",
+   "year": 2019,
+   "category": "lo-fi / plunderphonics",
+   "releaseType": "album",
+   "coverId": "1VBli4wEz7tyBK1E8xIo5W42vaJGgAJHr",
+   "spotify": "https://open.spotify.com/album/0GCias0JdnsKULYomiZKIU"
+  }
+ ],
+ "blog": []
+};

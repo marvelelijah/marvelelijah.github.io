@@ -248,7 +248,8 @@
   .lightbox-camera{ margin-bottom:4px; }
   .lightbox-lens{ margin-bottom:4px; }
   .lightbox-film{ margin-bottom:4px; }
-  .lightbox-format{ margin-bottom:14px; }
+  .lightbox-format{ margin-bottom:4px; }
+  .lightbox-exposure{ margin-bottom:14px; }
   .lightbox-artist{ margin-bottom:4px; }
   .lightbox-medium{ margin-bottom:14px; }
   .lightbox-desc{ line-height:1.6; }
@@ -864,6 +865,22 @@
   .set-row-name{ flex:none; }
   .set-row-val{ margin-left:auto; color:var(--fg); }
 
+  /* ---- blog posts ---- */
+  .post{ max-width:68ch; }
+  .post-title{ font-size:1.25em; font-weight:normal; color:var(--fg); margin:4px 0 2px; }
+  .post-date{ color:var(--fg-dim); font-size:0.85em; margin-bottom:14px; }
+  .post-cover{ display:block; width:100%; height:auto; margin:0 0 16px; border:1px solid var(--line); }
+  .post-body{ line-height:1.75; }
+  .post-body p{ margin:0 0 1em; }
+  .post-body h2, .post-body h3, .post-body h4{ font-weight:normal; color:var(--dir); margin:1.4em 0 0.5em; }
+  .post-body h2{ font-size:1.1em; } .post-body h3{ font-size:1em; } .post-body h4{ font-size:0.95em; }
+  .post-body a{ color:var(--fg); text-decoration:underline; text-underline-offset:3px; }
+  .post-body blockquote{ margin:0 0 1em; padding-left:12px; border-left:2px solid var(--line); color:var(--fg-dim); }
+  .post-body ul{ margin:0 0 1em; padding-left:1.4em; }
+  .post-body code{ background:var(--line); padding:0 4px; }
+  .post-body hr{ border:none; border-top:1px solid var(--line); margin:1.6em 0; }
+  .post-body img.post-img{ display:block; max-width:100%; height:auto; margin:0.4em 0 1.2em; border:1px solid var(--line); }
+
   /* ---- settings dropdown ---- */
   .listing .settings-toggle{ display:flex; align-items:baseline; gap:0; }
   .listing .tag-settings{ color:var(--dir); }
@@ -1067,6 +1084,7 @@
       <div class="lightbox-lens" id="lightboxLens"></div>
       <div class="lightbox-film" id="lightboxFilm"></div>
       <div class="lightbox-format" id="lightboxFormat"></div>
+      <div class="lightbox-exposure" id="lightboxExposure"></div>
       <div class="lightbox-artist" id="lightboxArtist"></div>
       <div class="lightbox-medium" id="lightboxMedium"></div>
       <div class="lightbox-desc" id="lightboxDesc"></div>
@@ -1075,26 +1093,15 @@
   <button class="lightbox-arrow lightbox-next" id="lightboxNext" type="button" aria-label="next photo">›</button>
 </div>
 
+<script src="content/content.js"></script>
+<script src="js/markdown.js"></script>
 <script src="img/manifest.js"></script>
 <script>
 (function(){
-  // Real photo data pulled from the "Elijah Halford Website" Google Drive folder
-  // (Photography/Film and Photography/Digital), alphabetized by filename.
-  // camera/description are left blank where there's nothing to derive from the
-  // filename alone — fill those in and I'll wire them in.
-  const FILM_STOCK_LABELS = {
-    CineStill500T:'cinestill 500t', CineStill400D:'cinestill 400d',
-    KodakVision3500T:'kodak vision3 500t', Portra400:'kodak portra 400',
-    Portra800:'kodak portra 800', Portra160:'kodak portra 160',
-    Delta100:'ilford delta 100', Fuji400:'fujifilm 400',
-    KentmerePan400:'ilford kentmere pan 400', AmberT200:'amber t200',
-    CineStill800T:'cinestill 800t', KodakEktar100:'kodak ektar 100',
-  };
-  function filmStockFromName(filename){
-    const m = filename.match(/^\d{2}-\d{2}-\d{2}_([A-Za-z0-9]+)\s*\(/);
-    if(!m) return '';
-    return FILM_STOCK_LABELS[m[1]] || m[1].toLowerCase();
-  }
+  // All editable content (photos, journal links, music, blog posts) lives in
+  // content/content.js, which the admin page (/admin) reads and writes.
+  const C = window.SITE_CONTENT || {};
+  const CP = C.photos || {};
   const SNOOP_COMMENTS = [' well, this is awkward. ', ' fuuuuucccckkkkk. '];
   function insertSnoopComment(parent, beforeNode){
     const msg = SNOOP_COMMENTS[(Math.random() * SNOOP_COMMENTS.length) | 0];
@@ -1112,7 +1119,7 @@
     if(!m || !m.w || !m.w.length) return null;
     let pick = m.w[m.w.length - 1];
     for(const x of m.w){ if(x >= w){ pick = x; break; } }
-    const url = IMG_BASE + id + '-' + pick + '.webp';
+    const url = IMG_BASE + id + '-' + pick + '.' + (m.x || 'webp');
     IMG_BY_URL[url] = id;
     return url;
   }
@@ -1125,7 +1132,7 @@
     const id = IMG_BY_URL[src];
     const m = id && IMG_M[id];
     if(!m) return null;
-    img.srcset = m.w.map(w => IMG_BASE + id + '-' + w + '.webp ' + w + 'w').join(', ');
+    img.srcset = m.w.map(w => IMG_BASE + id + '-' + w + '.' + (m.x || 'webp') + ' ' + w + 'w').join(', ');
     img.sizes = sizes;
     img.decoding = 'async';
     return m;
@@ -1167,201 +1174,83 @@
   function coverArtRG(mbid){
     return 'https://coverartarchive.org/release-group/' + mbid + '/front-500';
   }
-  const DIGITAL_CAMERA = 'sony a7c';
-  const DIGITAL_LENS = 'sony fe 40mm f/2.5 g';
-  const FILM_FORMAT = '35mm';
-
-  const FILM_DETAILS = {
-    '01-04-26_CineStill400D (4).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'While I was driving down the interstate, my passenger accidentally took a long exposure of the SunTrust Center. It\'s currently my favorite photo of Orlando.' },
-    '01-06-26_AmberT200 (15).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'An itch I needed to scratch in early 2026 was trying my hand at self-timed long exposures on my commute.' },
-    '01-06-26_AmberT200 (18).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'I was listening to Vanities by Malibu throughout my year long obsession with long exposure film photography.' },
-    '01-09-25_KentmerePan400 (36).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Karaoke.' },
-    '01-09-25_KentmerePan400 (4).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'We\'re at the age where local shows aren\'t worth the noise, we\'d rather smoke outside the venue.' },
-    '01-09-26_Fuji400 (26).jpg': { camera:'canon ae-1 program', lens:'canon fd 50mm f/1.4', description:'There\'s this huge cross on my way back from the city and I always get reminded of Neon Genesis Evangelion. As if that\'s not even inspired by religion at all, it just looks cool.' },
-    '01-09-26_Fuji400 (35).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Shirt reads, “SORRY YOU HAD A BAD DAY YOU CAN TOUCH MY DICK IF YOU WANT”' },
-    '01-09-26_Fuji400 (37).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'I hate being that one guy in the very front of a crowd but I don\'t mind being the asshole if I get a shot like this.' },
-    '01-25-26_Fuji400 (11).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Sunny, but still cold. Looking forward to this temperature in the city again.' },
-    '01-25-26_Fuji400 (14).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Black Israelites posting up on a corner in the city. They had security and their own videographer. I had a better camera than him.' },
-    '01-25-26_Fuji400 (7).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Walt Disney World has residential roads that run behind every park with security on every corner. Shots like these get you in a lot of trouble. Good news for me because I legally took this photo within the park. The backroad detail was just a fun fact.' },
-    '02-01-26_Fuji400 (15).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Millions come through Universal Studios every year. Most are seagulls.' },
-    '02-01-26_Fuji400 (16).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Street facade, nothing you see is real, this is nothing, you are nothing.' },
-    '02-01-26_Fuji400 (32).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'I went to high school behind that side of the park. We constantly heard the screams from that rollercoaster.' },
-    '02-24-26_Fuji400 (11).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'No, I didn\'t come in with this.' },
-    '02-24-26_Fuji400 (15).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Thanks for staying still.' },
-    '02-24-26_Fuji400 (16).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Guilty culprit.' },
-    '02-24-26_Fuji400 (17).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'I really like this photo.' },
-    '02-24-26_Fuji400 (26).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'I received some bad news before I took this.' },
-    '02-24-26_Fuji400 (6).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Lake Eola in Orlando is a strange spot because it\'s a public park with parking meters and third spaces, but between the two is a large homeless population.' },
-    '02-24-26_Fuji400 (8).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'For you upon your returnal.' },
-    '03-25-26_Delta100 (14).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Orlando public library.' },
-    '03-25-26_Delta100 (32).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'The commute has a nice view across the lake.' },
-    '03-25-26_Delta100 (36).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Same spot two months earlier.' },
-    '03-29-26_Portra800 (16).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Bird? Plane. Ringling Museum of Art, Sarasota.' },
-    '03-29-26_Portra800 (28).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Worst spot to get stuck in traffic with your favorite hat on.' },
-    '03-29-26_Portra800 (32).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Your local city-approved protest screams parade more than civil disobedience.' },
-    '03-29-26_Portra800 (34).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'' },
-    '04-17-26_Portra400 (34).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Does this belong to any of you?' },
-    '05-06-26_Portra160 (15).jpg': { camera:'canon eos 650', lens:'canon ef 50mm f/1.4', description:'Graduation photos at the University of Central Florida.' },
-    '05-06-26_Portra160 (34).jpg': { camera:'canon eos 650', lens:'canon ef 50mm f/1.4', description:'Everybody was taking graduation photos and I found a sweet spot where no sorority girls were swimming in the water.' },
-    '05-17-26_Portra400 (28).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'' },
-    '05-17-26_Portra400 (4).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Epcot International Flower & Garden Festival.' },
-    '05-17-26_Portra400 (8-9).jpg.png': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Very much intentional double exposure.' },
-    '06-14-26_KodakVision3500T (8).jpg': { camera:'canon eos 650', lens:'canon ef 50mm f/1.4', description:'Another landmark on my commute in Groveland.' },
-    '06-16-26_Portra160 (15).jpg': { camera:'canon eos 650', lens:'canon ef 50mm f/1.4', description:'Interesting gentleman.' },
-    '06-16-26_Portra160 (27).jpg': { camera:'canon eos 650', lens:'canon ef 50mm f/1.4', description:'Cattle near my house.' },
-    '06-16-26_Portra160 (31).jpg': { camera:'canon eos 650', lens:'canon ef 50mm f/1.4', description:'Dozens of cows live on this land for tax reasons.' },
-    '06-16-26_Portra160 (33).jpg': { camera:'canon eos 650', lens:'canon ef 50mm f/1.4', description:'These cows even have children as they wait for the land they graze to appreciate.' },
-    '06-30-26_CineStill500T (11).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'I shot this on CineStill 800T but you can (and should) shoot on its intended box speed, 500.' },
-    '06-30-26_CineStill500T (34).jpg': { camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', description:'Pro tip: if you shoot CineStill at 500 you don\'t have to pull in development because it\'s repackaged Kodak Vision3 500T — don\'t listen to what CineStill says.' },
-    '09-12-25 (1).jpg': { displayName:'09-12-25_CineStill800T (1).jpg', camera:'canon eos 650', lens:'canon ef 50mm f/1.4', film:'cinestill 800t', description:'This belonged to my first roll of film. Nice shot.' },
-    '11-21-25 (1).jpg': { displayName:'11-21-25_CineStill800T (1).jpg', camera:'pentax 645', lens:'wide angle (exact lens unknown)', film:'cinestill 800t', format:'medium format', description:'Taken on a wedding shoot in Miami.' },
-    '11-29-25 (1).png': { displayName:'11-29-25_KodakEktar100 (1).png', camera:'canon eos 650', lens:'canon ef 50mm f/1.4', film:'kodak ektar 100', description:'Artist vending at an art market.' },
-    '12-06-25 (1).jpg': { displayName:'12-06-25_KodakEktar100 (1).jpg', camera:'canon ae-1 program', lens:'canon fd 28mm f/2.8', film:'kodak ektar 100', description:'Christmas parade. I go every year.' },
-    '12-15-25 (1).jpg': { displayName:'12-15-25_CineStill400D (1).jpg', camera:'canon eos 650', lens:'canon ef 50mm f/1.4', film:'cinestill 400d', description:'Whose dog is this?' },
-    '12-15-25 (2).jpg': { displayName:'12-15-25_CineStill400D (2).jpg', camera:'canon eos 650', lens:'canon ef 50mm f/1.4', film:'cinestill 400d', description:'Lying around like they pay the bills. smh.' },
-    '12-20-25 (1).jpg': { displayName:'12-20-25_Portra800 (1).jpg', camera:'canon eos 650', lens:'canon ef 50mm f/1.4', film:'kodak portra 800', description:'Cows.' },
-    '12-20-25 (4).png': { displayName:'12-20-25_Portra800 (4).png', camera:'canon eos 650', lens:'canon ef 50mm f/1.4', film:'kodak portra 800', description:'Cows.' },
-    '12-25-25 (1).jpg': { displayName:'12-25-25_CineStill800T (1).jpg', camera:'canon eos 650', lens:'canon ef 50mm f/1.4', film:'cinestill 800t', description:'Arcade on Christmas Night.' },
-    '12-25-25 (2).jpg': { displayName:'12-25-25_CineStill800T (2).jpg', camera:'canon eos 650', lens:'canon ef 50mm f/1.4', film:'cinestill 800t', description:'Arcade on Christmas Night.' },
-  };
-
-  const DIGITAL_DETAILS = {
-    // 09-27-26 + 10-03-26 batch
-    '09-27-26 (3).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Get a room." },
-    '09-27-26 (32).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Another view of that building." },
-    '09-27-26 (44).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Falun Gong." },
-    '09-27-26 (48).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"The view one gets from below." },
-    '09-27-26 (58).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Setting sun, frigid shadow." },
-    '10-03-26 (6).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Can’t park there, mate." },
-    '10-03-26 (7).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Forgotten at sea." },
-    '10-03-26 (8).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"PROPHET’S REVENGE." },
-    '10-03-26 (10).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"The beach." },
-    '10-03-26 (16).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"New Oasis." },
-    // 10-09-26 batch
-    '10-09-26 (84).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Evanora Unlimited." },
-    '10-09-26 (100).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"The promoter." },
-    '10-09-26 (121).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Couple of gents on the decks." },
-    '10-09-26 (139).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Man on right was named Cash, man on left was named Lincoln. True story." },
-    '10-09-26 (179).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Brain melting bass has done its job." },
-    '10-09-26 (215).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"DJ." },
-    '10-09-26 (247).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Alley cat." },
-    '10-09-26 (276).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Ravers." },
-    '10-09-26 (278).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Big Ass Fans." },
-    '10-09-26 (315).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Painter and the painted." },
-    '10-09-26 (317).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Airbrush refill." },
-    '10-09-26 (353).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"I was experimenting with light trying to get the “hero shot”." },
-    '10-09-26 (360).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"“If you share any of these and my nose looks big, I’m going to find you and kill you.” - Unknown Raver." },
-    '10-09-26 (381).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Evanora looks through." },
-    '10-09-26 (394).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"The kickflip nobody notices is usually the best you’ve accomplished." },
-    '10-09-26 (397).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Nonchalant af." },
-    '10-09-26 (416).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Everything you’re looking for is in this image." },
-    '10-09-26 (475).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Performance." },
-    '10-09-26 (534).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Rose colored glasses on, party on." },
-    '10-09-26 (550).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Performance." },
-    '10-09-26 (566).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Hot and humid stage but nobody cared." },
-    '10-09-26 (637).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Parking lot portrait." },
-    '10-09-26 (672).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Like an angel who pulled their own wings off." },
-    '10-09-26 (687).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Evanora." },
-    '10-09-26 (710).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"How it feels sometimes." },
-    '10-09-26 (823).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Obscura." },
-    '10-09-26 (859).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Prismatic glass." },
-    '10-09-26 (939).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"WILL." },
-    '10-09-26 (985).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"Worship." },
-    '10-09-26 (1071).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"The face of a weary world." },
-    '10-09-26 (1105).jpg': { camera:'sony a7c', lens:'sony fe 24mm f/2.8 g', description:"After I took this, I felt compelled to speak. “Not only have I now met the most interesting person in the world, but you’re going to become a myth among men.” That got a big smile out of them. I think I’ll keep that photo." },
-    '04-07-26 (1).jpg': { camera:'canon eos r5 mark ii', lens:'canon rf 24-70mm f/2.8l is usm', description:'Choose life.' },
-    '04-07-26 (2).jpg': { camera:'canon eos r5 mark ii', lens:'canon rf 24-70mm f/2.8l is usm', description:'Choose a job.' },
-    '04-07-26 (3).jpg': { camera:'canon eos r5 mark ii', lens:'canon rf 24-70mm f/2.8l is usm', description:'Choose a career.' },
-    '04-07-26 (4).jpg': { camera:'canon eos r5 mark ii', lens:'canon rf 24-70mm f/2.8l is usm', description:'Choose a family.' },
-    '07-17-26 (1).jpg': { camera:'canon eos r5 mark ii', lens:'canon rf 24-70mm f/2.8l is usm', description:'What the fuck r u looking at?' },
-    '09-18-23 (1).jpg': { camera:'canon eos m50 mark ii', lens:'meike mk-6.5mm f/2', description:'Two men holding hands.' },
-    '10-31-23 (1).jpg': { camera:'canon eos m50 mark ii', lens:'meike mk-6.5mm f/2', description:'That one guy.' },
-    '10-31-23 (2).jpg': { camera:'canon eos m50 mark ii', lens:'meike mk-6.5mm f/2', description:'Checkmate.' },
-  };
-
-  const STILLS_DETAILS = {
-    '01-25-24 (1).jpg': { camera:'canon eos m50 mark ii', lens:'meike mk-6.5mm f/2', description:'Look here.' },
-    '01-25-24 (2).jpg': { camera:'canon eos m50 mark ii', lens:'meike mk-6.5mm f/2', description:'Went on a date with another photographer, we both shot each other in our styles.' },
-    '04-05-24 (1).jpg': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'Music event. Lot of clowns involved.' },
-    '04-05-24 (2).jpg': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'A gentleman destroyed his guitar on stage, fans kept souvenirs.' },
-    '04-05-24 (3).jpg': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'I remember this "venue" being really cramped, it was in a smoke shop.' },
-    '05-10-24 (1).png': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'Before it goes to shit.' },
-    '08-29-24 (1).png': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'Stills from the music video "Your Problem Dog" by Endie, which I shot and edited.' },
-    '08-29-24 (2).png': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'Stills from the music video "Your Problem Dog" by Endie, which I shot and edited.' },
-    '08-29-24 (3).png': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'Stills from the music video "Your Problem Dog" by Endie, which I shot and edited.' },
-    '08-29-24 (4).png': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'Stills from the music video "Your Problem Dog" by Endie, which I shot and edited.' },
-    '08-29-24 (5).png': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'Stills from the music video "Your Problem Dog" by Endie, which I shot and edited.' },
-    '08-29-24 (6).png': { camera:'canon eos r5c', lens:'canon rf 15-35mm f2.8l is usm', description:'Stills from the music video "Your Problem Dog" by Endie, which I shot and edited.' },
-    '11-22-25 (1).png': { camera:'sony alpha fx3', lens:'sony fe 16-35mm f/2.8 g', description:'Still from a wedding I shot at the Ancient Spanish Monastery in Miami Beach. It was a filming location for Miami Vice and Ace Ventura: Pet Detective.' },
-    '12-31-23 (1).png': { camera:'canon eos m50 mark ii', lens:'meike mk-6.5mm f/2', description:'Woman notices camera, woman behind inspects sword.' },
-    '12-31-23 (2).jpg': { camera:'canon eos m50 mark ii', lens:'meike mk-6.5mm f/2', description:'Cheeky smoke.' },
-  };
-
-  const DIGITAL_DESCRIPTIONS = {
-    '08-20-26 (17).jpg': 'I\'ve always been told I shoot too tight. How about fuck you? Do you even see this fucking bee?',
-    '08-20-26 (34).jpg': 'How you grade your photos is very important. This was a nice sunny day, too. I\'m just hella emo when I drive.',
-    '08-20-26 (70).jpg': 'Sister in the hospital — again.',
-    '08-21-26 (2).jpg': 'Took a stab at shooting the same spot with digital. My professional peers can\'t tell the difference.',
-    '08-21-26 (3).jpg': 'Is it betraying the quality of digital to still grade like film?',
-    '08-21-26 (5).jpg': 'I got bit by a lot of mosquitoes for this shot, frame it or something.',
-    '08-22-26 (30).jpg': 'Apparently turning your hazards on in thick rainfall is illegal.',
-    '09-02-26 (106).jpg': 'Professional headshots for my hairdresser. I came in to take her photos shortly after shaving my head, I\'m sure she felt betrayed.',
-    '09-02-26 (163).jpg': 'Do you know how long it took me to make this lady smile? She hates me!',
-    '09-02-26 (244).jpg': 'Sometimes you just need to rest your camera on your knee, turn off your flash, and get shots without anyone noticing.',
-    '09-02-26 (318).jpg': 'I\'m related to Rob Halford of Judas Priest. I like telling the owner of this record store because he always recalls the same story: meeting Rob in Orlando and being asked by him where the nearest gay bar is.',
-    '09-02-26 (33).jpg': 'Parrot. Thank god its owner didn\'t charge me to take this photo because I haven\'t carried change since I worked in food service.',
-    '09-02-26 (343).jpg': 'What are you looking at?',
-    '09-02-26 (390).jpg': 'Big fan of this lady\'s side profile.',
-    '09-06-26 (111).jpg': 'Tasteful side-balls.',
-    '09-06-26 (142).jpg': 'Another gorgeous passenger photo, thank you.',
-    '09-06-26 (147).jpg': 'F5 tornado, you just had to be there, dude.',
-    '09-06-26 (46).jpg': 'Waiting, waiting.',
-    '09-13-26 (218).jpg': 'Precious.',
-    '09-13-26 (69).jpg': 'Big fan of this photo op, I intend to shoot there every visit to Universal Studios.',
-  };
-
-  // "06-30-26_CineStill500T (34).jpg" -> 260630.0034, so photos sort by date, then frame
-  function photoSortKey(name){
-    const m = name.match(/^(\d{2})-(\d{2})-(\d{2})/);
+  // Sort key: the date a photo was taken, so galleries can run newest/oldest.
+  // Uses the saved date ("2026-06-30 18:04:11") when there is one, otherwise the
+  // MM-DD-YY at the start of the filename, then the frame number in brackets.
+  function photoSortKey(name, date){
+    const d = date && String(date).match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2}))?)?/);
+    if(d){
+      const t = d[4] ? (Number(d[4]) * 3600 + Number(d[5]) * 60 + Number(d[6] || 0)) / 100000 : 0;
+      return Number(d[1].slice(2) + d[2] + d[3]) + t;
+    }
+    const m = String(name || '').match(/^(\d{2})-(\d{2})-(\d{2})/);
     if(!m) return 0;
     const n = name.match(/\((\d+)\)/);
     return Number(m[3] + m[1] + m[2]) + (n ? Number(n[1]) / 10000 : 0);
   }
 
-  function buildPhotoFiles(entries, mode){
+  // "f/2.8 · 1/125s · iso 400 · 40mm" from the saved camera settings
+  function exposureLine(x){
+    if(!x) return '';
+    return [x.f ? 'f/' + x.f : '', x.shutter || '', x.iso ? 'iso ' + x.iso : '', x.focal ? x.focal + 'mm' : '']
+      .filter(Boolean).join(' · ');
+  }
+
+  function buildPhotoFiles(list){
     const files = {};
-    entries.forEach(([id, filename], i) => {
-      const filmInfo = mode === 'film' ? FILM_DETAILS[filename] : null;
-      const digitalInfo = mode === 'digital' ? DIGITAL_DETAILS[filename] : null;
-      const stillsInfo = mode === 'stills' ? STILLS_DETAILS[filename] : null;
-      let camera = '', lens = '', film = '', format = '', description = '';
-      if(mode === 'film'){
-        camera = filmInfo ? filmInfo.camera : '';
-        lens = filmInfo ? filmInfo.lens : '';
-        film = (filmInfo && filmInfo.film) ? filmInfo.film : filmStockFromName(filename);
-        format = (filmInfo && filmInfo.format) ? filmInfo.format : FILM_FORMAT;
-        description = filmInfo ? filmInfo.description : '';
-      } else if(mode === 'digital'){
-        camera = digitalInfo ? digitalInfo.camera : DIGITAL_CAMERA;
-        lens = digitalInfo ? digitalInfo.lens : DIGITAL_LENS;
-        description = digitalInfo ? digitalInfo.description : (DIGITAL_DESCRIPTIONS[filename] || '');
-      } else if(mode === 'stills'){
-        camera = stillsInfo ? stillsInfo.camera : '';
-        lens = stillsInfo ? stillsInfo.lens : '';
-        description = stillsInfo ? stillsInfo.description : '';
-      }
+    (list || []).forEach((p, i) => {
+      if(!p || !p.id) return;
       files['p' + String(i).padStart(3, '0') + '.photo'] = {
         type:'photo',
-        filename: (filmInfo && filmInfo.displayName) ? filmInfo.displayName : filename,
-        sortKey: photoSortKey(filename),
-        camera: camera,
-        lens: lens,
-        film: film,
-        format: format,
-        description: description,
-        src: driveThumb(id, 1600),
+        id: p.id,
+        filename: p.displayName || p.file || '',
+        sortKey: photoSortKey(p.file, p.date),
+        camera: p.camera || '',
+        lens: p.lens || '',
+        film: p.film || '',
+        format: p.format || '',
+        exposure: exposureLine(p.exif),
+        description: p.description || '',
+        src: driveThumb(p.id, 1600),
       };
     });
+    return files;
+  }
+
+  function uniqueKey(files, base, ext){
+    let k = (base || 'item') + ext, n = 2;
+    while(files[k]) k = base + '-' + (n++) + ext;
+    return k;
+  }
+  function buildLinkFiles(list){
+    const files = {};
+    (list || []).forEach(l => {
+      if(!l || !l.url) return;
+      files[uniqueKey(files, l.slug, '.link')] = { type:'link', kind: l.kind || 'article',
+        title: l.title || l.url, author: l.author || '', category: l.category || '', url: l.url };
+    });
+    return files;
+  }
+  function buildAlbumFiles(list){
+    const files = {};
+    (list || []).forEach(a => {
+      if(!a || !a.title) return;
+      files[uniqueKey(files, a.slug, '.album')] = { type:'album',
+        title: a.title, artist: a.artist || '', year: a.year || '', category: a.category || '',
+        releaseType: a.releaseType || '', released: a.released || '', length: a.length || '',
+        cover: a.coverId ? driveThumb(a.coverId, 1000) : (a.cover || ''),
+        spotify: a.spotify || '' };
+    });
+    return files;
+  }
+  function buildPostFiles(list){
+    const files = {};
+    (list || []).filter(p => p && p.title && !p.draft)
+      .slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+      .forEach(p => {
+        files[uniqueKey(files, p.slug, '.post')] = { type:'post',
+          title: p.title, date: p.date || '', body: p.body || '', coverId: p.coverId || '' };
+      });
     return files;
   }
 
@@ -1417,148 +1306,6 @@
     });
     return files;
   }
-
-  const FILM_RAW = [
-    ['1wzf7ZtOvk24zAsLCWptWxFBXHwejFQnI','06-30-26_CineStill500T (34).jpg'],
-    ['1Ob_RMKsHi-kvduYAGI2tsemRXTdJG4aJ','06-30-26_CineStill500T (11).jpg'],
-    ['1FVaYBzv-kTJDROWjP5zz2q6-Dl4gtpey','06-14-26_KodakVision3500T (8).jpg'],
-    ['1rXJmEp9DkZZMl72YzRh44coTb-WJDKQ6','06-16-26_Portra160 (33).jpg'],
-    ['1JZB7l8UqWFi-qXqwv31sZYvRksrw-02F','06-16-26_Portra160 (31).jpg'],
-    ['1OhCXL-wQQDNV3sFOYL4RsMybldaoVBay','06-16-26_Portra160 (27).jpg'],
-    ['1T0fXcUTwE6bxoohKGcTParN8pZ8FYdVJ','06-16-26_Portra160 (15).jpg'],
-    ['1gYpFmT59sepJuxaoeogFVIS7AvuM3ipE','05-17-26_Portra400 (8-9).jpg.png'],
-    ['1Z58AJXsbgA1QtO7aXQWIgtebByDExO2I','05-17-26_Portra400 (28).jpg'],
-    ['16f6jLCmpYvtO3znrOemn03LwHm0Ju56Q','05-17-26_Portra400 (4).jpg'],
-    ['1bhtivlnPfwMCP4Ai-2F9iYtGN87CuYWd','05-06-26_Portra160 (34).jpg'],
-    ['1BmuJCryxFygE38RwNZ5ZB7S_3BC3SuCC','05-06-26_Portra160 (15).jpg'],
-    ['1hk26vzEY0aO4ymOdFXsFborFp_r-Cn1E','04-17-26_Portra400 (34).jpg'],
-    ['1-M4f-dfmCVmjvmaUIAI0d0L3nBcNc6sN','03-29-26_Portra800 (34).jpg'],
-    ['1eukdvKmCr7BSlDDj3Yo88uupkkbgSCCz','03-29-26_Portra800 (32).jpg'],
-    ['138yN-lbRnc_D1xsEKS3YPb7Pnw41rBF1','03-29-26_Portra800 (28).jpg'],
-    ['1oSVO9bYzqzaZHfk_xDtYDEKmPRbRm2OG','03-29-26_Portra800 (16).jpg'],
-    ['1SXG1l9N2T6d5ImGvm2QikoUGp5wvnUBn','03-25-26_Delta100 (36).jpg'],
-    ['1pZCnXLdQ0YGZqJE6it60B8F2kz2XqGam','03-25-26_Delta100 (32).jpg'],
-    ['1Z3t09d2TwNUMTn6XwTYKwxen2rElCqWV','03-25-26_Delta100 (14).jpg'],
-    ['1zg9hF4SBJfIBhP2pFybOBmQgrd0Ng3tz','02-24-26_Fuji400 (26).jpg'],
-    ['1VYcSR82Kre7FJDOyoj3_pJIr2XTB1S7r','02-24-26_Fuji400 (17).jpg'],
-    ['1N9kdS3rv7Vxi5vJpcFP86CARa9DBRh4y','02-24-26_Fuji400 (16).jpg'],
-    ['13k-Jv2wN78VF6lnAlsMgARuF9853TN64','02-24-26_Fuji400 (15).jpg'],
-    ['1G7qkU-oAmwk7UXGXUns_wtPW2H-y4HFj','02-24-26_Fuji400 (11).jpg'],
-    ['19EehxpFW70xipDVjZPV3JUXmWEBC7gci','02-24-26_Fuji400 (8).jpg'],
-    ['1q7k7XqS2fj3xKgDPzP0uM7JpUa-2ahZ7','02-24-26_Fuji400 (6).jpg'],
-    ['1mafl45brzegkVSAnqNlj9fjiqbf3pUcy','02-01-26_Fuji400 (32).jpg'],
-    ['1ViBfIkOX8owT0-GWOtze75p-wNm1yO_z','02-01-26_Fuji400 (16).jpg'],
-    ['1JynNZSr7xCdiQSYNXUubBVn6Dp9vTB6e','02-01-26_Fuji400 (15).jpg'],
-    ['1oEYEbASAj0EvMDssAnaCWhcY3wOufALd','01-25-26_Fuji400 (14).jpg'],
-    ['1RZzf0SEEPWDqM6cztL91VgQJirpUkCNp','01-25-26_Fuji400 (11).jpg'],
-    ['1f1jK343-v9WGa62J4CehHDB1KZm0OmgJ','01-25-26_Fuji400 (7).jpg'],
-    ['1VjbSmihtb-VvH0f97Vy6P2LFIq1YQi29','01-09-26_Fuji400 (37).jpg'],
-    ['1NVVDbPpaZiyfki1K0Wr6ajuUB7eTcp1-','01-09-26_Fuji400 (35).jpg'],
-    ['1WNUs1MigAKI-2yTLDDS6vjZfob_0AymR','01-09-26_Fuji400 (26).jpg'],
-    ['1iEAMFQ9VdoOk79h0wiGxJg3I6vesIRy4','01-04-26_CineStill400D (4).jpg'],
-    ['15zxFpLGBF6Vu2B84z5a5iEdk-R58aIte','01-06-26_AmberT200 (18).jpg'],
-    ['1KkkACSUCDL9PtimkJ4HCWRueRGlpcdH0','01-06-26_AmberT200 (15).jpg'],
-    ['1evCDOiEKdTh6JPbGAaWuBmHuVaAvi8dd','01-09-25_KentmerePan400 (4).jpg'],
-    ['1-U4A9YWx4UnpHZQVUmwFHAaOjcoZbobW','01-09-25_KentmerePan400 (36).jpg'],
-    ['17-cVdCELJra3qPpiAzKCREfmlyy_JuBa','11-21-25 (1).jpg'],
-    ['1hqit_mxtrTPPkuybNZTn7isFyYiT8d13','12-25-25 (2).jpg'],
-    ['128pzZXPPB-jkwVwbeZDcvX1kNQxOafwD','11-29-25 (1).png'],
-    ['1EYHeIve1S1NZQOSXmCbZ9iBZ0_1jp6x4','12-25-25 (1).jpg'],
-    ['1fmGxtgSD9nxZXpJc07tx9D7mU-tcxL5H','12-15-25 (2).jpg'],
-    ['1zllDEbspr42ysj4sbuYhNhSmTWFzJGQG','09-12-25 (1).jpg'],
-    ['1If-Wnan5Lm52a_Nza6MMZO4swXLhVoXp','12-20-25 (4).png'],
-    ['1Lu8PjPiavgmJL8UdiFjA0d7okzPYCNQ_','12-15-25 (1).jpg'],
-    ['1DRz8lJZW-RWzvV9c7H2UNG6vX4d1VlFo','12-06-25 (1).jpg'],
-    ['11a1PacgLDLmVd5VF8J82jpZSa1i9LsQZ','12-20-25 (1).jpg'],
-  ];
-  const DIGITAL_RAW = [
-    ['18kkiwDnuTxGntJbfLf3-IGXA08-N1KVi','10-09-26 (84).jpg'],
-    ['1NmX_QS0Rcl3SZeJ8mIW44oLG5dDgZ0PZ','10-09-26 (100).jpg'],
-    ['1I2i9itY1NlUY7ems_7lw32VUTXVlfDty','10-09-26 (121).jpg'],
-    ['1smd2NAe4XqUsR3ZS10QxkKJ4ev5bU0lv','10-09-26 (139).jpg'],
-    ['1a6T3O3I5AGR4cMEmwEq9spj3i1HG7ggJ','10-09-26 (179).jpg'],
-    ['1sGUUDodg7Bz6_xjdB7uHAWK8NMgVvkw5','10-09-26 (215).jpg'],
-    ['19z7ABOcYAcOdiU91yVk9Q_JrEman1DsI','10-09-26 (247).jpg'],
-    ['1erUxEV7QE7bgjzgecAnGrheVHqi8sRQz','10-09-26 (276).jpg'],
-    ['1dvGNoBFOS1dx_eMWOkf2aBKJovhOWKeG','10-09-26 (278).jpg'],
-    ['1T4SCafkjhPnpDy3oTzluPW19dA6gPa2F','10-09-26 (315).jpg'],
-    ['17ZYbpnXLCsAaMe22y3KD-TN9y1nSiZ2n','10-09-26 (317).jpg'],
-    ['1O47lhoak5oFm1u51tkgkgPEYOMd_MJTE','10-09-26 (353).jpg'],
-    ['1EPBtdnzZDPnmNk4xthLwxa1uPyGHvN6D','10-09-26 (360).jpg'],
-    ['1eJVf9S-ZjOSJGGueU3swsT34PI0HoVsz','10-09-26 (381).jpg'],
-    ['14l7UpD0bsBgbqfjm3Q6Rw3PU875uX8ah','10-09-26 (394).jpg'],
-    ['18pipJMka7Fi_hNoFDySomLng0QnQAbYM','10-09-26 (397).jpg'],
-    ['1jd-W9y1h2rufzFupu77mwU09Fc64zyrf','10-09-26 (416).jpg'],
-    ['1uHaIKpOZwHm4OUX0Yk5QVyAlSc8wrSdP','10-09-26 (475).jpg'],
-    ['1U2iIGDe3Ydnz13kWuGr6xpNDIt01jH-K','10-09-26 (534).jpg'],
-    ['1TDaj-C2ZbuxkqdW3dsr34CLcuEHmgMTd','10-09-26 (550).jpg'],
-    ['1ewkGlpiiDXXtzGx5sQ6H9tuRH9t9EPzV','10-09-26 (566).jpg'],
-    ['1FtZ0uItSxH7HlawJZWsiuugIR2N0SwaA','10-09-26 (637).jpg'],
-    ['1L230yaGsE5p4wZHp8xu05iZ4I6KYsgqs','10-09-26 (672).jpg'],
-    ['1vGwmxJUPF1ZCj9K5-GUXxHj-2A1voR7h','10-09-26 (687).jpg'],
-    ['11dbgFVxGXZvLnvvcEvrbvtRAcC37m5NJ','10-09-26 (710).jpg'],
-    ['1Txj1qNlqalvxMbp-ycsqWkiIKcR0M3Pt','10-09-26 (823).jpg'],
-    ['1qGPTUQOc7j2LQOOLvNnFyp47k6Vw-4RC','10-09-26 (859).jpg'],
-    ['1_WlMG-4-kM3PxGM8QXloJX9vJbRqyPvX','10-09-26 (939).jpg'],
-    ['1CY9va0iqWpU1_99tAsUBGfzLaJK7X9dX','10-09-26 (985).jpg'],
-    ['1XZx-tvvtGMqHRMdJDCfSF7YbeNvDhzMT','10-09-26 (1071).jpg'],
-    ['1qwDUcUHdfp6PZxlyGSUpf3rX8lRyDpI5','10-09-26 (1105).jpg'],
-    ['1m4JeRhcf4wKfA7Vbuwdo4GCegTxMiwx5','10-03-26 (6).jpg'],
-    ['1aYGCsN3sfkhtN1gZ8lvkoVHZjrJg3ZIR','10-03-26 (7).jpg'],
-    ['1BalQqp3eqBlr1schKx_09jgDUWRMrB4K','10-03-26 (8).jpg'],
-    ['1wersvGg8uaDEkH38R8_Z8M95uT4QEaIY','10-03-26 (10).jpg'],
-    ['1rwHjHaZZvd8aYw3ykhpqcThrxYZzHhVG','10-03-26 (16).jpg'],
-    ['1byrth5M8duLob_xnciTe9OZvWvizOPSy','09-27-26 (3).jpg'],
-    ['1n7G108T6yGo8SGnkCwW7FK6h2-OpkvBq','09-27-26 (32).jpg'],
-    ['1HKDGgcPmIMMMkP9OrM4_VTrV-xWjApA0','09-27-26 (44).jpg'],
-    ['1zUOmefU25zzyug30enIHVqas6M-5EzL_','09-27-26 (48).jpg'],
-    ['1Dy6WJUHmCax4q251-Bd88kB7Qb0L9FWX','09-27-26 (58).jpg'],
-    ['1f-4zB-KGz6u58rEgkuVABnH1cYSeyzjS','09-13-26 (69).jpg'],
-    ['1buDg_VOJyymrn77spJjShcm4bC58Dxbk','09-13-26 (218).jpg'],
-    ['1zPapHRAfWwTaIemjAsdyXEw-xGNTuabK','09-06-26 (46).jpg'],
-    ['1wmb_qe2asa4MYXw_IjXcxDfKL-C5rXEC','09-06-26 (147).jpg'],
-    ['1L1A65xsiLIigPP75sQ-MIrjC3lXMydOP','09-06-26 (142).jpg'],
-    ['1gjNd9mNxaD8RmYBXb_uzgfi_66wdKCMg','09-06-26 (111).jpg'],
-    ['1ZrId_M0eT8EpaeQwj26au35ccYk5iUAm','09-02-26 (33).jpg'],
-    ['1Cp-v_XfSYaF7FUxEOg50QWK-oLTnYo8y','09-02-26 (390).jpg'],
-    ['1lyHoMA4wP95fkwJ6ji8lp6z-t-2HjuUS','09-02-26 (343).jpg'],
-    ['1XZp-Kb5p06QKpn4jDVU7rA7F9zCN1bu2','09-02-26 (318).jpg'],
-    ['1IwwyoDQLzVzk6wXUn1sln7BiJn_zgyay','09-02-26 (244).jpg'],
-    ['1B1qmOOT_DJ99wABYBIEasbx5nhlHK1X_','09-02-26 (163).jpg'],
-    ['1GI5H_U8PDjypa2a9pJLtHYyeVqq-9Gmb','09-02-26 (106).jpg'],
-    ['1likmMKN_uQHi_yIMPnEpfPJqfoYtWTxl','08-22-26 (30).jpg'],
-    ['1G-8k23eUCxJW2IC2qXRs8NbJfzInzzU5','08-20-26 (70).jpg'],
-    ['1zLFUVl6HD-eIAqN7blAp2x5loTQvgpn8','08-20-26 (34).jpg'],
-    ['1Hm_OXulpRHubwqxuccq1AWyVLIIDCSVE','08-20-26 (17).jpg'],
-    ['14BSrjF6RJPgu1NyUclTZPBCj-JLGa8_9','08-21-26 (5).jpg'],
-    ['1ogUdJejwQWSx3zh9avC1QP7jK2Fob24R','08-21-26 (3).jpg'],
-    ['1Fcqt2tkEko2XWk-ZkHevz1ys6oAPxt3R','08-21-26 (2).jpg'],
-    ['195kAVA-iWkDRPvf-Q-jfs4ZknmWSTrXd','04-07-26 (4).jpg'],
-    ['1-QMiEk4m7JWeTrtjU3dUsPwcszlWng0d','04-07-26 (3).jpg'],
-    ['1p6TxB7L1pSTXYUDpZmWRDp5Xo4_pnZs1','04-07-26 (1).jpg'],
-    ['1lBUPw_qKvIZUohOG-2lh_L2m1NkHeqcp','04-07-26 (2).jpg'],
-    ['1_dg6ExBBnIjhYzkzHlDNZyzgIXvpKgQ1','07-17-26 (1).jpg'],
-    ['1_kiD94QeS3r7Y5LEO0SOcKyRyN_ypl5L','09-18-23 (1).jpg'],
-    ['1lpw0oqXAySt75vhWZ1i9OpHkwjs5-OFA','10-31-23 (1).jpg'],
-    ['1hGPXxNXOSCgF3QwcsdjkP172rEIRYEX6','10-31-23 (2).jpg'],
-  ];
-  const STILLS_RAW = [
-    ['16FCd02gM9ADFyeTclBiMQeuJNY0gu9Hc','01-25-24 (2).jpg'],
-    ['1eOp7Q5HcAqD3ONWbJPWSTZ4eWYe7X76O','01-25-24 (1).jpg'],
-    ['1sdoO-iN9lWn0q_DkfzDwv1k1NJLYLUcD','08-29-24 (2).png'],
-    ['1SsKvhQEABpquUqyEVwHUkeuhuWx_8Euz','08-29-24 (1).png'],
-    ['11qUdlDGcfwR35p10SsTko1shzSuo1U7I','08-29-24 (3).png'],
-    ['16zRFhaqbTXLBEPBsS2aBlaBaHA1fespK','08-29-24 (4).png'],
-    ['1ixabA9IqJgyRssfIaAMUDRvwgU9QABZS','08-29-24 (5).png'],
-    ['1EcI_3X3badCyqf8AYGbC0li5kCmQLNaT','08-29-24 (6).png'],
-    ['1Tu6J3ts6kHYrwKrSjaqzaI2sWQTgvk1K','12-31-23 (1).png'],
-    ['1pA4dfMepQ3S2d2NiaTk8rKNjiEpv6C25','12-31-23 (2).jpg'],
-    ['1EIk6AGPrgV8813VfDq-0ZWCfsT4FVEWi','05-10-24 (1).png'],
-    ['1cOAXXBNAsX1zwpzKtme7P9Z5CQ23-yPq','04-05-24 (3).jpg'],
-    ['1ys7zGyfsxJVCYFMb6NvNRAVsxrXTxUu_','04-05-24 (1).jpg'],
-    ['1iSvWs9K5dYvunmGeYw6LQsHHxQHdQ5Qo','04-05-24 (2).jpg'],
-    ['1D2nRRzLR2W4WdhekqI8RnagOQpubSmvv','11-22-25 (1).png'],
-  ];
 
   const FS = {
     'about.txt': { type:'about',
@@ -1617,289 +1364,17 @@ CAMERA    Canon AE-1 Program
 FORMAT    35mm film
 LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       'photography': { type:'dir', files:{
-        'film': { type:'dir', files: buildPhotoFiles(FILM_RAW, 'film') },
-        'digital': { type:'dir', files: buildPhotoFiles(DIGITAL_RAW, 'digital') },
-        'stills': { type:'dir', files: buildPhotoFiles(STILLS_RAW, 'stills') },
+        'film': { type:'dir', files: buildPhotoFiles(CP.film) },
+        'digital': { type:'dir', files: buildPhotoFiles(CP.digital) },
+        'stills': { type:'dir', files: buildPhotoFiles(CP.stills) },
       }},
       'videography': { type:'dir', files: buildVideoFiles(VIDEOS) },
     }},
 
     'journal': { type:'dir', files:{
-      'time-well-spent': { type:'dir', files:{
-        'testpattern-scanning-pool.link': { type:'link', kind:'video',
-          title:'TESTPATTERN — "Modern Living" / "Crescent Moon" @ Scanning Pool Vol.2 (1983)',
-          author:'scanning-pool', category:'video art · live performance archive',
-          url:'https://www.youtube.com/watch?v=TnJQq7OH4xs' },
-        'prime-intellect.link': { type:'link', kind:'article',
-          title:'The Metamorphosis of Prime Intellect',
-          author:'Roger Williams', category:'novel',
-          url:'https://localroger.com/prime-intellect/' },
-        'divine-machinery-analysis.link': { type:'link', kind:'video',
-          title:'Analyzing Divine Machinery as an "Art Movement"',
-          author:'Joshua Bushman', category:'video essay · art criticism',
-          url:'https://www.youtube.com/watch?v=nJx9POvQ894' },
-        'clavicular-incel-culture.link': { type:'link', kind:'video',
-          title:'Clavicular and the Evolution of Incel Culture',
-          author:'Jarrett Moore', category:'video essay · internet culture',
-          url:'https://www.youtube.com/watch?v=SqdtRnjK_qM' },
-        'afterlife-minecraft-credits.link': { type:'link', kind:'video',
-          title:'Afterlife | Minecraft Infinite Credits Theme',
-          author:'Legacy Plus', category:'music · soundtrack',
-          url:'https://www.youtube.com/watch?v=99fyhaz8Rsc' },
-        'sadboys-drain-gang-locations.link': { type:'link', kind:'article',
-          title:'Sadboys and Drain Gang Music Video Locations Compilation',
-          author:'r/sadboys', category:'reddit thread · music trivia',
-          url:'https://www.reddit.com/r/sadboys/comments/10f7exo/sadboys_and_drain_gang_music_video_locations/' },
-        '9m9h9e9-wiki-index.link': { type:'link', kind:'article',
-          title:'r/9M9H9E9 Wiki: Index of Resources',
-          author:'r/9M9H9E9', category:'reddit wiki · resource index',
-          url:'https://www.reddit.com/r/9M9H9E9/wiki/index/' },
-        'chaos-charles-manson-cia.link': { type:'link', kind:'article',
-          title:'Chaos: Charles Manson',
-          author:'CIA', category:'declassified document · history',
-          url:'https://www.cia.gov/resources/csi/static/Review-Chaos-CharlesManson-25-Sep.pdf' },
-        '9-11-dashboard.link': { type:'link', kind:'video',
-          title:'9/11 Attacks Real Time Dashboard — All Major News Coverage, Sept 11 2001 06:00–10:00 EDT',
-          author:'Elia Bordin', category:'archival news compilation',
-          url:'https://www.youtube.com/watch?v=0XSMBqeIVPI' },
-        'sigil-magic-psychology.link': { type:'link', kind:'article',
-          title:'The Science Behind Sigil Magic: Psychology Meets Mysticism',
-          author:'Mystic Ryst', category:'esoterica · psychology',
-          url:'https://mysticryst.com/blogs/the-mystic-journal/science-behind-sigil-magic-psychology-meets-mysticism' },
-        'rise-of-online-cruelty.link': { type:'link', kind:'video',
-          title:'The Rise of Online Cruelty',
-          author:'Ben Hoerman', category:'video essay · internet culture',
-          url:'https://www.youtube.com/watch?v=adlH1MC2qI0' },
-        'most-horrifying-sci-fi-story.link': { type:'link', kind:'video',
-          title:'The Most Horrifying Sci-Fi Story Ever Written',
-          author:'AtunSheiFilms', category:'video essay · literature',
-          url:'https://www.youtube.com/watch?v=JXAsdsHXZ5c' },
-        'florida.link': { type:'link', kind:'video',
-          title:'FLORIDA',
-          author:'HorsesOnYT', category:'comedy · internet culture',
-          url:'https://www.youtube.com/watch?v=-hlkzIaF0nU' },
-        'polish-movie-posters.link': { type:'link', kind:'video',
-          title:'The Weird Rebellion of Polish Movie Posters',
-          author:'Pyramid Peak', category:'video essay · design history',
-          url:'https://www.youtube.com/watch?v=KpPBQvjesQ8' },
-        'humanitys-greatest-sin.link': { type:'link', kind:'video',
-          title:"Humanity's Greatest Sin",
-          author:'Solar Sands', category:'video essay · philosophy',
-          url:'https://www.youtube.com/watch?v=DA9nVP479pw' },
-        'sanctuary-domain.link': { type:'link', kind:'article',
-          title:'sanctuary-domain.net',
-          author:'', category:'website',
-          url:'https://www.sanctuary-domain.net' },
-        'gauss-gos-sodclod2.link': { type:'link', kind:'video',
-          title:'gauss - gos sodclod2',
-          author:'Yem', category:'music · experimental',
-          url:'https://www.youtube.com/watch?v=0490asqg5Io' },
-        'disciples-mollison-portraits.link': { type:'link', kind:'article',
-          title:"The Disciples: James Mollison's Portraits of Music Fans",
-          author:'Ridiculously Interesting', category:'photography · music culture',
-          url:'https://ridiculouslyinteresting.com/2011/10/29/the-disciples-james-mollisons-portraits-of-music-fans-2/' },
-        'ewen-spencer-dance-photography.link': { type:'link', kind:'article',
-          title:"While You Were Sleeping: Ewen Spencer's Dance Club Photography",
-          author:'The Guardian', category:'photography · interview',
-          url:'https://www.theguardian.com/artanddesign/2022/feb/20/ewen-spencer-dance-club-photography-while-you-were-sleeping-interview' },
-        'mike-brodie-juvenile-prosperity.link': { type:'link', kind:'article',
-          title:'Mike Brodie: A Period of Juvenile Prosperity',
-          author:'Daylight Books', category:'photography · photobook',
-          url:'https://daylightbooks.org/blogs/stories/mike-brodie-a-period-of-juvenile-prosperity' },
-        'civil-war-photojournalism.link': { type:'link', kind:'article',
-          title:"'Civil War': Does Alex Garland's Film Get Photojournalism Right?",
-          author:'LA Times', category:'film · photojournalism',
-          url:'https://www.latimes.com/entertainment-arts/movies/story/2024-04-16/civil-war-a24-alex-garland-photojournalism-right-wrong' },
-        'marvel-and-9-11.link': { type:'link', kind:'video',
-          title:'Marvel and 9/11',
-          author:'GDF', category:'video essay · comics history',
-          url:'https://www.youtube.com/watch?v=pM9Cr9mhsAo' },
-      }},
-
-      'blog': { type:'dir', files:{
-      }},
-
-      'music': { type:'dir', files:{
-        'good-time-ost.album': { type:'album',
-          title:'Good Time (Original Motion Picture Soundtrack)',
-          artist:'Oneohtrix Point Never', year:2017, category:'soundtrack / electronic', releaseType:'album',
-          released:'11 August 2017', length:'46:02',
-          cover:'https://th.bing.com/th/id/R.cdf1268ef97bfa901386359db0ba0ea4?rik=yV%2fnu%2boE57JjlA&riu=http%3a%2f%2fcdn.shopify.com%2fs%2ffiles%2f1%2f0558%2f2081%2fproducts%2fGTFC_1024x.jpg%3fv%3d1654726384&ehk=lv%2bUwc5oqivaEYMETZf1skv4zHNdDtIqd1d3e8ZWQaM%3d&risl=&pid=ImgRaw&r=0',
-          spotify:'https://open.spotify.com/album/5BaEzcY1rllt67qPiupUmA' },
-        'homework.album': { type:'album',
-          title:'Homework', artist:'Daft Punk', year:1997, category:'house / electronic', releaseType:'album',
-          released:'20 January 1997', length:'73:53',
-          cover:'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/dc/68/45/dc684589-af57-6895-1177-4f2acbb93e47/190296240911.jpg/1200x1200bf-60.jpg',
-          spotify:'https://open.spotify.com/album/6JRaPcrT3cMBEmkgSqEPhI' },
-        'revengeseekerz.album': { type:'album',
-          title:'Revengeseekerz', artist:'Jane Remover', year:2025, category:'digicore / hyperpop', releaseType:'album',
-          released:'4 April 2025', length:'49:26',
-          cover:'https://media.pitchfork.com/photos/67f3cf3e9c1c5cea3038a50f/1:1/w_450%2Cc_limit/Jane-Remover-Revengeseekerz.jpeg',
-          spotify:'https://open.spotify.com/album/21b4cDNse2AMpj94ykfuON' },
-        'portal-2-songs-to-test-by.album': { type:'album',
-          title:'Portal 2: Songs to Test By (Collectors Edition)', artist:'Aperture Science Psychoacoustic Laboratories',
-          year:2011, category:'soundtrack / electronic', releaseType:'album',
-          released:'25 May 2011', length:'202:34',
-          cover:'https://theongaku.s3.amazonaws.com/uploads/post/cover/200/portal-2-cover.png',
-          spotify:'https://open.spotify.com/album/5l1BFWphq5XiWlpbYUjrhr' },
-        'eversince.album': { type:'album',
-          title:'Eversince', artist:'Bladee', year:2016, category:'cloud rap', releaseType:'album',
-          released:'25 May 2016', length:'39:29',
-          cover:'https://th.bing.com/th/id/R.c01c637d0d6a5ba6d661cac67ff665ef?rik=W3NIgaJiYF4QFA&riu=http%3a%2f%2fimages.genius.com%2f2df0dbd58a387615bd7ac5ea9a8378c6.1000x1000x1.jpg&ehk=BPaCxYznbQiE8IVRptejCZ%2fYsUcMGHtsMffqOzx0WLY%3d&risl=&pid=ImgRaw&r=0',
-          spotify:'https://open.spotify.com/album/0ZyoyTZbl3g0IwkNlpg633' },
-        'red-light.album': { type:'album',
-          title:'Red Light', artist:'Bladee', year:2018, category:'cloud rap', releaseType:'album',
-          released:'11 May 2018', length:'40:08',
-          cover:'https://images.genius.com/b81222e5d6dfc81874e7a120daefc163.1000x1000x1.jpg',
-          spotify:'https://open.spotify.com/album/2aOPyH6k96e4TDJkEivOC9' },
-        'vanities.album': { type:'album',
-          title:'Vanities', artist:'Malibu', year:2025, category:'ambient', releaseType:'album',
-          released:'3 October 2025', length:'48:35',
-          cover:'https://e.snmc.io/i/1200/s/29defc3f4cd88c8a11274a2141b97fa4/13850154',
-          spotify:'https://open.spotify.com/album/7ePZ3EZLrbIXyms6fc9hJd' },
-        'flight-of-the-conchords.album': { type:'album',
-          title:'Flight of the Conchords', artist:'Flight of the Conchords', year:2008, category:'comedy / folk', releaseType:'album',
-          released:'21 April 2008', length:'42:06',
-          cover:'https://magnetmagazine.com/wp-content/uploads/2023/04/FOTC.jpg',
-          spotify:'https://open.spotify.com/album/0YFBrqatMlyDCqqYhhoizO' },
-        'two-star-and-the-dream-police.album': { type:'album',
-          title:'Two Star & The Dream Police', artist:'Mk.gee', year:2024, category:'alt R&B / rock', releaseType:'album',
-          released:'9 February 2024', length:'33:12',
-          cover:'https://tse1.mm.bing.net/th/id/OIP.gQOt_OtE7T1jda4x2QbMfAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
-          spotify:'https://open.spotify.com/album/6DlLdXBGCsSDPOV8R2pCl7' },
-        'betrayed-in-the-octagon.album': { type:'album',
-          title:'Betrayed in the Octagon', artist:'Oneohtrix Point Never', year:2007, category:'ambient / electronic', releaseType:'album',
-          released:'20 November 2007', length:'39:16',
-          cover:'https://i.discogs.com/Ca8D4aP_VxIDuk_I7XfwU2gLY6U0Q9dzt5A5cu3UZI4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTMzMjU1/NDg2LTE3NDA1ODk3/MDgtNTAzMi5qcGVn.jpeg',
-          spotify:'https://open.spotify.com/album/0Ld4zIJyNK5UDcCfBkHXbN' },
-        'replica.album': { type:'album',
-          title:'Replica', artist:'Oneohtrix Point Never', year:2011, category:'electronic / plunderphonics', releaseType:'album',
-          released:'8 November 2011', length:'40:54',
-          cover:'https://tse1.mm.bing.net/th/id/OIP.gHPYGRBkZ1_XgL9ebGvLegHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
-          spotify:'https://open.spotify.com/album/7H6gso8aBfKK7mlouLCsW3' },
-        'discokommitten.album': { type:'album',
-          title:'Discokommittén', artist:'Max Peezay', year:2005, category:'grime / swedish hip-hop', releaseType:'album',
-          released:'28 December 2005', length:'43:22',
-          cover:'https://i.scdn.co/image/ab67616d0000b273c6804e46aaa4e863d563f519',
-          spotify:'https://open.spotify.com/album/7d5PNUdGFFyARg4f5rNLkL' },
-
-        'sandy-nevermore.album': { type:'album',
-          title:'sandy nevermore', artist:'kurtains', year:2025, category:'indie pop / alt rock', releaseType:'album',
-          released:'28 March 2025', length:'15:26',
-          cover:driveThumb('1skYf7kRXxrlPAOmRuHQTzt-Nu4hPr55V', 1000),
-          spotify:'https://open.spotify.com/album/0rsrly3wkirq1bo91IORJ8' },
-        'unmusique.album': { type:'album',
-          title:'Unmusique', artist:'Lucy Bedroque', year:2025, category:'digicore / rage', releaseType:'album',
-          released:'16 May 2025', length:'39:55',
-          cover:coverArt('3263b0d4-7255-4f01-a65a-d1a44af38aa1'),
-          spotify:'https://open.spotify.com/album/4hP6GKbrQjCCeJ8B0MfBXQ' },
-        'yall.album': { type:'album',
-          title:"Y'all", artist:'glaive', year:2025, category:'hyperpop / digicore', releaseType:'album',
-          released:'26 September 2025', length:'38:40',
-          cover:driveThumb('13xSY-D1WrbTJJwO6mcDyfPM2X17RxGu7', 1000),
-          spotify:'https://open.spotify.com/album/3QliGTfl4dbkKLI17VkbVl' },
-        'tripwire.album': { type:'album',
-          title:'tripwire', artist:'Endie', year:2025, category:'pop rap / digicore / trap', releaseType:'album',
-          released:'27 June 2025', length:'40:00',
-          cover:driveThumb('1eE73c1lTrXWtsrvN-UR8h-_7R6hkGL5N', 1000),
-          spotify:'https://open.spotify.com/album/3eSXocOYHCEXXmmN0DqK5t' },
-        'marty-supreme-ost.album': { type:'album',
-          title:'Marty Supreme (Original Soundtrack)', artist:'Daniel Lopatin', year:2025, category:'electronic / film score', releaseType:'album',
-          released:'25 December 2025', length:'46:15',
-          cover:coverArtRG('76182837-24ae-4057-8a30-49d5d24fd275'),
-          spotify:'https://open.spotify.com/album/4ACAVXXQYUTmlZgdg0aG8U' },
-        'russian-mind.album': { type:'album',
-          title:'Russian Mind', artist:'Oneohtrix Point Never', year:2009, category:'ambient / kosmische', releaseType:'album',
-          released:'2009', length:'24:38',
-          cover:driveThumb('12w36D0HFdhS3Eh0xhNPN94Dlsa7GQcvm', 1000),
-          spotify:'https://open.spotify.com/album/0VwbF2G4D6iEX38Z8Z9QEN' },
-        'zones-without-people.album': { type:'album',
-          title:'Zones Without People', artist:'Oneohtrix Point Never', year:2009, category:'ambient', releaseType:'album',
-          released:'6 August 2009', length:'31:20',
-          cover:coverArt('82a5fee2-69eb-4bd6-9dce-d4cc62bfad9a'),
-          spotify:'https://open.spotify.com/album/5dyKW0zHFCaW5HJcZQ3QK0' },
-        'returnal.album': { type:'album',
-          title:'Returnal', artist:'Oneohtrix Point Never', year:2010, category:'electronic / drone / kosmische', releaseType:'album',
-          released:'22 June 2010', length:'41:59',
-          cover:coverArt('a96ee369-9d38-4b13-a8c4-dab190519fc0'),
-          spotify:'https://open.spotify.com/album/0cJJRJRZJlrTKQBZBoDZ7j' },
-        'the-fall-into-time.album': { type:'album',
-          title:'The Fall Into Time', artist:'Oneohtrix Point Never', year:2013, category:'electronic / ambient', releaseType:'compilation',
-          released:'2013', length:'43:17',
-          cover:driveThumb('1qr-Non4K12ltAgn0oU3pL_ALVCNquJ18', 1000),
-          spotify:'https://open.spotify.com/album/4RF54XCPiLaVmZu9KWmzxd' },
-        'filthy-tongue-of-gods-and-griots.album': { type:'album',
-          title:'From Filthy Tongue of Gods and Griots', artist:'dälek', year:2002, category:'experimental / industrial hip-hop', releaseType:'album',
-          released:'6 August 2002', length:'56:40',
-          cover:coverArt('beca37c6-9b32-4ac4-ac2a-e480cd71d46c'),
-          spotify:'https://open.spotify.com/album/4ZifLmCPfzhOCocXAMP9Ny' },
-        'falling.album': { type:'album',
-          title:'Falling', artist:'Frost Children', year:2025, category:'hyperpop / electro house', releaseType:'single',
-          released:'1 July 2025', length:'3:47',
-          cover:driveThumb('1qELLm6wXrEKp_7E0Bya7tOC--B5eVp5b', 1000),
-          spotify:'https://open.spotify.com/album/4RDqQEo4Wc5mAQHavIIH0f' },
-        'stay-true-forever.album': { type:'album',
-          title:'Stay true forever', artist:'kuru', year:2025, category:'lo-fi / bedroom', releaseType:'album',
-          cover:driveThumb('14r6nHlS0Ja8ah8NtH6vagV1eCyswytnv', 1000),
-          spotify:'https://open.spotify.com/album/7sfzt6opjPYVupZDX0bMUB' },
-        'tiger.album': { type:'album',
-          title:'Tiger', artist:'Thaiboy Digital', year:2025, category:'cloud rap', releaseType:'album',
-          cover:driveThumb('17nKG7q6ksygqxP1mZJSyvx8B8RROU5c0', 1000),
-          spotify:'https://open.spotify.com/album/0MTTE1UtmLcN9Tm2GooEfZ' },
-        'sos.album': { type:'album',
-          title:'S.O.S', artist:'Thaiboy Digital', year:2025, category:'cloud rap', releaseType:'ep',
-          cover:driveThumb('1c_fDXtEYlQKRa0opunjX-mH1ZwcYwCzh', 1000),
-          spotify:'https://open.spotify.com/album/12CZOt2CvQgq9JepaXR4h5' },
-        'fm-thoughts.album': { type:'album',
-          title:'FM Thoughts', artist:'Slater', year:2025, category:'hyperpop', releaseType:'album',
-          cover:driveThumb('1iSJDxrLH-herVxQJ1_-xS3VIP2667xqm', 1000),
-          spotify:'https://open.spotify.com/album/4VLADJHOrl32zNqeN0Kxot' },
-        'afterlife-flatbush-zombies.album': { type:'album',
-          title:'Afterlife', artist:'Flatbush Zombies', year:2025, category:'hip-hop', releaseType:'single',
-          cover:driveThumb('1sV1tc44B7FH9k2L9kykIMCwO5sEPzkod', 1000),
-          spotify:'https://open.spotify.com/album/7ziMuGcC9aJh8HCHQltupF' },
-        'add-it-up.album': { type:'album',
-          title:'Add it UP', artist:'Harto Falión', year:2025, category:'reggaeton / latin trap', releaseType:'single',
-          cover:driveThumb('1M3rJIHuNhxyrhYULDF6qQzdBR-Fd6J2t', 1000),
-          spotify:'https://open.spotify.com/track/06VtTvHR9QlLMYfuDbTFhc' },
-        'galore.album': { type:'album',
-          title:'Galore', artist:'Oklou', year:2025, category:'art pop / electronic', releaseType:'album',
-          cover:driveThumb('1876X7NYR2_cRlCdXwDjI0NU-JeKBEXw5', 1000),
-          spotify:'https://open.spotify.com/album/6s7TtMHRcoy8D0ipc0wmjE' },
-        'inferno.album': { type:'album',
-          title:'Inferno', artist:'Boards of Canada', year:2026, category:'electronic / ambient / IDM / hauntology', releaseType:'album',
-          released:'29 May 2026', length:'69:51',
-          cover:driveThumb('1wqGDc3WIL6mviaan5qrrkjecy6FPdM7T', 1000),
-          spotify:'https://open.spotify.com/album/0mu3EvWYfNwBfISSg0q03p' },
-        'symbol.album': { type:'album',
-          title:'Symbol', artist:'Susumu Yokota', year:2005, category:'ambient / electronic', releaseType:'album',
-          cover:driveThumb('173sdV2HJyBflimKw9HZu_ZFlSUOq90aR', 1000),
-          spotify:'https://open.spotify.com/album/0ntm3YaiXVkkGitWl2XASV' },
-        'tweaker-poem.album': { type:'album',
-          title:'Tweaker Poem', artist:'Frost Children', year:2025, category:'hyperpop', releaseType:'ep',
-          cover:driveThumb('12Y6X5uRG2t_jTBB9c9Kvmio0ZPoEM88A', 1000),
-          spotify:'https://open.spotify.com/album/2fzKiP2hfzKll1QlXNzojx' },
-        'i-cant-wait-to-use-the-internet.album': { type:'album',
-          title:"I Can't Wait to Use the Internet", artist:'Kane Parsons', year:2025, category:'ambient / experimental', releaseType:'album',
-          cover:driveThumb('1CRusQg5eZqWrTpMx_I8Dgbp2h-97LS3x', 1000),
-          spotify:'https://open.spotify.com/album/6LEuxaOuDFUdlmikfHd8WW' },
-        '1992-2012.album': { type:'album',
-          title:'1992 - 2012', artist:'Underworld', year:2011, category:'electronic / techno', releaseType:'compilation',
-          cover:driveThumb('1Vn7UzTPMBac6vGxQL6jbm5FCpbl_MQKM', 1000),
-          spotify:'https://open.spotify.com/album/68wdXsJmyuDfbozV2rDjXq' },
-        'complex-skoolio.album': { type:'album',
-          title:'COMPLEX (september 2022)', artist:'skoolio', year:2022, category:'lo-fi / plunderphonics', releaseType:'album',
-          cover:driveThumb('1fzN-weddXEOi3kUW3_MQsaxWwABpSJAH', 1000),
-          spotify:'https://open.spotify.com/album/2qkokAFYT54n3nFTTrkbn5' },
-        'atmos-skoolio.album': { type:'album',
-          title:'atmos (final 2023)', artist:'skoolio', year:2023, category:'lo-fi / plunderphonics', releaseType:'album',
-          cover:driveThumb('1BpVcpqeoShZ4KtbmbNI3My7mYQeDdhBI', 1000),
-          spotify:'https://open.spotify.com/album/72Q0GSDS70bQeSNHE1Jekl' },
-        'jul-mix-21-skoolio.album': { type:'album',
-          title:'Jul Mix 21 (2k19 tribute)', artist:'skoolio', year:2019, category:'lo-fi / plunderphonics', releaseType:'album',
-          cover:driveThumb('1VBli4wEz7tyBK1E8xIo5W42vaJGgAJHr', 1000),
-          spotify:'https://open.spotify.com/album/0GCias0JdnsKULYomiZKIU' },
-      }},
+      'time-well-spent': { type:'dir', files: buildLinkFiles(C.links) },
+      'blog': { type:'dir', files: buildPostFiles(C.blog) },
+      'music': { type:'dir', files: buildAlbumFiles(C.music) },
     }},
   };
 
@@ -1954,6 +1429,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   const lightboxLens = document.getElementById('lightboxLens');
   const lightboxFilm = document.getElementById('lightboxFilm');
   const lightboxFormat = document.getElementById('lightboxFormat');
+  const lightboxExposure = document.getElementById('lightboxExposure');
   const lightboxArtist = document.getElementById('lightboxArtist');
   const lightboxMedium = document.getElementById('lightboxMedium');
   const lightboxDesc = document.getElementById('lightboxDesc');
@@ -2827,6 +2303,43 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     body.appendChild(wrap);
   }
 
+  function postDateLabel(d){
+    const m = String(d || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(!m) return d || '';
+    const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+    return months[Number(m[2]) - 1] + ' ' + Number(m[3]) + ', ' + m[1];
+  }
+
+  function printPostFile(node, originCmd){
+    const body = printPanel(node.title, true, originCmd);
+    const art = el('article', 'post');
+    art.appendChild(el('h1', 'post-title', esc(node.title)));
+    if(node.date) art.appendChild(el('div', 'post-date', esc(postDateLabel(node.date))));
+    if(node.coverId){
+      const img = document.createElement('img');
+      img.className = 'post-cover';
+      const src = driveThumb(node.coverId, 1600);
+      responsiveImg(img, src, '(max-width: 760px) 100vw, 800px');
+      img.src = src;
+      img.alt = '';
+      art.appendChild(img);
+    }
+    const text = el('div', 'post-body');
+    text.innerHTML = window.renderMarkdown ? window.renderMarkdown(node.body) : esc(node.body);
+    // pictures uploaded through /admin get the same fast, right-sized loading as the gallery
+    text.querySelectorAll('img.post-img').forEach(img => {
+      const src = img.getAttribute('src');
+      const mm = src.match(/^img\/p\/([\w-]+)-\d+\.\w+$/);
+      if(mm && IMG_M[mm[1]]){
+        const best = driveThumb(mm[1], 1600);
+        responsiveImg(img, best, '(max-width: 760px) 100vw, 800px');
+        img.src = best;
+      }
+    });
+    art.appendChild(text);
+    body.appendChild(art);
+  }
+
   function hashHue(str){
     let h = 0;
     for(let i = 0; i < str.length; i++){ h = (h * 31 + str.charCodeAt(i)) % 360; }
@@ -2943,6 +2456,11 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
         cmd = 'cat ' + pathStr + '/' + key;
         tagCls = tagFor(f);
         thumbEl = makeRowThumb(f.title, f.cover);
+      } else if(f.type === 'post'){
+        name = f.title;
+        kind = postDateLabel(f.date) || 'post';
+        cmd = 'cat ' + pathStr + '/' + key;
+        tagCls = '';
       } else if(f.type === 'link'){
         name = f.title;
         kind = f.author + ' · ' + f.category;
@@ -3351,6 +2869,13 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       lightboxFormat.textContent = '';
       lightboxFormat.style.display = 'none';
     }
+    if(photo.exposure){
+      lightboxExposure.textContent = 'settings: ' + photo.exposure;
+      lightboxExposure.style.display = '';
+    } else {
+      lightboxExposure.textContent = '';
+      lightboxExposure.style.display = 'none';
+    }
     if(photo.artist){
       lightboxArtist.textContent = 'artist: ' + photo.artist;
       lightboxArtist.style.display = '';
@@ -3368,7 +2893,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     lightboxDesc.textContent = photo.description || '';
 
     if(!REDUCED_MOTION){
-      [lightboxFilename, lightboxCamera, lightboxLens, lightboxFilm, lightboxFormat,
+      [lightboxFilename, lightboxCamera, lightboxLens, lightboxFilm, lightboxFormat, lightboxExposure,
        lightboxArtist, lightboxMedium, lightboxDesc]
         .forEach((elm, i) => scrambleInto(elm, i * 0.1, 0.5));
     }
@@ -3529,6 +3054,8 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
 
     if(node && node.type === 'album'){
       printAlbumFile(node, 'cat ' + path);
+    } else if(node && node.type === 'post'){
+      printPostFile(node, 'cat ' + path);
     } else if(node && node.type === 'link'){
       openLinkFile(node);
     } else if(node && node.type === 'video'){

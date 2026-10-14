@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>admin · elijahhalford</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <span>elijah@halford:<b>admin</b></span>
+    <span class="topbar-right">
+      <span id="connState" class="conn off">not connected</span>
+      <a href="../" target="_blank" rel="noopener">view site ↗</a>
+    </span>
+  </header>
+
+  <nav class="tabs" id="tabs" role="tablist">
+    <button type="button" role="tab" data-tab="photos">photos</button>
+    <button type="button" role="tab" data-tab="links">time well spent</button>
+    <button type="button" role="tab" data-tab="blog">blog</button>
+    <button type="button" role="tab" data-tab="music">music</button>
+    <button type="button" role="tab" data-tab="connect">connect</button>
+  </nav>
+
+  <main id="main">
+
+    <!-- ================= connect ================= -->
+    <section class="view" data-view="connect" hidden>
+      <div class="panel">
+        <div class="panelhead"><span>~/admin/connect</span></div>
+        <p class="dim">This page saves straight to your website's GitHub repository. It needs a GitHub access key that can only touch this one repository.</p>
+        <ol class="steps">
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → new fine-grained token ↗</a></li>
+          <li>Name it <code>website admin</code>, pick an expiry (a year is fine).</li>
+          <li><b>Repository access</b> → <i>Only select repositories</i> → <code>marvelelijah.github.io</code></li>
+          <li><b>Permissions</b> → Repository → <b>Contents: Read and write</b>. Optional: <b>Actions: Read-only</b> (shows when an update is live).</li>
+          <li>Generate, copy the key, paste it below.</li>
+        </ol>
+        <div class="field">
+          <label for="tokenInput">access key</label>
+          <input id="tokenInput" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+        </div>
+        <div class="row">
+          <label class="check"><input type="checkbox" id="rememberToken" checked> remember on this device</label>
+        </div>
+        <details class="more">
+          <summary>repository settings</summary>
+          <div class="grid3">
+            <div class="field"><label for="cfgOwner">owner</label><input id="cfgOwner" value="marvelelijah"></div>
+            <div class="field"><label for="cfgRepo">repository</label><input id="cfgRepo" value="marvelelijah.github.io"></div>
+            <div class="field"><label for="cfgBranch">branch</label><input id="cfgBranch" value="main"></div>
+          </div>
+        </details>
+        <div class="row actions">
+          <button type="button" class="btn primary" id="connectBtn">connect</button>
+          <button type="button" class="btn" id="disconnectBtn">forget key</button>
+        </div>
+        <p class="dim small">The key is kept only in this browser. Anyone who can use this browser while it's remembered can edit your site, so don't tick "remember" on a shared computer.</p>
+      </div>
+    </section>
+
+    <!-- ================= photos ================= -->
+    <section class="view" data-view="photos" hidden>
+      <div class="panel">
+        <div class="panelhead"><span>~/admin/photos/new</span></div>
+        <label class="drop" id="photoDrop" tabindex="0">
+          <input type="file" id="photoFiles" accept="image/jpeg,image/png,image/webp" multiple hidden>
+          <span class="drop-big">drop photos here</span>
+          <span class="dim">or click to choose · jpeg / png · resized for web in your browser</span>
+        </label>
+        <div id="photoQueue" class="queue"></div>
+        <div class="row actions" id="photoQueueActions" hidden>
+          <button type="button" class="btn primary" id="publishPhotos">publish</button>
+          <button type="button" class="btn" id="clearPhotos">clear</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panelhead">
+          <span>~/admin/photos</span>
+          <span class="seg" id="photoCatTabs">
+            <button type="button" data-cat="film" class="on">film</button>
+            <button type="button" data-cat="digital">digital</button>
+            <button type="button" data-cat="stills">stills</button>
+          </span>
+        </div>
+        <div id="photoGrid" class="pgrid"></div>
+      </div>
+    </section>
+
+    <!-- ================= time well spent ================= -->
+    <section class="view" data-view="links" hidden>
+      <div class="panel">
+        <div class="panelhead"><span id="linkFormTitle">~/admin/time-well-spent/new</span></div>
+        <form id="linkForm" class="form" autocomplete="off">
+          <div class="field">
+            <label for="linkUrl">link</label>
+            <div class="inline">
+              <input id="linkUrl" type="url" required placeholder="https://…">
+              <button type="button" class="btn" id="linkFetch">fill in</button>
+            </div>
+          </div>
+          <div class="field"><label for="linkTitle">title</label><input id="linkTitle" required></div>
+          <div class="grid2">
+            <div class="field"><label for="linkAuthor">by</label><input id="linkAuthor" list="dlLinkAuthors"></div>
+            <div class="field"><label for="linkCategory">category</label><input id="linkCategory" list="dlLinkCats" placeholder="video essay · internet culture"></div>
+          </div>
+          <div class="field">
+            <span class="label">type</span>
+            <div class="boxes" id="linkKind">
+              <label><input type="radio" name="linkKind" value="video" checked><span>video</span></label>
+              <label><input type="radio" name="linkKind" value="article"><span>article / website</span></label>
+            </div>
+          </div>
+          <div class="row actions">
+            <button type="submit" class="btn primary" id="linkSave">add to time well spent</button>
+            <button type="button" class="btn" id="linkCancel" hidden>cancel edit</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="panelhead"><span>~/journal/time-well-spent</span><span class="dim" id="linkCount"></span></div>
+        <div id="linkList" class="list"></div>
+      </div>
+    </section>
+
+    <!-- ================= blog ================= -->
+    <section class="view" data-view="blog" hidden>
+      <div class="panel" id="postEditorPanel">
+        <div class="panelhead"><span id="postFormTitle">~/admin/blog/new</span></div>
+        <form id="postForm" class="form" autocomplete="off">
+          <div class="field"><label for="postTitle">title</label><input id="postTitle" required></div>
+          <div class="grid2">
+            <div class="field"><label for="postDate">date</label><input id="postDate" type="date" required></div>
+            <div class="field">
+              <span class="label">status</span>
+              <label class="check tall"><input type="checkbox" id="postDraft"> draft (hidden from the site)</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label">cover image (optional)</span>
+            <div class="inline">
+              <label class="btn" for="postCoverFile">choose…</label>
+              <input type="file" id="postCoverFile" accept="image/jpeg,image/png,image/webp" hidden>
+              <span id="postCoverName" class="dim">none</span>
+              <button type="button" class="btn" id="postCoverRemove" hidden>remove</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label">post</span>
+            <div class="toolbar" id="mdToolbar">
+              <button type="button" data-md="h" title="heading">H</button>
+              <button type="button" data-md="b" title="bold"><b>B</b></button>
+              <button type="button" data-md="i" title="italic"><i>I</i></button>
+              <button type="button" data-md="link" title="link">link</button>
+              <button type="button" data-md="quote" title="quote">“ ”</button>
+              <button type="button" data-md="list" title="list">• list</button>
+              <label class="tb-img" for="postImageFile" title="insert a picture">+ picture</label>
+              <input type="file" id="postImageFile" accept="image/jpeg,image/png,image/webp" hidden>
+            </div>
+            <div class="editor">
+              <textarea id="postBody" rows="16" placeholder="Write here. Leave a blank line between paragraphs.&#10;&#10;# a heading&#10;**bold**, *italic*, [a link](https://…)"></textarea>
+              <div class="preview post-body" id="postPreview" aria-live="polite"></div>
+            </div>
+          </div>
+          <div class="row actions">
+            <button type="submit" class="btn primary" id="postSave">publish post</button>
+            <button type="button" class="btn" id="postNew">new post</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="panelhead"><span>~/journal/blog</span><span class="dim" id="postCount"></span></div>
+        <div id="postList" class="list"></div>
+      </div>
+    </section>
+
+    <!-- ================= music ================= -->
+    <section class="view" data-view="music" hidden>
+      <div class="panel">
+        <div class="panelhead"><span id="albumFormTitle">~/admin/music/new</span></div>
+        <form id="albumForm" class="form" autocomplete="off">
+          <div class="grid2">
+            <div class="field"><label for="albumTitle">album / single</label><input id="albumTitle" required></div>
+            <div class="field"><label for="albumArtist">artist</label><input id="albumArtist" required list="dlArtists"></div>
+          </div>
+          <div class="album-row">
+            <label class="cover-drop" id="coverDrop" tabindex="0">
+              <input type="file" id="albumCoverFile" accept="image/jpeg,image/png,image/webp" hidden>
+              <img id="coverPreview" alt="" hidden>
+              <span id="coverHint">drop cover art<br><span class="dim">or click</span></span>
+            </label>
+            <div class="album-found">
+              <div class="row">
+                <button type="button" class="btn" id="albumLookup">look up details</button>
+                <select id="albumMatches" hidden aria-label="other matches"></select>
+              </div>
+              <div id="albumFoundNote" class="dim small">year, release date, type, genre and length are found automatically from MusicBrainz. Check them before saving.</div>
+              <div class="grid3">
+                <div class="field"><label for="albumYear">year</label><input id="albumYear" inputmode="numeric"></div>
+                <div class="field"><label for="albumReleased">released</label><input id="albumReleased" placeholder="28 March 2025"></div>
+                <div class="field"><label for="albumLength">length</label><input id="albumLength" placeholder="43:22"></div>
+              </div>
+              <div class="grid2">
+                <div class="field"><label for="albumType">type</label>
+                  <select id="albumType"><option>album</option><option>ep</option><option>single</option><option>compilation</option><option>mixtape</option><option>soundtrack</option></select>
+                </div>
+                <div class="field"><label for="albumGenre">genre</label><input id="albumGenre" placeholder="ambient / electronic"></div>
+              </div>
+              <details class="more">
+                <summary>more</summary>
+                <div class="field"><label for="albumSpotify">spotify link (optional)</label><input id="albumSpotify" type="url" placeholder="https://open.spotify.com/album/…"></div>
+                <label class="check"><input type="checkbox" id="albumUseMbCover"> no file? use the cover from MusicBrainz</label>
+              </details>
+            </div>
+          </div>
+          <div class="row actions">
+            <button type="submit" class="btn primary" id="albumSave">add to music</button>
+            <button type="button" class="btn" id="albumCancel" hidden>cancel edit</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="panelhead"><span>~/journal/music</span><span class="dim" id="albumCount"></span></div>
+        <div id="albumList" class="list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="log" aria-label="activity">
+    <div class="log-head"><span>activity</span><button type="button" id="logClear" class="linkbtn">clear</button></div>
+    <div id="log" class="log-body" aria-live="polite"></div>
+  </section>
+</div>
+
+<!-- photo edit dialog -->
+<dialog id="photoDialog" class="dialog">
+  <form method="dialog" class="dialog-inner" id="photoEditForm">
+    <div class="panelhead"><span id="photoDialogTitle">edit photo</span><button type="button" class="x" id="photoDialogClose" aria-label="close">×</button></div>
+    <div id="photoDialogBody"></div>
+    <div class="row actions">
+      <button type="button" class="btn primary" id="photoDialogSave">save</button>
+      <button type="button" class="btn danger" id="photoDialogDelete">delete photo</button>
+    </div>
+  </form>
+</dialog>
+
+<datalist id="dlCameras"></datalist>
+<datalist id="dlLenses"></datalist>
+<datalist id="dlFilms"></datalist>
+<datalist id="dlLinkAuthors"></datalist>
+<datalist id="dlLinkCats"></datalist>
+<datalist id="dlArtists"></datalist>
+
+<script src="../js/markdown.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
