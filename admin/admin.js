@@ -623,6 +623,10 @@ function addPhotoFiles(list){
 async function addPhotoCard(file){
   const item = { id: uid(), file };
   photoQueue.push(item);
+  // hold its place in the list now, so cards keep the order the files were dropped in
+  const slot = el('div', { class: 'card', text: 'reading ' + file.name + '…' });
+  $('#photoQueue').appendChild(slot);
+  $('#photoQueueActions').hidden = false;
   let exif = null;
   try{ exif = readExif(await file.slice(0, 512 * 1024).arrayBuffer()); }catch(e){}
   const scanner = exif && SCANNER_HINTS.test([exif.make, exif.model, exif.software].join(' '));
@@ -654,8 +658,7 @@ async function addPhotoCard(file){
   item.el = el('div', { class: 'card' },
     el('div', { class: 'card-side' }, preview, meta, exifLine, item.status, remove),
     item.ui.node);
-  $('#photoQueue').appendChild(item.el);
-  $('#photoQueueActions').hidden = false;
+  slot.replaceWith(item.el);
 }
 
 function setStatus(item, text, kind){ item.status.className = 'card-status ' + (kind || 'dim'); item.status.textContent = text; }
@@ -668,6 +671,7 @@ $('#clearPhotos').addEventListener('click', () => {
 $('#publishPhotos').addEventListener('click', async () => {
   const items = photoQueue.slice();
   if(!items.length) return;
+  if(items.some(it => !it.ui)){ log('still reading the photos — try again in a second', 'dim'); return; }
   for(const it of items){
     it.data = it.ui.read();
     if(!it.data.file){ setStatus(it, 'give it a name first', 'err'); return; }

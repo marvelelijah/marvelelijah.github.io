@@ -248,8 +248,8 @@
   .lightbox-camera{ margin-bottom:4px; }
   .lightbox-lens{ margin-bottom:4px; }
   .lightbox-film{ margin-bottom:4px; }
-  .lightbox-format{ margin-bottom:4px; }
-  .lightbox-exposure{ margin-bottom:14px; }
+  .lightbox-format, .lightbox-shutter, .lightbox-aperture, .lightbox-iso, .lightbox-focal{ margin-bottom:4px; }
+  .lightbox-taken{ margin-top:10px; margin-bottom:14px; }
   .lightbox-artist{ margin-bottom:4px; }
   .lightbox-medium{ margin-bottom:14px; }
   .lightbox-desc{ line-height:1.6; }
@@ -1068,7 +1068,11 @@
       <div class="lightbox-lens" id="lightboxLens"></div>
       <div class="lightbox-film" id="lightboxFilm"></div>
       <div class="lightbox-format" id="lightboxFormat"></div>
-      <div class="lightbox-exposure" id="lightboxExposure"></div>
+      <div class="lightbox-shutter" id="lightboxShutter"></div>
+      <div class="lightbox-aperture" id="lightboxAperture"></div>
+      <div class="lightbox-iso" id="lightboxIso"></div>
+      <div class="lightbox-focal" id="lightboxFocal"></div>
+      <div class="lightbox-taken" id="lightboxTaken"></div>
       <div class="lightbox-artist" id="lightboxArtist"></div>
       <div class="lightbox-medium" id="lightboxMedium"></div>
       <div class="lightbox-desc" id="lightboxDesc"></div>
@@ -1183,6 +1187,19 @@
       .filter(Boolean).join(' · ');
   }
 
+  // "2026-10-09 22:08:54" -> "oct 9, 2026 · 10:08 pm"
+  function takenLabel(d){
+    const m = String(d || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+    if(!m) return '';
+    const mon = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][Number(m[2]) - 1];
+    let out = mon + ' ' + Number(m[3]) + ', ' + m[1];
+    if(m[4]){
+      const h = Number(m[4]);
+      out += ' · ' + ((h % 12) || 12) + ':' + m[5] + (h < 12 ? ' am' : ' pm');
+    }
+    return out;
+  }
+
   function buildPhotoFiles(list){
     const files = {};
     (list || []).forEach((p, i) => {
@@ -1197,6 +1214,11 @@
         film: p.film || '',
         format: p.format || '',
         exposure: exposureLine(p.exif),
+        shutter: (p.exif && p.exif.shutter) || '',
+        aperture: (p.exif && p.exif.f) ? 'f/' + p.exif.f : '',
+        iso: (p.exif && p.exif.iso) ? String(p.exif.iso) : '',
+        focal: (p.exif && p.exif.focal) ? p.exif.focal + 'mm' : '',
+        taken: takenLabel(p.date),
         description: p.description || '',
         src: driveThumb(p.id, 1600),
       };
@@ -1416,7 +1438,11 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   const lightboxLens = document.getElementById('lightboxLens');
   const lightboxFilm = document.getElementById('lightboxFilm');
   const lightboxFormat = document.getElementById('lightboxFormat');
-  const lightboxExposure = document.getElementById('lightboxExposure');
+  const lightboxShutter = document.getElementById('lightboxShutter');
+  const lightboxAperture = document.getElementById('lightboxAperture');
+  const lightboxIso = document.getElementById('lightboxIso');
+  const lightboxFocal = document.getElementById('lightboxFocal');
+  const lightboxTaken = document.getElementById('lightboxTaken');
   const lightboxArtist = document.getElementById('lightboxArtist');
   const lightboxMedium = document.getElementById('lightboxMedium');
   const lightboxDesc = document.getElementById('lightboxDesc');
@@ -2856,13 +2882,12 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       lightboxFormat.textContent = '';
       lightboxFormat.style.display = 'none';
     }
-    if(photo.exposure){
-      lightboxExposure.textContent = 'settings: ' + photo.exposure;
-      lightboxExposure.style.display = '';
-    } else {
-      lightboxExposure.textContent = '';
-      lightboxExposure.style.display = 'none';
-    }
+    [[lightboxShutter, 'shutter', photo.shutter], [lightboxAperture, 'aperture', photo.aperture],
+     [lightboxIso, 'iso', photo.iso], [lightboxFocal, 'focal length', photo.focal], [lightboxTaken, 'taken', photo.taken]]
+      .forEach(([elm, label, val]) => {
+        elm.textContent = val ? label + ': ' + val : '';
+        elm.style.display = val ? '' : 'none';
+      });
     if(photo.artist){
       lightboxArtist.textContent = 'artist: ' + photo.artist;
       lightboxArtist.style.display = '';
@@ -2880,7 +2905,8 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     lightboxDesc.textContent = photo.description || '';
 
     if(!REDUCED_MOTION){
-      [lightboxFilename, lightboxCamera, lightboxLens, lightboxFilm, lightboxFormat, lightboxExposure,
+      [lightboxFilename, lightboxCamera, lightboxLens, lightboxFilm, lightboxFormat,
+       lightboxShutter, lightboxAperture, lightboxIso, lightboxFocal, lightboxTaken,
        lightboxArtist, lightboxMedium, lightboxDesc]
         .forEach((elm, i) => scrambleInto(elm, i * 0.1, 0.5));
     }

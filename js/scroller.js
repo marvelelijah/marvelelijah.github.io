@@ -34,7 +34,33 @@
     thumb.className = 'vs-thumb';
     bar.appendChild(thumb);
     document.body.appendChild(bar);
-    let hideT = null, dragging = false, hovering = false;
+    let hideT = null, dragging = false, hovering = false, watchT = null;
+
+    // is the scrolling area actually on screen right now? (closed windows, hidden panes)
+    function visible(){
+      if(doc) return true;
+      if(!box.isConnected) return false;
+      if(box.checkVisibility) return box.checkVisibility({ opacityProperty: true, visibilityProperty: true });
+      for(let n = box; n && n !== document.documentElement; n = n.parentElement){
+        const cs = getComputedStyle(n);
+        if(cs.display === 'none' || cs.visibility === 'hidden' || cs.opacity === '0') return false;
+      }
+      return true;
+    }
+    function hideNow(){
+      clearTimeout(hideT); clearInterval(watchT); watchT = null;
+      hovering = false; dragging = false;
+      bar.classList.remove('show', 'drag');
+      bar.style.display = 'none';
+    }
+    // while the bar is showing, keep checking its window is still there
+    function watch(){
+      if(watchT) return;
+      watchT = setInterval(() => {
+        if(!visible() || !geom()){ hideNow(); return; }
+        if(!bar.classList.contains('show')){ clearInterval(watchT); watchT = null; }
+      }, 150);
+    }
 
     function geom(){
       const vh = doc ? window.innerHeight : box.clientHeight;
@@ -52,7 +78,7 @@
       return { vh, sh, top, right, h, t };
     }
     function place(){
-      const g = geom();
+      const g = visible() ? geom() : null;
       if(!g){ bar.style.display = 'none'; return null; }
       bar.style.display = '';
       bar.style.top = g.top + 'px';
@@ -69,13 +95,15 @@
       return g;
     }
     function show(){
-      if(!place()) return;
+      if(!place()){ hideNow(); return; }
       bar.classList.add('show');
+      watch();
       clearTimeout(hideT);
       hideT = setTimeout(() => { if(!dragging && !hovering) bar.classList.remove('show'); }, 900);
     }
-    thumb.addEventListener('mouseenter', () => { hovering = true; clearTimeout(hideT); });
-    thumb.addEventListener('mouseleave', () => { hovering = false; show(); });
+    // hover only counts for a real mouse (a tap would otherwise keep the bar up for good)
+    thumb.addEventListener('pointerenter', (e) => { if(e.pointerType === 'mouse'){ hovering = true; clearTimeout(hideT); } });
+    thumb.addEventListener('pointerleave', () => { hovering = false; show(); });
     thumb.addEventListener('pointerdown', (e) => {
       const g = geom();
       if(!g) return;
@@ -103,7 +131,7 @@
       const g = geom();
       if(g && e.clientX > g.right - 16 && e.clientX <= g.right) show();
     }, { passive: true });
-    return { show, place, bar, box };
+    return { show, place, hideNow, bar, box };
   }
 
   function onScroll(e){
@@ -118,6 +146,15 @@
   window.addEventListener('resize', () => bars.forEach(b => b.place()), { passive: true });
   // drop bars whose scrolling area has gone (closed pop-outs, panels)
   setInterval(() => {
-    bars.forEach((b, k) => { if(k !== document && !k.isConnected){ b.bar.remove(); bars.delete(k); } });
-  }, 4000);
+    bars.forEach((b, k) => { if(k !== document && !k.isConnected){ b.hideNow(); b.bar.remove(); bars.delete(k); } });
+  }, 2000);
+  // any click or Escape
+  // (closing X buttons, back buttons, opening things): hide every bar straight away;
+  // it comes back the moment something is scrolled again
+  const hideAll = (e) => {
+    if(e && e.target && e.target.closest && e.target.closest('.vs-bar')) return;
+    bars.forEach(b => b.hideNow());
+  };
+  document.addEventListener('click', hideAll, true);
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') hideAll(); }, true);
 })();
