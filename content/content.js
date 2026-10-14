@@ -44,16 +44,6 @@ window.SITE_CONTENT = {
     "description": "Dozens of cows live on this land for tax reasons."
    },
    {
-    "id": "1OhCXL-wQQDNV3sFOYL4RsMybldaoVBay",
-    "file": "06-16-26_Portra160 (27).jpg",
-    "date": "2026-06-16",
-    "camera": "canon eos 650",
-    "lens": "canon ef 50mm f/1.4",
-    "film": "kodak portra 160",
-    "format": "35mm",
-    "description": "Cattle near my house."
-   },
-   {
     "id": "1T0fXcUTwE6bxoohKGcTParN8pZ8FYdVJ",
     "file": "06-16-26_Portra160 (15).jpg",
     "date": "2026-06-16",
