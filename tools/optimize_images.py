@@ -66,8 +66,12 @@ def index_originals(folder):
     found = {}
     for dp, _, files in os.walk(folder):
         for fn in files:
+            if fn.startswith('.'):
+                continue
+            # Drive sometimes downloads files without an extension, so index every
+            # file by full name and by name-minus-extension; only matches get opened.
+            found.setdefault(fn.lower(), os.path.join(dp, fn))
             if fn.lower().endswith(EXTS):
-                found.setdefault(fn.lower(), os.path.join(dp, fn))
                 found.setdefault(os.path.splitext(fn)[0].lower(), os.path.join(dp, fn))
     return found
 
