@@ -2180,7 +2180,7 @@ window.SITE_CONTENT = {
   {
    "slug": "the-man-who-erased-himself-nexpo-research-application",
    "title": "The Man Who Erased Himself - Nexpo Research Application",
-   "date": "2026-10-14",
+   "date": "2026-09-10",
    "body": "[READ PDF HERE](https://drive.google.com/file/d/1R-0z__nTDhWJbo7__DhzaYF1efK6Ahv0/view?usp=sharing)\n\n![PB](img/p/umv8nzrnhbd7b1n-960.webp)"
   },
   {
