@@ -905,20 +905,6 @@ window.SITE_CONTENT = {
     }
    },
    {
-    "id": "1CY9va0iqWpU1_99tAsUBGfzLaJK7X9dX",
-    "file": "10-09-26 (985).jpg",
-    "date": "2026-10-09",
-    "camera": "sony a7c",
-    "lens": "sony fe 24mm f/2.8 g",
-    "description": "Worship.",
-    "exif": {
-     "shutter": "1/160s",
-     "f": "2.8",
-     "iso": 2500,
-     "focal": 24
-    }
-   },
-   {
     "id": "1XZx-tvvtGMqHRMdJDCfSF7YbeNvDhzMT",
     "file": "10-09-26 (1071).jpg",
     "date": "2026-10-09",
