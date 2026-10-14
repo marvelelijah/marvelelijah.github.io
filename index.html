@@ -874,9 +874,10 @@
   .settings-drop.open{ grid-template-rows:1fr; opacity:1; }
   .settings-drop-inner{
     min-height:0; overflow:hidden;
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); align-items:start; gap:12px;
+    display:flex; align-items:flex-start; gap:12px;
   }
-  .settings-drop-inner > .settings-win:first-child, .settings-drop-inner > .settings-win{ margin-top:10px; }
+  /* two tidy columns on desktop: format + physics on the left, view on the right */
+  .settings-col{ flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:12px; padding-top:10px; }
   @media (prefers-reduced-motion: reduce){ .settings-drop{ transition:none; } }
   .settings-chev{ display:inline-block; transition:transform 0.3s ease; }
   .settings-wrap.is-open .settings-chev{ transform:rotate(90deg); }
@@ -927,7 +928,7 @@
   html.a11y :focus-visible{ outline:2px solid #9fd3ff !important; outline-offset:2px; }
   html.a11y .boot-logo, html.a11y .crt-gutter{ display:none !important; }
   html.a11y .settings-physics{ display:none; }
-  html.a11y .settings-drop-inner{ grid-template-columns:1fr; }
+  html.a11y .settings-drop-inner{ flex-direction:column; align-items:stretch; gap:0; }
   .listing .set-btn.look-a11y{ color:var(--fg); border-color:var(--fg-dim); }
   html.a11y .listing .set-btn{ color:#ffffff; border-color:#9a9a9a; }
   html.a11y .listing .set-btn[class*="look-"]:not(.look-a11y){
@@ -983,7 +984,7 @@
     .listing .settings-drop .set-btn.look-darkroom{ border-color:#9c241c; }
     .listing .settings-drop .set-btn.look-negative{ border-color:#ecebe4; }
     .listing .settings-drop .set-btn.look-grain{ border-color:#5a5650; }
-    .settings-drop-inner{ grid-template-columns:1fr; }
+    .settings-drop-inner{ flex-direction:column; align-items:stretch; gap:0; }
     .inputrow input{ font-size:16px; }
     .inputrow.collapsed{ display:none; }
   }
@@ -3720,6 +3721,10 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     drop.id = 'settingsDrop';
     const dropInner = el('div', 'settings-drop-inner');
     drop.appendChild(dropInner);
+    const colA = el('div', 'settings-col');
+    const colB = el('div', 'settings-col');
+    dropInner.appendChild(colA);
+    dropInner.appendChild(colB);
 
     // window 1: reformat
     const fmtWin = el('div', 'settings-win');
@@ -3740,7 +3745,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     a11yBtn.setAttribute('aria-label', 'accessible format: plain text, no animation, no pop-out windows');
     fmtBtns.appendChild(a11yBtn);
     fmtWin.appendChild(fmtBtns);
-    dropInner.appendChild(fmtWin);
+    colA.appendChild(fmtWin);
 
     // window 2: view (text size, gallery columns)
     const viewWin = el('div', 'settings-win settings-view');
@@ -3769,7 +3774,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     });
     colRow.appendChild(colBtns);
     viewWin.appendChild(colRow);
-    dropInner.appendChild(viewWin);
+    colB.appendChild(viewWin);
 
     // window 3: pop-out physics (pop-outs only exist on the desktop layout)
     let physMap = [], sliders = [];
@@ -3789,7 +3794,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       ];
       sliders.forEach(sl => physWin.appendChild(sl.row));
       physWin.appendChild(el('div', 'set-note', esc('open about.txt, contact.txt or work/equipment.txt to see the pop-outs.')));
-      dropInner.appendChild(physWin);
+      colA.appendChild(physWin);
     }
     wrap.appendChild(drop);
 
