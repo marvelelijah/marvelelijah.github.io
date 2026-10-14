@@ -1477,11 +1477,13 @@ window.SITE_CONTENT = {
     "date": "2023-10-31",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
-    "description": "Checkmate.",
     "exif": {
      "shutter": "1/13s",
-     "iso": 800
-    }
+     "f": "4",
+     "iso": 800,
+     "focal": 6.5
+    },
+    "description": "Checkmate."
    }
   ],
   "stills": [
