@@ -778,14 +778,7 @@
   body.theme-darkroom img{ filter:grayscale(1) brightness(0.8) sepia(1) hue-rotate(-45deg) saturate(6); }
   body.theme-darkroom{ text-shadow:0 0 8px rgba(255,40,20,0.35); }
 
-  /* ---- redecorate: layout effects (stackable) ---- */
-  .app-shell{
-    transform:rotate(var(--fx-rot-a, 0deg)) rotate(var(--fx-rot-b, 0deg)) scale(var(--fx-scale, 1)) scaleX(var(--fx-flip, 1));
-    transition:transform 0.9s cubic-bezier(.5,0,.2,1);
-  }
-  html.fx-australia{ --fx-rot-a:180deg; }
-  html.fx-tilt{ --fx-rot-b:-3.5deg; --fx-scale:0.94; }
-  html.fx-mirror{ --fx-flip:-1; }
+  /* ---- redecorate: inverted ---- */
   html.fx-negative{ filter:invert(1) hue-rotate(180deg); }
   html{ transition:filter 0.6s ease; }
 
@@ -818,8 +811,36 @@
   .listing .settings-toggle{ display:flex; align-items:baseline; gap:0; }
   .listing .tag-settings{ color:var(--dir); }
   .settings-chev{ margin-left:8px; color:var(--fg-dim); }
-  .settings-drop{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); align-items:start; gap:12px; margin:10px 0 6px; }
-  .settings-drop[hidden]{ display:none; }
+  .settings-drop{
+    display:grid; grid-template-rows:0fr; opacity:0;
+    transition:grid-template-rows 0.38s cubic-bezier(.2,.7,.2,1), opacity 0.3s ease;
+  }
+  .settings-drop.open{ grid-template-rows:1fr; opacity:1; }
+  .settings-drop-inner{
+    min-height:0; overflow:hidden;
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); align-items:start; gap:12px;
+  }
+  .settings-drop-inner > .settings-win:first-child, .settings-drop-inner > .settings-win{ margin-top:10px; }
+  @media (prefers-reduced-motion: reduce){ .settings-drop{ transition:none; } }
+  .settings-chev{ display:inline-block; transition:transform 0.3s ease; }
+  .settings-wrap.is-open .settings-chev{ transform:rotate(90deg); }
+
+  /* each format button previews its own look */
+  .listing .set-btn.look-geocity{
+    font-family:"Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive;
+    background:linear-gradient(90deg, #ff3fa4, #ffd23f, #3fffd2, #7a5cff);
+    color:#1a0033; border-color:#ff3fa4; font-weight:bold;
+  }
+  .listing .set-btn.look-crt{
+    font-family:'VT323', 'JetBrains Mono', ui-monospace, monospace; font-size:1.2em; line-height:1.05;
+    background:#020b04; color:#5dff8f; border-color:#2d9a55; text-shadow:0 0 5px #5dff8f;
+  }
+  .listing .set-btn.look-darkroom{
+    background:#080000; color:#ff4a3d; border-color:#9c241c; text-shadow:0 0 6px rgba(255,40,20,0.6);
+  }
+  .listing .set-btn.look-negative{ background:#ecebe4; color:#0b0b0b; border-color:#ecebe4; }
+  .listing .set-btn[class*="look-"]:hover, .listing .set-btn[class*="look-"]:focus-visible{ filter:brightness(1.15); }
+  .listing .set-btn[class*="look-"].on{ outline:1px solid var(--fg); outline-offset:3px; }
   .settings-win{ border:1px solid var(--line); padding:10px 12px 12px; }
   .settings-title{ color:var(--fg-dim); border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:10px; }
   .set-btns{ display:flex; flex-wrap:wrap; gap:6px; }
@@ -876,7 +897,11 @@
     .output{ padding-bottom:calc(14px + env(safe-area-inset-bottom) + var(--room, 0px)); }
     .listing .settings-drop .set-btn{ display:inline-block; width:auto; padding:8px 12px; border:1px solid var(--line); }
     .listing .settings-drop .set-btn.on{ border-color:var(--dir); }
-    .settings-drop{ grid-template-columns:1fr; }
+    .listing .settings-drop .set-btn.look-geocity{ border-color:#ff3fa4; }
+    .listing .settings-drop .set-btn.look-crt{ border-color:#2d9a55; }
+    .listing .settings-drop .set-btn.look-darkroom{ border-color:#9c241c; }
+    .listing .settings-drop .set-btn.look-negative{ border-color:#ecebe4; }
+    .settings-drop-inner{ grid-template-columns:1fr; }
     .inputrow input{ font-size:16px; }
     .inputrow.collapsed{ display:none; }
   }
@@ -3404,9 +3429,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
 
   const FX_LINES = {
     negative: 'printing from the negative.',
-    australia: "g'day.",
-    mirror: '.sdrawkcab ti daer',
-    tilt: 'someone bumped the desk.',
   };
   function toggleFx(name, quiet){
     const on = !document.documentElement.classList.contains('fx-' + name);
@@ -3444,13 +3466,10 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   }
   /* ---------- settings: a dropdown in the ~ listing (replaces the old help console) ---------- */
   const REFORMAT_OPTIONS = [
-    { label:'geocity',   kind:'theme', name:'geocity' },
-    { label:'crt',       kind:'theme', name:'crt' },
-    { label:'darkroom',  kind:'theme', name:'darkroom' },
-    { label:'negative',  kind:'fx',    name:'negative' },
-    { label:'australia', kind:'fx',    name:'australia' },
-    { label:'mirror',    kind:'fx',    name:'mirror' },
-    { label:'tilt',      kind:'fx',    name:'tilt' },
+    { label:'geocity',  kind:'theme', name:'geocity' },
+    { label:'crt',      kind:'theme', name:'crt' },
+    { label:'darkroom', kind:'theme', name:'darkroom' },
+    { label:'inverted', kind:'fx',    name:'negative' },
   ];
   const PHYSICS_OPTIONS = [
     { label:'drift',       mode:'drift' },
@@ -3470,7 +3489,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     return b;
   }
 
-  function settingsSlider(label, min, max, step, get, set, fmt){
+  function settingsSlider(label, min, max, step, get, set, fmt, def){
     const row = el('label', 'set-slider');
     const name = el('span', 'set-slider-name', esc(label));
     const val = el('span', 'set-slider-val', '');
@@ -3479,6 +3498,9 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     r.setAttribute('aria-label', label);
     const show = () => { val.textContent = fmt(get()); };
     r.addEventListener('input', () => { set(parseFloat(r.value)); show(); if(floatWins.length) startFloatLoop(); });
+    // double-click puts it back to the default
+    r.title = 'double-click to reset';
+    r.addEventListener('dblclick', () => { set(def); r.value = def; show(); });
     row.appendChild(name); row.appendChild(r); row.appendChild(val);
     return { row, sync(){ r.value = get(); show(); } };
   }
@@ -3492,24 +3514,26 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     const chev = el('span', 'settings-chev', '▸');
     chev.setAttribute('aria-hidden', 'true');
     btn.appendChild(chev);
-    btn.appendChild(el('span', 'kind', esc('reformat' + (isNarrow() ? '' : ' · pop-out physics'))));
     wrap.appendChild(btn);
 
     const drop = el('div', 'settings-drop');
     drop.id = 'settingsDrop';
+    const dropInner = el('div', 'settings-drop-inner');
+    drop.appendChild(dropInner);
 
     // window 1: reformat
     const fmtWin = el('div', 'settings-win');
-    fmtWin.appendChild(el('div', 'settings-title', esc('reformat')));
+    fmtWin.appendChild(el('div', 'settings-title', esc('format')));
     const fmtBtns = el('div', 'set-btns');
     const fmtMap = REFORMAT_OPTIONS.map(o => {
       const b = settingsBtn(o.label, () => o.kind === 'theme' ? applyTheme(o.name, true) : toggleFx(o.name, true));
+      b.classList.add('look-' + o.name);
       fmtBtns.appendChild(b);
       return { o, b };
     });
     fmtBtns.appendChild(settingsBtn('reset', () => resetLooks(true)));
     fmtWin.appendChild(fmtBtns);
-    drop.appendChild(fmtWin);
+    dropInner.appendChild(fmtWin);
 
     // window 2: pop-out physics (pop-outs only exist on the desktop layout)
     let physMap = [], sliders = [];
@@ -3524,22 +3548,22 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       });
       physWin.appendChild(physBtns);
       sliders = [
-        settingsSlider('gravity', 200, 4000, 50, () => G, v => { G = v; }, v => (v / G_DEFAULT).toFixed(1) + '×'),
-        settingsSlider('bounce', 0, 0.95, 0.01, () => BOUNCE, v => { BOUNCE = v; }, v => Math.round(v * 100) + '%'),
+        settingsSlider('gravity', 200, 4000, 50, () => G, v => { G = v; }, v => (v / G_DEFAULT).toFixed(1) + '×', G_DEFAULT),
+        settingsSlider('bounce', 0, 0.95, 0.01, () => BOUNCE, v => { BOUNCE = v; }, v => Math.round(v * 100) + '%', BOUNCE_DEFAULT),
       ];
       sliders.forEach(sl => physWin.appendChild(sl.row));
       physWin.appendChild(el('div', 'set-note', esc('open about.txt, contact.txt or work/equipment.txt to see the pop-outs.')));
-      drop.appendChild(physWin);
+      dropInner.appendChild(physWin);
     }
     wrap.appendChild(drop);
 
     btn.addEventListener('click', () => {
       settingsOpen = !settingsOpen;
       applySettingsOpen();
-      if(settingsOpen) requestAnimationFrame(() => {
+      if(settingsOpen) setTimeout(() => {
         const r = wrap.getBoundingClientRect(), o = output.getBoundingClientRect();
         if(r.bottom > o.bottom) smoothScrollOutput(output.scrollTop + (r.bottom - o.bottom) + 12);
-      });
+      }, REDUCED_MOTION ? 0 : 380);
     });
 
     settingsEls = { wrap, btn, chev, drop, fmtMap, physMap, sliders };
@@ -3551,8 +3575,10 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   function applySettingsOpen(){
     if(!settingsEls) return;
     settingsEls.btn.setAttribute('aria-expanded', settingsOpen ? 'true' : 'false');
-    settingsEls.chev.textContent = settingsOpen ? '▾' : '▸';
-    settingsEls.drop.hidden = !settingsOpen;
+    settingsEls.wrap.classList.toggle('is-open', settingsOpen);
+    settingsEls.drop.classList.toggle('open', settingsOpen);
+    if(settingsOpen) settingsEls.drop.removeAttribute('inert'); else settingsEls.drop.setAttribute('inert', '');
+    settingsEls.drop.setAttribute('aria-hidden', settingsOpen ? 'false' : 'true');
   }
 
   function refreshSettings(){
@@ -3607,10 +3633,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       case 'geocity': case 'geocities': applyTheme('geocity'); break;
       case 'crt': applyTheme('crt'); break;
       case 'darkroom': applyTheme('darkroom'); break;
-      case 'negative': toggleFx('negative'); break;
-      case 'australia': toggleFx('australia'); break;
-      case 'mirror': toggleFx('mirror'); break;
-      case 'tilt': toggleFx('tilt'); break;
+      case 'negative': case 'inverted': case 'invert': toggleFx('negative'); break;
       case 'gravity': case 'antigravity': case 'magnet': case 'zerog': setPhysics(cmd === 'zerog' ? 'drift' : cmd); break;
       case 'reset': case 'normal': resetLooks(); break;
       default:
