@@ -655,13 +655,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09 23:23:48",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Painter and the painted.",
     "exif": {
      "shutter": "1/160s",
      "f": "2.8",
      "iso": 4000,
      "focal": 24
-    }
+    },
+    "description": "Painter and the painted."
    },
    {
     "id": "17ZYbpnXLCsAaMe22y3KD-TN9y1nSiZ2n",
