@@ -22,7 +22,10 @@
 <meta name="twitter:description" content="Elijah Halford is a filmmaker and photographer based in Orlando, Florida — music videos, events, weddings, and 35mm film and digital photography.">
 <meta name="twitter:image" content="https://elijahhalford.com/img/og.jpg">
 <link rel="preload" as="image" href="img/site/logo.gif">
-<link rel="icon" type="image/png" sizes="32x32" href="img/site/favicon-32.png">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="img/site/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="48x48" href="img/site/favicon-48.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="img/site/favicon-192.png?v=2">
 <link rel="apple-touch-icon" sizes="180x180" href="img/site/apple-touch-icon.png">
 <script type="application/ld+json">
 {
@@ -61,7 +64,7 @@
     background:var(--bg);
     color:var(--fg);
     font-family:'JetBrains Mono', ui-monospace, monospace;
-    font-size:15px;
+    font-size:calc(15px * var(--ts, 1));
     line-height:1.65;
     -webkit-font-smoothing:antialiased;
   }
@@ -166,7 +169,7 @@
   }
   .gallery-section-title:first-child{ margin-top:0; }
   .gallery-grid{
-    columns:2;
+    columns:var(--gcols, 2);
     column-gap:12px;
   }
   .gallery-thumb{
@@ -263,6 +266,13 @@
     border-color:var(--fg-dim);
   }
   .lightbox-close{ top:20px; right:20px; width:32px; height:32px; font-size:1.1rem; }
+  .lightbox-play{
+    position:fixed; top:20px; right:62px; height:32px; padding:0 10px;
+    border:1px solid var(--line); color:var(--fg-dim); background:rgba(0,0,0,0.4);
+    display:flex; align-items:center; gap:6px; font-size:0.85rem;
+  }
+  .lightbox-play:hover, .lightbox-play:focus-visible, .lightbox-play.on{ color:var(--fg); border-color:var(--fg-dim); }
+  .lightbox-play .bar{ position:absolute; left:0; bottom:-1px; height:2px; width:0; background:var(--fg-dim); }
   .lightbox-arrow{ top:50%; transform:translateY(-50%); width:44px; height:44px; font-size:1.4rem; }
   .lightbox-prev{ left:20px; }
   .lightbox-next{ right:20px; }
@@ -296,6 +306,7 @@
     .lightbox-image{ max-height:62svh; margin:0 auto; }
     .lightbox-info{ width:100%; padding-top:0; }
     .lightbox-close{ top:calc(12px + env(safe-area-inset-top)); right:12px; width:44px; height:44px; font-size:1.3rem; }
+    .lightbox-play{ top:calc(12px + env(safe-area-inset-top)); right:66px; height:44px; padding:0 14px; }
     .lightbox-arrow{
       top:auto; transform:none;
       bottom:calc(16px + env(safe-area-inset-bottom));
@@ -827,6 +838,31 @@
   .gallery-top.show{ opacity:1; transform:none; pointer-events:auto; }
   .gallery-top:hover, .gallery-top:focus-visible{ border-color:var(--fg); }
 
+  /* ---- film grain overlay ---- */
+  .grain{
+    position:fixed; inset:-60px; pointer-events:none; z-index:299; opacity:0.085;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation:grainShift 0.5s steps(5) infinite;
+    display:none;
+  }
+  html.fx-grain .grain{ display:block; }
+  @keyframes grainShift{
+    0%{ transform:translate(0,0); } 20%{ transform:translate(-22px,14px); } 40%{ transform:translate(18px,-26px); }
+    60%{ transform:translate(-12px,-8px); } 80%{ transform:translate(26px,20px); } 100%{ transform:translate(0,0); }
+  }
+  @media (prefers-reduced-motion: reduce){ .grain{ animation:none; } }
+  html.a11y .grain{ display:none !important; }
+  .listing .set-btn.look-grain{
+    background-color:#1a1a1a; color:#e8e4da; border-color:#5a5650;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.35'/></svg>");
+  }
+  .set-row{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin-top:14px; color:var(--fg-dim); }
+  .set-row > .set-btns{ order:3; flex-basis:100%; }
+  .set-row > .set-row-val{ order:2; }
+  .settings-title + .set-row{ margin-top:0; }
+  .set-row-name{ flex:none; }
+  .set-row-val{ margin-left:auto; color:var(--fg); }
+
   /* ---- settings dropdown ---- */
   .listing .settings-toggle{ display:flex; align-items:baseline; gap:0; }
   .listing .tag-settings{ color:var(--dir); }
@@ -884,7 +920,7 @@
   html.a11y{ --bg:#000000 !important; --fg:#ffffff !important; --fg-dim:#d0d0d0 !important; --line:#6b6b6b !important; --dir:#9fd3ff !important; --media:#ffd27a !important; --err:#ff9b9b !important; }
   html.a11y body{
     font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    font-size:17px; line-height:1.6; text-shadow:none; background-image:none;
+    font-size:calc(17px * var(--ts, 1)); line-height:1.6; text-shadow:none; background-image:none;
   }
   html.a11y .listing .kind{ font-size:0.9em; }
   html.a11y .listing button:not(.set-btn) > span:not(.kind):not(.settings-chev):not(.row-icon){ text-decoration:underline; text-underline-offset:3px; }
@@ -895,12 +931,13 @@
   .listing .set-btn.look-a11y{ color:var(--fg); border-color:var(--fg-dim); }
   html.a11y .listing .set-btn{ color:#ffffff; border-color:#9a9a9a; }
   html.a11y .listing .set-btn[class*="look-"]:not(.look-a11y){
+    background-image:none;
     background:none; color:#ffffff; border-color:#9a9a9a; font-family:inherit; font-size:1em; font-weight:normal; text-shadow:none;
   }
   html.a11y .listing .set-btn.look-a11y.on{ color:#0b0b0b; background:#9fd3ff; border-color:#9fd3ff; outline:none; }
 
   @media (max-width: 760px){
-    body{ font-size:14px; -webkit-text-size-adjust:100%; }
+    body{ font-size:calc(14px * var(--ts, 1)); -webkit-text-size-adjust:100%; }
     .term{ padding:0 14px; }
     .topbar{ padding:calc(12px + env(safe-area-inset-top)) 0 10px; }
     .output{ padding:14px 0; padding-bottom:calc(14px + var(--room, 0px)); position:relative; -webkit-overflow-scrolling:touch; }
@@ -945,6 +982,7 @@
     .listing .settings-drop .set-btn.look-crt{ border-color:#2d9a55; }
     .listing .settings-drop .set-btn.look-darkroom{ border-color:#9c241c; }
     .listing .settings-drop .set-btn.look-negative{ border-color:#ecebe4; }
+    .listing .settings-drop .set-btn.look-grain{ border-color:#5a5650; }
     .settings-drop-inner{ grid-template-columns:1fr; }
     .inputrow input{ font-size:16px; }
     .inputrow.collapsed{ display:none; }
@@ -1012,8 +1050,10 @@
 </div>
 </div>
 
+<div class="grain" aria-hidden="true"></div>
 <div class="lightbox" id="lightbox" aria-hidden="true">
   <button class="lightbox-close" id="lightboxClose" type="button" aria-label="close photo">×</button>
+  <button class="lightbox-play" id="lightboxPlay" type="button" aria-label="play slideshow" aria-pressed="false"><span class="ico">▶</span><span class="lbl">slideshow</span><span class="bar"></span></button>
   <button class="lightbox-arrow lightbox-prev" id="lightboxPrev" type="button" aria-label="previous photo">‹</button>
   <div class="lightbox-content" id="lightboxContent">
     <div class="lightbox-image-wrap" id="lightboxImageWrap">
@@ -3312,6 +3352,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   }
 
   function closeLightbox(){
+    if(typeof stopSlideshow === 'function' && slideTimer) stopSlideshow();
     lightbox.classList.remove('open');
     lightbox.setAttribute('aria-hidden', 'true');
   }
@@ -3369,8 +3410,43 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     swipeX = null;
     if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) stepPhoto(dx < 0 ? 1 : -1);
   }, { passive: true });
-  lightboxPrev.addEventListener('click', () => stepPhoto(-1));
-  lightboxNext.addEventListener('click', () => stepPhoto(1));
+  lightboxPrev.addEventListener('click', () => { stepPhoto(-1); if(slideTimer) startSlideshow(); });
+  lightboxNext.addEventListener('click', () => { stepPhoto(1); if(slideTimer) startSlideshow(); });
+
+  /* ---------- lightbox slideshow ---------- */
+  const lightboxPlay = document.getElementById('lightboxPlay');
+  const SLIDE_MS = 4500;
+  let slideTimer = null;
+  let slideBarAnim = null;
+  function runSlideBar(){
+    const bar = lightboxPlay.querySelector('.bar');
+    if(slideBarAnim) slideBarAnim.cancel();
+    if(REDUCED_MOTION){ bar.style.width = '0'; return; }
+    slideBarAnim = bar.animate([{ width:'0%' }, { width:'100%' }], { duration:SLIDE_MS, easing:'linear' });
+  }
+  function startSlideshow(){
+    clearInterval(slideTimer);
+    slideTimer = setInterval(() => { stepPhoto(1); runSlideBar(); }, SLIDE_MS);
+    runSlideBar();
+    lightboxPlay.classList.add('on');
+    lightboxPlay.setAttribute('aria-pressed', 'true');
+    lightboxPlay.setAttribute('aria-label', 'pause slideshow');
+    lightboxPlay.querySelector('.ico').textContent = '❚❚';
+    lightboxPlay.querySelector('.lbl').textContent = 'pause';
+  }
+  function stopSlideshow(){
+    clearInterval(slideTimer); slideTimer = null;
+    if(slideBarAnim){ slideBarAnim.cancel(); slideBarAnim = null; }
+    lightboxPlay.classList.remove('on');
+    lightboxPlay.setAttribute('aria-pressed', 'false');
+    lightboxPlay.setAttribute('aria-label', 'play slideshow');
+    lightboxPlay.querySelector('.ico').textContent = '▶';
+    lightboxPlay.querySelector('.lbl').textContent = 'slideshow';
+  }
+  lightboxPlay.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if(slideTimer) stopSlideshow(); else startSlideshow();
+  });
   lightbox.addEventListener('click', (e) => {
     if(e.target === lightbox) closeLightbox();
   });
@@ -3551,6 +3627,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
 
   const FX_LINES = {
     negative: 'printing from the negative.',
+    grain: 'film grain on.',
   };
   function toggleFx(name, quiet){
     const on = !document.documentElement.classList.contains('fx-' + name);
@@ -3592,6 +3669,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     { label:'crt',      kind:'theme', name:'crt' },
     { label:'darkroom', kind:'theme', name:'darkroom' },
     { label:'inverted', kind:'fx',    name:'negative' },
+    { label:'grain',    kind:'fx',    name:'grain' },
   ];
   const PHYSICS_OPTIONS = [
     { label:'drift',       mode:'drift' },
@@ -3664,7 +3742,36 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     fmtWin.appendChild(fmtBtns);
     dropInner.appendChild(fmtWin);
 
-    // window 2: pop-out physics (pop-outs only exist on the desktop layout)
+    // window 2: view (text size, gallery columns)
+    const viewWin = el('div', 'settings-win settings-view');
+    viewWin.appendChild(el('div', 'settings-title', esc('view')));
+    const tsRow = el('div', 'set-row');
+    tsRow.appendChild(el('span', 'set-row-name', esc('text size')));
+    const tsBtns = el('div', 'set-btns');
+    const tsDown = settingsBtn('A−', () => stepTextScale(-1));
+    tsDown.setAttribute('aria-label', 'smaller text');
+    const tsReset = settingsBtn('A', () => setTextScale(1));
+    tsReset.setAttribute('aria-label', 'default text size');
+    const tsUp = settingsBtn('A+', () => stepTextScale(1));
+    tsUp.setAttribute('aria-label', 'larger text');
+    [tsDown, tsReset, tsUp].forEach(b => tsBtns.appendChild(b));
+    tsRow.appendChild(tsBtns);
+    const tsVal = el('span', 'set-row-val', '');
+    tsRow.appendChild(tsVal);
+    viewWin.appendChild(tsRow);
+    const colRow = el('div', 'set-row');
+    colRow.appendChild(el('span', 'set-row-name', esc('photo grid')));
+    const colBtns = el('div', 'set-btns');
+    const colMap = colOptions().map(n => {
+      const b = settingsBtn(n + (n === 1 ? ' column' : ' columns'), () => setCols(n));
+      colBtns.appendChild(b);
+      return { n, b };
+    });
+    colRow.appendChild(colBtns);
+    viewWin.appendChild(colRow);
+    dropInner.appendChild(viewWin);
+
+    // window 3: pop-out physics (pop-outs only exist on the desktop layout)
     let physMap = [], sliders = [];
     if(!isNarrow()){
       const physWin = el('div', 'settings-win settings-physics');
@@ -3695,7 +3802,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       }, REDUCED_MOTION ? 0 : 380);
     });
 
-    settingsEls = { wrap, btn, chev, drop, fmtMap, physMap, sliders, a11yBtn };
+    settingsEls = { wrap, btn, chev, drop, fmtMap, physMap, sliders, a11yBtn, tsVal, colMap };
     applySettingsOpen();
     refreshSettings();
     return wrap;
@@ -3711,7 +3818,14 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   }
 
   function refreshSettings(){
+    savePrefs();
     if(!settingsEls) return;
+    settingsEls.tsVal.textContent = Math.round(textScale * 100) + '%';
+    settingsEls.colMap.forEach(({ n, b }) => {
+      const on = currentCols() === n;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
     const body = document.body.classList, html = document.documentElement.classList;
     settingsEls.fmtMap.forEach(({ o, b }) => {
       const on = o.kind === 'theme' ? body.contains('theme-' + o.name) : html.contains('fx-' + o.name);
@@ -3726,6 +3840,53 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     settingsEls.sliders.forEach(sl => sl.sync());
     settingsEls.a11yBtn.classList.toggle('on', simpleMode);
     settingsEls.a11yBtn.setAttribute('aria-pressed', simpleMode ? 'true' : 'false');
+  }
+
+  /* ---------- view prefs: text size + gallery columns ---------- */
+  const TS_STEPS = [0.85, 1, 1.15, 1.3, 1.5];
+  let textScale = 1;
+  function setTextScale(v, quiet){
+    textScale = v;
+    if(v === 1) document.documentElement.style.removeProperty('--ts');
+    else document.documentElement.style.setProperty('--ts', String(v));
+    if(!quiet) refreshSettings();
+  }
+  function stepTextScale(dir){
+    let i = TS_STEPS.indexOf(textScale);
+    if(i < 0) i = 1;
+    setTextScale(TS_STEPS[Math.max(0, Math.min(TS_STEPS.length - 1, i + dir))]);
+  }
+  let galleryCols = null; // null = layout default (2)
+  function colOptions(){ return isNarrow() ? [1, 2, 3] : [2, 3, 4]; }
+  function currentCols(){ return galleryCols || 2; }
+  function setCols(n, quiet){
+    galleryCols = n === 2 ? null : n;
+    if(galleryCols) document.documentElement.style.setProperty('--gcols', String(n));
+    else document.documentElement.style.removeProperty('--gcols');
+    if(!quiet) refreshSettings();
+  }
+
+  /* ---------- remembered settings (this browser only) ---------- */
+  const PREFS_KEY = 'eh-prefs';
+  let prefsReady = false;
+  function loadPrefs(){
+    try{ return JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') || {}; }catch(e){ return {}; }
+  }
+  function savePrefs(){
+    if(!prefsReady) return;
+    const theme = THEMES.find(t => document.body.classList.contains('theme-' + t)) || null;
+    const fx = Object.keys(FX_LINES).filter(f => document.documentElement.classList.contains('fx-' + f));
+    try{ localStorage.setItem(PREFS_KEY, JSON.stringify({ theme, fx, ts: textScale, cols: galleryCols })); }catch(e){}
+  }
+  function restorePrefs(){
+    const P = loadPrefs();
+    if(P.ts && TS_STEPS.indexOf(P.ts) >= 0) setTextScale(P.ts, true);
+    if(P.cols && [1, 2, 3, 4].indexOf(P.cols) >= 0) setCols(P.cols, true);
+    if(!simpleMode){
+      if(P.theme && THEMES.indexOf(P.theme) >= 0) applyTheme(P.theme, true);
+      (P.fx || []).forEach(f => { if(FX_LINES[f]) toggleFx(f, true); });
+    }
+    prefsReady = true;
   }
 
   /* ---------- accessible format: plain, still, readable; remembered for return visits ---------- */
@@ -3784,6 +3945,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       case 'crt': applyTheme('crt'); break;
       case 'darkroom': applyTheme('darkroom'); break;
       case 'negative': case 'inverted': case 'invert': toggleFx('negative'); break;
+      case 'grain': toggleFx('grain'); break;
       case 'gravity': case 'antigravity': case 'magnet': case 'zerog': setPhysics(cmd === 'zerog' ? 'drift' : cmd); break;
       case 'reset': case 'normal': resetLooks(); break;
       default:
@@ -3934,6 +4096,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     let savedSimple = null;
     try{ savedSimple = localStorage.getItem(SIMPLE_KEY); }catch(e){}
     if(savedSimple === '1') setSimple(true, false);
+    restorePrefs();
     updatePrompt();
     if(location.hash === '#ended'){
       try{ history.replaceState(null, '', location.pathname + location.search); }
