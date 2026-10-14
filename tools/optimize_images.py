@@ -52,6 +52,9 @@ def ids_in_site():
         for a in c.get('music', []):
             if a.get('coverId'):
                 roles.setdefault(a['coverId'], 'cover')
+        for v in c.get('videos', []):
+            if v.get('thumbId'):
+                roles.setdefault(v['thumbId'], 'vthumb')
     for i in re.findall(r"driveThumb\('([A-Za-z0-9_-]{20,})',\s*\d+\)", s):
         roles.setdefault(i, 'cover')
     for i in re.findall(r"driveThumbId:'([A-Za-z0-9_-]{20,})'", s):

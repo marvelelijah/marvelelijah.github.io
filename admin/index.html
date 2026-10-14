@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css">
+<script>document.write('<link rel="stylesheet" href="admin.css?v=' + Math.floor(Date.now() / 60000) + '">');</script>
 </head>
 <body>
 <div class="shell">
@@ -23,6 +23,7 @@
 
   <nav class="tabs" id="tabs" role="tablist">
     <button type="button" role="tab" data-tab="photos">photos</button>
+    <button type="button" role="tab" data-tab="videos">videography</button>
     <button type="button" role="tab" data-tab="links">time well spent</button>
     <button type="button" role="tab" data-tab="blog">blog</button>
     <button type="button" role="tab" data-tab="music">music</button>
@@ -113,6 +114,56 @@
           </span>
         </div>
         <div id="photoGrid" class="pgrid"></div>
+      </div>
+    </section>
+
+    <!-- ================= videography ================= -->
+    <section class="view" data-view="videos" hidden>
+      <div class="panel">
+        <div class="panelhead"><span id="videoFormTitle">~/admin/videography/new</span></div>
+        <form id="videoForm" class="form" autocomplete="off">
+          <div class="field">
+            <label for="videoUrl">youtube link</label>
+            <div class="inline">
+              <input id="videoUrl" required placeholder="https://www.youtube.com/watch?v=…">
+              <button type="button" class="btn" id="videoFetch">fill in</button>
+            </div>
+          </div>
+          <div class="album-row">
+            <label class="cover-drop video-thumb-drop" id="vthumbDrop" tabindex="0">
+              <input type="file" id="videoThumbFile" accept="image/jpeg,image/png,image/webp" hidden>
+              <img id="vthumbPreview" alt="" hidden>
+              <span id="vthumbHint">thumbnail<br><span class="dim">optional — drop your own,<br>otherwise YouTube's is used</span></span>
+            </label>
+            <div>
+              <div class="field"><label for="videoTitle">title</label><input id="videoTitle" required></div>
+              <div class="grid2">
+                <div class="field"><label for="videoDate">date</label><input id="videoDate" type="date" required></div>
+                <div class="field">
+                  <span class="label">section</span>
+                  <div class="boxes" id="videoCat">
+                    <label><input type="radio" name="videoCat" value="music" checked><span>music videos</span></label>
+                    <label><input type="radio" name="videoCat" value="events"><span>events</span></label>
+                    <label><input type="radio" name="videoCat" value="weddings"><span>weddings</span></label>
+                  </div>
+                </div>
+              </div>
+              <div class="row"><label class="check"><input type="checkbox" id="videoPinned"> demo reel (shown first, above every section)</label></div>
+              <div class="field"><label for="videoDesc">description (optional)</label><input id="videoDesc" placeholder="Shot &amp; edited by me."></div>
+              <div class="row">
+                <button type="button" class="btn" id="videoThumbRemove" hidden>use YouTube's thumbnail instead</button>
+              </div>
+            </div>
+          </div>
+          <div class="row actions">
+            <button type="submit" class="btn primary" id="videoSave">add to videography</button>
+            <button type="button" class="btn" id="videoCancel" hidden>cancel edit</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="panelhead"><span>~/work/videography</span><span class="dim" id="videoCount"></span></div>
+        <div id="videoList" class="list"></div>
       </div>
     </section>
 
@@ -283,6 +334,6 @@
 
 <script src="../js/markdown.js"></script>
 <script src="../js/scroller.js"></script>
-<script src="admin.js"></script>
+<script>document.write('<script src="admin.js?v=' + Math.floor(Date.now() / 60000) + '"><\/script>');</script>
 </body>
 </html>

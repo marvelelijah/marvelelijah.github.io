@@ -248,11 +248,11 @@
   .lightbox-camera{ margin-bottom:4px; }
   .lightbox-lens{ margin-bottom:4px; }
   .lightbox-film{ margin-bottom:4px; }
-  .lightbox-format, .lightbox-shutter, .lightbox-aperture, .lightbox-iso, .lightbox-focal{ margin-bottom:4px; }
-  .lightbox-taken{ margin-top:10px; margin-bottom:14px; }
+  .lightbox-format, .lightbox-shutter, .lightbox-aperture, .lightbox-iso{ margin-bottom:4px; }
+  .lightbox-time{ margin:-6px 0 10px; color:var(--fg-dim); }
   .lightbox-artist{ margin-bottom:4px; }
   .lightbox-medium{ margin-bottom:14px; }
-  .lightbox-desc{ line-height:1.6; }
+  .lightbox-desc{ line-height:1.6; margin-top:12px; }
   .lightbox-close, .lightbox-arrow{
     position:fixed;
     border:1px solid var(--line);
@@ -1064,6 +1064,7 @@
     </div>
     <div class="lightbox-info">
       <div class="lightbox-filename" id="lightboxFilename"></div>
+      <div class="lightbox-time" id="lightboxTaken"></div>
       <div class="lightbox-camera" id="lightboxCamera"></div>
       <div class="lightbox-lens" id="lightboxLens"></div>
       <div class="lightbox-film" id="lightboxFilm"></div>
@@ -1071,8 +1072,6 @@
       <div class="lightbox-shutter" id="lightboxShutter"></div>
       <div class="lightbox-aperture" id="lightboxAperture"></div>
       <div class="lightbox-iso" id="lightboxIso"></div>
-      <div class="lightbox-focal" id="lightboxFocal"></div>
-      <div class="lightbox-taken" id="lightboxTaken"></div>
       <div class="lightbox-artist" id="lightboxArtist"></div>
       <div class="lightbox-medium" id="lightboxMedium"></div>
       <div class="lightbox-desc" id="lightboxDesc"></div>
@@ -1081,10 +1080,16 @@
   <button class="lightbox-arrow lightbox-next" id="lightboxNext" type="button" aria-label="next photo">›</button>
 </div>
 
-<script src="content/content.js"></script>
-<script src="js/markdown.js"></script>
-<script src="js/scroller.js"></script>
-<script src="img/manifest.js"></script>
+<script>
+  // Load the site's content fresh: a version stamp that changes every minute stops
+  // browsers and the CDN from serving an old copy after an edit in /admin.
+  (function(){
+    var v = Math.floor(Date.now() / 60000);
+    ['content/content.js', 'img/manifest.js', 'js/markdown.js', 'js/scroller.js'].forEach(function(src){
+      document.write('<script src="' + src + '?v=' + v + '"><\/script>');
+    });
+  })();
+</script>
 <script>
 (function(){
   // All editable content (photos, journal links, music, blog posts) lives in
@@ -1187,17 +1192,12 @@
       .filter(Boolean).join(' · ');
   }
 
-  // "2026-10-09 22:08:54" -> "oct 9, 2026 · 10:08 pm"
+  // "2026-10-09 22:08:54" -> "10:08 pm" (the date is already in the file name)
   function takenLabel(d){
-    const m = String(d || '').match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/);
+    const m = String(d || '').match(/[ T](\d{2}):(\d{2})/);
     if(!m) return '';
-    const mon = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][Number(m[2]) - 1];
-    let out = mon + ' ' + Number(m[3]) + ', ' + m[1];
-    if(m[4]){
-      const h = Number(m[4]);
-      out += ' · ' + ((h % 12) || 12) + ':' + m[5] + (h < 12 ? ' am' : ' pm');
-    }
-    return out;
+    const h = Number(m[1]);
+    return ((h % 12) || 12) + ':' + m[2] + (h < 12 ? ' am' : ' pm');
   }
 
   function buildPhotoFiles(list){
@@ -1271,29 +1271,9 @@
   }
 
   // Pinned first regardless of date, then every other video sorted most-recent-first.
-  const VIDEOS = [
-    { id:'9aPUrzSdMIg', title:'SPECIAL BLEND | Demo Reel', description:'', date:'Sep 20, 2026', pinned:true },
-    { id:'QJTUzHw7fq4', title:'Marissa + Marcus', description:'', date:'Jul 22, 2026', category:'weddings', driveThumbId:'1i0t0p69OiS2DNpGRYxHiY3LRaX19h6-8' },
-    { id:'PSk3job83l4', title:'Kristin + Cory', description:'', date:'Feb 11, 2026', category:'weddings', driveThumbId:'1d56r2AmtKp0JlzTCebubAamOuRQVcQ9F' },
-    { id:'mGaY-wTj3k0', title:'Come Out With Pride Orlando 2025 Sizzle', description:'', date:'Jan 9, 2026', category:'events' },
-    { id:'d7osrOh03a0', title:'Maria + Manny', description:'', date:'Dec 14, 2025', category:'weddings', driveThumbId:'1TVhNmg_MNxDSXXd-XAzILr8ENuSI466j' },
-    { id:'CafpYmLlhDw', title:'Astrid + Jorge', description:'', date:'Nov 5, 2025', category:'weddings', driveThumbId:'1at5BXgmu4hWugolQMvxrTPjM_YRCvV4l' },
-    { id:'j6HE6ts_f9U', title:'Mercedes + Edgar', description:'', date:'Apr 16, 2025', category:'weddings', driveThumbId:'1vD0NbWlicrikh_Yf_o2KPDITO8GMGxGS' },
-    { id:'a-6s08vM0Sg', title:'Dani + Kevin', description:'', date:'Mar 10, 2025', category:'weddings', driveThumbId:'1ehQKTCbgZ_8CJ-gbyWpOkDlaFO3dl1Q8' },
-    { id:'B33VLtKYvnk', title:'Tarek + Sarah', description:'', date:'Feb 17, 2025', category:'weddings', driveThumbId:'1VyIWOCiKt_1zmVluKbMRJ9_LAxLvp-uv' },
-    { id:'NiHChXd-3ic', title:'Cynthia + John', description:'', date:'Feb 3, 2025', category:'weddings', driveThumbId:'1hJTgCzgY4nutmy11UfUBX2jNbVZXjqVe' },
-    { id:'1DgXbgMsPgs', title:'Elizabeth + Duncan', description:'', date:'Jan 27, 2025', category:'weddings', driveThumbId:'1d8MvUC_wtVa_J4nUhle0MN2a9yZovJOT' },
-    { id:'t0PAnofVL98', title:'Estephanie + Juan', description:'', date:'Nov 11, 2024', category:'weddings', driveThumbId:'10av9h6uxBWiLSp56iVypLpssEP-EboqQ' },
-    { id:'N7dHE6L81SM', title:'Come Out With Pride Orlando 2024 Sizzle', description:'', date:'Nov 2, 2024', category:'events', driveThumbId:'1PXZ6yORy4yiJg1Oqvoe6j0UjVMZE36Xw' },
-    { id:'weGMNrxmK40', title:"endie - your problem dog (official video)", description:'Shot & edited by me.', date:'Oct 10, 2024', category:'music' },
-    { id:'4fQuzl4-CVQ', title:'Naomi + Ben', description:'', date:'Aug 22, 2024', category:'weddings', driveThumbId:'18vKxiVo49ZxKt7jNMrPeP5ebfpK3wI3c' },
-    { id:'8pkm4sgIAXg', title:'Wilnez + Dakarai', description:'', date:'Jun 23, 2024', category:'weddings', driveThumbId:'1E4wfbjOUrL8Va_n-w5qNgIlU3THJNSaJ' },
-    { id:'knbDCFdgWTk', title:"endie - what's feeling important (official music video)", description:'Shot & edited by me.', date:'May 31, 2024', category:'music' },
-    { id:'iJePwX8RDXU', title:'Yesenia + Wendy', description:'', date:'May 21, 2024', category:'weddings', driveThumbId:'1cGvd3r_V34DsWxDakeMmm49SD_yh0kCm' },
-    { id:'XPzA_r5PGYQ', title:'Eugenie + Chirag', description:'', date:'Feb 24, 2024', category:'weddings', driveThumbId:'1MCr01nh8x2T-uWN3Toiglj9YfNZCYSyP' },
-    { id:'yJOLeYmvBjA', title:'Keeley + Katie', description:'', date:'Oct 17, 2023', category:'weddings', driveThumbId:'1Qb3GnggeVLWhyBdP1auksjcPfzwejBlN' },
-    { id:'TqpXLJXZatY', title:'Red Mist (Music Video)', description:'Shot & edited by me.', date:'Aug 4, 2023', category:'music' },
-  ];
+  // videos live in content/content.js (edited in /admin → videography)
+  const VIDEOS = (C.videos || []).slice().sort((x, y) =>
+    (y.pinned ? 1 : 0) - (x.pinned ? 1 : 0) || (Date.parse(y.date) || 0) - (Date.parse(x.date) || 0));
 
   function buildVideoFiles(entries){
     const files = {};
@@ -1309,8 +1289,8 @@
         date: v.date || '',
         pinned: !!v.pinned,
         category: v.category || '',
-        thumb: v.driveThumbId ? driveThumb(v.driveThumbId, 640) : youtubeThumb(v.id),
-        thumbFallback: v.driveThumbId ? youtubeThumb(v.id) : youtubeThumbFallback(v.id),
+        thumb: (v.thumbId || v.driveThumbId) ? driveThumb(v.thumbId || v.driveThumbId, 640) : youtubeThumb(v.id),
+        thumbFallback: (v.thumbId || v.driveThumbId) ? youtubeThumb(v.id) : youtubeThumbFallback(v.id),
       };
     });
     return files;
@@ -1441,7 +1421,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   const lightboxShutter = document.getElementById('lightboxShutter');
   const lightboxAperture = document.getElementById('lightboxAperture');
   const lightboxIso = document.getElementById('lightboxIso');
-  const lightboxFocal = document.getElementById('lightboxFocal');
   const lightboxTaken = document.getElementById('lightboxTaken');
   const lightboxArtist = document.getElementById('lightboxArtist');
   const lightboxMedium = document.getElementById('lightboxMedium');
@@ -2460,7 +2439,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
         const count = Object.keys(f.files).length;
         name = key + '/';
         kind = 'dir · ' + count + ' item' + (count === 1 ? '' : 's');
-        if(count === 0){ kind = 'coming soon...'; isEmpty = true; }
+        if(count === 0) isEmpty = true;
         cmd = 'ls ' + pathStr + '/' + key;
         tagCls = 'tag-dir';
       } else if(f.type === 'album'){
@@ -2882,10 +2861,10 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       lightboxFormat.textContent = '';
       lightboxFormat.style.display = 'none';
     }
-    [[lightboxShutter, 'shutter', photo.shutter], [lightboxAperture, 'aperture', photo.aperture],
-     [lightboxIso, 'iso', photo.iso], [lightboxFocal, 'focal length', photo.focal], [lightboxTaken, 'taken', photo.taken]]
+    [[lightboxShutter, 'shutter: ', photo.shutter], [lightboxAperture, 'aperture: ', photo.aperture],
+     [lightboxIso, 'iso: ', photo.iso], [lightboxTaken, '', photo.taken]]
       .forEach(([elm, label, val]) => {
-        elm.textContent = val ? label + ': ' + val : '';
+        elm.textContent = val ? label + val : '';
         elm.style.display = val ? '' : 'none';
       });
     if(photo.artist){
@@ -2906,7 +2885,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
 
     if(!REDUCED_MOTION){
       [lightboxFilename, lightboxCamera, lightboxLens, lightboxFilm, lightboxFormat,
-       lightboxShutter, lightboxAperture, lightboxIso, lightboxFocal, lightboxTaken,
+       lightboxTaken, lightboxShutter, lightboxAperture, lightboxIso,
        lightboxArtist, lightboxMedium, lightboxDesc]
         .forEach((elm, i) => scrambleInto(elm, i * 0.1, 0.5));
     }

@@ -127,7 +127,7 @@ function parseContent(text){
   const c = parseWrapped(text, 'SITE_CONTENT =');
   c.photos = c.photos || {};
   ['film', 'digital', 'stills'].forEach(k => { c.photos[k] = c.photos[k] || []; });
-  c.links = c.links || []; c.music = c.music || []; c.blog = c.blog || [];
+  c.links = c.links || []; c.music = c.music || []; c.blog = c.blog || []; c.videos = c.videos || [];
   return c;
 }
 function serializeContent(c){ return CONTENT_HEAD + JSON.stringify(c, null, 1) + ';\n'; }
@@ -251,7 +251,7 @@ function setBusy(on){
 /* =====================================================================
    images: resize in the browser to the same sizes the site expects
    ===================================================================== */
-const WIDTHS = { photo: [480, 960, 1600, 2400], cover: [300, 600, 1000], post: [960, 1600] };
+const WIDTHS = { photo: [480, 960, 1600, 2400], cover: [300, 600, 1000], post: [960, 1600], vthumb: [640, 1280] };
 let encodeFmt = null;
 async function pickFormat(){
   if(encodeFmt) return encodeFmt;
@@ -517,6 +517,7 @@ function renderAll(){
   fillDatalist('dlLinkCats', uniqSorted(content.links.map(l => l.category)));
   fillDatalist('dlArtists', uniqSorted(content.music.map(a => a.artist)));
   renderPhotoGrid();
+  renderVideos();
   renderLinks();
   renderPosts();
   renderAlbums();
@@ -871,6 +872,159 @@ $('#exifSave').addEventListener('click', async () => {
     exifMatches = []; $('#exifResult').hidden = true;
   }catch(e){}
 });
+
+/* =====================================================================
+   videography
+   ===================================================================== */
+const videoForm = $('#videoForm');
+let vid = null; // editor state
+const SHORT_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function youtubeId(u){
+  u = String(u || '').trim();
+  if(/^[\w-]{11}$/.test(u)) return u;
+  const m = u.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/i);
+  return m ? m[1] : '';
+}
+// the site keeps dates as "Sep 20, 2026"; the form uses 2026-09-20
+function toSiteDate(iso){
+  const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? SHORT_MONTHS[Number(m[2]) - 1] + ' ' + Number(m[3]) + ', ' + m[1] : '';
+}
+function fromSiteDate(d){
+  const m = String(d || '').match(/^([A-Za-z]{3})[a-z]*\.? (\d{1,2}), (\d{4})$/);
+  if(!m) return '';
+  const mi = SHORT_MONTHS.findIndex(x => x.toLowerCase() === m[1].toLowerCase());
+  return mi < 0 ? '' : m[3] + '-' + String(mi + 1).padStart(2, '0') + '-' + String(m[2]).padStart(2, '0');
+}
+const ytThumb = id => 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
+function vidCat(){ return ($('input[name="videoCat"]:checked') || {}).value || 'music'; }
+function setVidCat(c){ $$('input[name="videoCat"]').forEach(r => { r.checked = r.value === c; }); }
+
+function loadVideo(v){
+  vid = { editing: v ? v.id : null, thumbId: v ? v.thumbId || '' : '', file: null, img: null, removeThumb: false };
+  videoForm.reset();
+  $('#videoUrl').value = v ? 'https://www.youtube.com/watch?v=' + v.id : '';
+  $('#videoTitle').value = v ? v.title : '';
+  $('#videoDate').value = v ? fromSiteDate(v.date) : todayISO();
+  setVidCat(v ? (v.category || 'music') : 'music');
+  $('#videoPinned').checked = !!(v && v.pinned);
+  $('#videoDesc').value = v ? v.description || '' : '';
+  $('#videoFormTitle').textContent = v ? '~/admin/videography/edit' : '~/admin/videography/new';
+  $('#videoSave').textContent = v ? 'save changes' : 'add to videography';
+  $('#videoCancel').hidden = !v;
+  showVidThumb();
+}
+function showVidThumb(){
+  const img = $('#vthumbPreview');
+  const id = youtubeId($('#videoUrl').value);
+  let src = '';
+  if(vid.file) src = vid.url;
+  else if(vid.thumbId && !vid.removeThumb) src = thumbUrl(vid.thumbId, 640);
+  else if(id) src = ytThumb(id);
+  if(src){ img.src = src; img.hidden = false; $('#vthumbHint').hidden = true; }
+  else{ img.removeAttribute('src'); img.hidden = true; $('#vthumbHint').hidden = false; }
+  $('#videoThumbRemove').hidden = !(vid.file || (vid.thumbId && !vid.removeThumb));
+}
+$('#videoCancel').addEventListener('click', () => loadVideo(null));
+$('#videoUrl').addEventListener('change', () => { showVidThumb(); if(!$('#videoTitle').value) $('#videoFetch').click(); });
+$('#videoThumbRemove').addEventListener('click', () => { vid.file = null; vid.img = null; vid.removeThumb = true; showVidThumb(); });
+const vthumbDrop = $('#vthumbDrop'), vthumbInput = $('#videoThumbFile');
+function setVidThumb(f){
+  if(!f) return;
+  if(!isImageFile(f)){ log('thumbnail must be jpeg, png or webp', 'err'); return; }
+  vid.file = f; vid.img = null; vid.removeThumb = false; vid.url = URL.createObjectURL(f);
+  showVidThumb();
+}
+vthumbDrop.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); vthumbInput.click(); } });
+vthumbInput.addEventListener('change', () => { setVidThumb(vthumbInput.files[0]); vthumbInput.value = ''; });
+['dragenter', 'dragover'].forEach(t => vthumbDrop.addEventListener(t, e => { e.preventDefault(); vthumbDrop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => vthumbDrop.addEventListener(t, e => { e.preventDefault(); vthumbDrop.classList.remove('over'); }));
+vthumbDrop.addEventListener('drop', e => { if(e.dataTransfer && e.dataTransfer.files[0]) setVidThumb(e.dataTransfer.files[0]); });
+
+$('#videoFetch').addEventListener('click', async () => {
+  const id = youtubeId($('#videoUrl').value);
+  if(!id){ log("that doesn't look like a YouTube link", 'err'); return; }
+  showVidThumb();
+  const btn = $('#videoFetch');
+  btn.classList.add('is-busy');
+  try{
+    const r = await fetch('https://noembed.com/embed?url=' + encodeURIComponent('https://www.youtube.com/watch?v=' + id));
+    const d = await r.json();
+    if(d.error || !d.title) throw new Error(d.error || 'no title');
+    $('#videoTitle').value = d.title;
+    log('title filled in from YouTube — check it reads right', 'ok');
+  }catch(e){
+    log("couldn't get the title automatically — type it in", 'dim');
+  }finally{ btn.classList.remove('is-busy'); }
+});
+
+videoForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const st = vid;
+  const id = youtubeId($('#videoUrl').value);
+  const d = { id, title: $('#videoTitle').value.trim(), date: toSiteDate($('#videoDate').value),
+    category: vidCat(), pinned: $('#videoPinned').checked, description: $('#videoDesc').value.trim() };
+  if(!id){ log("that doesn't look like a YouTube link", 'err'); return; }
+  if(!d.title){ log('give the video a title', 'err'); return; }
+  if(!d.date){ log('pick a date', 'err'); return; }
+  const btn = $('#videoSave');
+  btn.classList.add('is-busy');
+  try{
+    if(st.file && !st.img) st.img = await processImage(st.file, 'vthumb');
+    await commit((st.editing ? 'admin: edit video ' : 'admin: add video ') + d.title, (c, m) => {
+      c.videos = c.videos || [];
+      const files = [];
+      const idx = st.editing ? c.videos.findIndex(v => v.id === st.editing) : -1;
+      if(st.editing && idx < 0) throw new Error('that video was removed somewhere else');
+      if(!st.editing && c.videos.some(v => v.id === id)) throw new Error('that video is already on the site');
+      const old = idx >= 0 ? c.videos[idx] : null;
+      const entry = { id, title: d.title, date: d.date, category: d.category };
+      if(d.description) entry.description = d.description;
+      if(d.pinned) entry.pinned = true;
+      let thumbId = old ? old.thumbId || '' : '';
+      if(st.img){ m[st.img.id] = st.img.entry; files.push(...st.img.files); thumbId = st.img.id; }
+      else if(st.removeThumb) thumbId = '';
+      if(thumbId) entry.thumbId = thumbId;
+      if(old && old.thumbId && old.thumbId !== thumbId){ files.push(...imageFilesFor(old.thumbId, m)); delete m[old.thumbId]; }
+      if(idx >= 0) c.videos[idx] = entry; else c.videos.unshift(entry);
+      return files;
+    });
+    if(st.img) localPreviews[st.img.id] = st.img.previewUrl;
+    loadVideo(null);
+  }catch(err){}
+  finally{ btn.classList.remove('is-busy'); }
+});
+
+function renderVideos(){
+  const list = $('#videoList');
+  list.innerHTML = '';
+  const vids = (content.videos || []).slice().sort((x, y) => (y.pinned ? 1 : 0) - (x.pinned ? 1 : 0) || (Date.parse(y.date) || 0) - (Date.parse(x.date) || 0));
+  $('#videoCount').textContent = vids.length + ' videos';
+  const label = { music: 'music video', events: 'event', weddings: 'wedding' };
+  vids.forEach(v => {
+    const img = el('img', { class: 'mini wide', alt: '', loading: 'lazy' });
+    img.src = v.thumbId ? thumbUrl(v.thumbId, 640) : ytThumb(v.id);
+    list.appendChild(el('div', { class: 'item' }, img,
+      el('div', { class: 'item-main' },
+        el('div', { class: 'item-title' }, v.title, v.pinned ? el('span', { class: 'badge', text: 'demo reel' }) : null),
+        el('div', { class: 'item-sub', text: [label[v.category] || v.category, v.date].filter(Boolean).join(' · ') })),
+      el('div', { class: 'item-actions' },
+        el('button', { type: 'button', text: 'open', onclick: () => window.open('https://www.youtube.com/watch?v=' + v.id, '_blank', 'noopener') }),
+        el('button', { type: 'button', text: 'edit', onclick: () => { loadVideo(v); videoForm.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }),
+        el('button', { type: 'button', class: 'del', text: 'delete', onclick: async () => {
+          if(!confirm('Remove "' + v.title + '" from videography?')) return;
+          try{
+            await commit('admin: delete video ' + v.title, (c, m) => {
+              const target = (c.videos || []).find(x => x.id === v.id);
+              c.videos = (c.videos || []).filter(x => x.id !== v.id);
+              if(target && target.thumbId){ const f = imageFilesFor(target.thumbId, m); delete m[target.thumbId]; return f; }
+              return [];
+            });
+          }catch(e){}
+        } }))));
+  });
+}
+loadVideo(null);
 
 /* =====================================================================
    time well spent
