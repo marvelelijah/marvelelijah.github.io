@@ -1465,11 +1465,13 @@ window.SITE_CONTENT = {
     "date": "2023-10-31",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
-    "description": "That one guy.",
     "exif": {
      "shutter": "1/30s",
-     "iso": 800
-    }
+     "f": "4",
+     "iso": 800,
+     "focal": 6.5
+    },
+    "description": "That one guy."
    },
    {
     "id": "1hGPXxNXOSCgF3QwcsdjkP172rEIRYEX6",
