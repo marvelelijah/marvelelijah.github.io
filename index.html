@@ -451,32 +451,6 @@
   .line.echo .prompt{ color:var(--dir); }
   .line.err{ color:var(--err); }
   .line.dim{ color:var(--fg-dim); }
-  .quote-line{ margin-bottom:4.95em; }
-
-  .revive-overlay{
-    position:fixed;
-    inset:0;
-    background:var(--bg);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:20px;
-    z-index:200;
-  }
-  .revive-overlay .line{ font-size:1.05rem; margin-bottom:0; position:relative; z-index:1; transition:opacity 1s ease; }
-  .revive-gif{
-    position:absolute;
-    top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    max-width:min(70vw,340px);
-    max-height:min(70vh,340px);
-    width:auto; height:auto;
-    opacity:0;
-    transition:opacity 1s ease;
-    pointer-events:none;
-    z-index:0;
-  }
 
   .panel{ margin:10px 0 16px; }
   .panelhead{
@@ -587,17 +561,6 @@
   .listing .tag-media{ color:var(--media); }
   .listing .kind{ color:var(--fg-dim); margin-left:10px; font-size:0.85em; }
 
-  .help-group{
-    color:var(--fg-dim);
-    font-size:0.8rem;
-    margin:14px 0 4px;
-  }
-  .help-group:first-child{ margin-top:0; }
-
-  .shortcuts{ display:flex; flex-wrap:wrap; gap:14px; margin-top:10px; }
-  .help-hint{ margin-top:14px; }
-  .shortcuts button{ color:var(--fg-dim); }
-  .shortcuts button:hover, .shortcuts button:focus-visible{ color:var(--fg); text-decoration:underline; }
 
   .inputrow.gone{ display:none; }
   .inputrow{
@@ -735,7 +698,6 @@
     .listing{ gap:10px; margin:6px 0 10px; }
     .listing .kind{ margin-left:14px; }
     .line.echo{ margin-top:22px; }
-    .help-group{ margin:22px 0 8px; }
     .inputrow{ padding:18px 0 28px; }
   }
 
@@ -852,60 +814,25 @@
   .crt-line{ flex:none; white-space:nowrap; overflow:hidden; text-overflow:clip; padding:1px 0; }
   @media (max-width: 1100px){ .crt-gutter{ display:none; } }
 
-  /* ---- :) ---- */
-  .surprise{ position:fixed; inset:0; z-index:1000; background:#000; }
-  .surprise img{ width:100%; height:100%; object-fit:fill; display:block; }
-  .surprise.out{ opacity:0; transition:opacity 0.45s ease; }
-
-  /* ---- games ---- */
-  .game-layer{
-    position:fixed; inset:0; z-index:500;
-    background:var(--bg);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    gap:10px;
-    padding:16px;
-    animation:gameIn 0.35s ease;
-    touch-action:none;
+  /* ---- settings dropdown ---- */
+  .listing .settings-toggle{ display:flex; align-items:baseline; gap:0; }
+  .listing .tag-settings{ color:var(--dir); }
+  .settings-chev{ margin-left:8px; color:var(--fg-dim); }
+  .settings-drop{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); align-items:start; gap:12px; margin:10px 0 6px; }
+  .settings-drop[hidden]{ display:none; }
+  .settings-win{ border:1px solid var(--line); padding:10px 12px 12px; }
+  .settings-title{ color:var(--fg-dim); border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:10px; }
+  .set-btns{ display:flex; flex-wrap:wrap; gap:6px; }
+  .listing .set-btn, .set-btn{
+    display:inline-block; width:auto; padding:5px 11px; border:1px solid var(--line);
+    color:var(--fg-dim); line-height:1.3;
   }
-  .game-layer.out{ opacity:0; transition:opacity 0.4s ease; }
-  .game-layer.dead canvas{ filter:brightness(0.55); transition:filter 0.4s ease; }
-  @keyframes gameIn{ from{ opacity:0; } to{ opacity:1; } }
-  .game-hud, .game-foot{
-    display:flex; justify-content:space-between; gap:20px;
-    color:var(--fg-dim); font-size:0.85rem;
-  }
-  .game-hud{ max-width:100%; justify-content:space-between; }
-  .game-score{ color:var(--fg); }
-  .game-stage{ position:relative; }
-  .game-stage canvas{ display:block; }
-  .game-sprite{
-    position:absolute;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
-    image-rendering:auto;
-  }
-  .game-msg{
-    position:absolute; left:50%; top:50%;
-    transform:translate(-50%,-50%);
-    color:var(--fg);
-    background:var(--bg);
-    padding:4px 12px;
-    pointer-events:none;
-  }
-  .game-msg:empty{ display:none; }
-
-  /* ---- page making room for a game ---- */
-  body.page-decoding-out .app-shell img,
-  body.page-decoding-out .float-layer img{ opacity:0; transition:opacity 0.6s ease; }
-  body.page-decoding-out .app-shell *,
-  body.page-decoding-out .float-win{ border-color:transparent !important; transition:border-color 0.6s ease; }
-  body.page-away .app-shell, body.page-away .float-layer{ visibility:hidden; }
-  .game-power{ border-radius:50%; object-fit:cover; border:1px solid var(--fg); }
-  .game-bonus{ object-fit:cover; border:1px solid var(--media); box-shadow:0 0 12px var(--media); }
-
-  /* ---- mobile dock (hidden on desktop) ---- */
-  .mobile-dock{ display:none; }
-  .mobile-dock.gone{ display:none !important; }
+  .listing .set-btn:hover, .listing .set-btn:focus-visible{ color:var(--fg); border-color:var(--fg-dim); text-decoration:none; }
+  .listing .set-btn.on{ color:var(--dir); border-color:var(--dir); }
+  .set-slider{ display:grid; grid-template-columns:5.5em 1fr 3.5em; align-items:center; gap:10px; margin-top:12px; color:var(--fg-dim); }
+  .set-slider input{ width:100%; accent-color:var(--dir); }
+  .set-slider-val{ text-align:right; color:var(--fg); }
+  .set-note{ margin-top:12px; color:var(--fg-dim); font-size:0.85em; }
 
   @media (max-width: 760px){
     body{ font-size:14px; -webkit-text-size-adjust:100%; }
@@ -945,7 +872,11 @@
     .compose-send{ padding:10px 18px; }
     .compose-type{ padding:5px 12px; }
 
-    .inputrow{ padding:8px 0 calc(12px + env(safe-area-inset-bottom)); border-top:none; }
+    .inputrow{ display:none; }
+    .output{ padding-bottom:calc(14px + env(safe-area-inset-bottom) + var(--room, 0px)); }
+    .listing .settings-drop .set-btn{ display:inline-block; width:auto; padding:8px 12px; border:1px solid var(--line); }
+    .listing .settings-drop .set-btn.on{ border-color:var(--dir); }
+    .settings-drop{ grid-template-columns:1fr; }
     .inputrow input{ font-size:16px; }
     .inputrow.collapsed{ display:none; }
   }
@@ -1115,10 +1046,8 @@
   // serve animated GIFs for direct <img> embedding, so the raw bytes live here instead.
   const ABOUT_GIF_DATA_URI = 'img/site/about.gif';
 
-  const REBIRTH_GIF_DATA_URI = 'img/site/rebirth.gif';
 
   const LOGO_GIF_DATA_URI = 'img/site/logo.gif';
-  const SURPRISE_DATA_URI = 'img/site/surprise.jpg';
   function coverArt(mbid){
     return 'https://coverartarchive.org/release/' + mbid + '/front-500';
   }
@@ -1852,47 +1781,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     }},
   };
 
-  const HELP = [
-    { group:'get around', items:[
-      ['ls [dir]',   'list files here, or in work/ / journal/'],
-      ['cd <dir>',   'move into work/ or journal/'],
-      ['cd ..',      'back up to the top level'],
-      ['pwd',        'show where you are'],
-    ]},
-    { group:'read something', items:[
-      ['cat <file>',  "print a file — e.g. cat about.txt"],
-      ['cat work/equipment.txt', 'works with a full path from anywhere'],
-      ['cd journal/music', 'directories can nest — cd works into them too'],
-      ['contact',     'shortcut for cat contact.txt'],
-      ['about',       'shortcut for cat about.txt'],
-    ]},
-    { group:'other', items:[
-      ['whoami',  'about you, the visitor'],
-      ['clear',   'clear the screen'],
-      ['help',    'show this again'],
-    ]},
-    { group:'redecorate', items:[
-      ['geocity',   'welcome to my homepage!! (run again for a new palette)'],
-      ['crt',       'phosphor green, scanlines, 1983'],
-      ['darkroom',  'safelight on. don\u2019t open the door'],
-      ['negative',  'invert everything, like a strip of film'],
-      ['australia', 'flip the terminal upside down'],
-      ['mirror',    'read it backwards'],
-      ['tilt',      'knock the monitor a little crooked'],
-      ['reset',     'put everything back'],
-    ]},
-    { group:'play', items:[
-      ['serpent', 'snake. eat the logo, don\u2019t bite yourself'],
-      ['ghost',   'a maze made of words. eat every dot'],
-    ]},
-    { group:'pop-out physics', items:[
-      ['gravity',     'pop-out windows fall and bounce on the floor'],
-      ['antigravity', 'they fall up instead'],
-      ['magnet',      'they chase your cursor'],
-      ['zerog',       'back to a lazy drift'],
-    ]},
-  ];
-
   let cwd = '';
   let history = [];
   let histIdx = 0;
@@ -1953,7 +1841,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   const videoGalleryTitle = document.getElementById('videoGalleryTitle');
   const videoGalleryClose = document.getElementById('videoGalleryClose');
   const videoGalleryBody = document.getElementById('videoGalleryBody');
-  const mobileDock = document.getElementById('mobileDock');
 
   // narrow = phone-sized layout; coarse = touch-first device. On either, never
   // auto-focus the command line (it would pop the on-screen keyboard on every tap).
@@ -2505,7 +2392,9 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   let floatPhysics = 'drift';
   let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
   window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
-  const G = 1400; // px / s^2
+  const G_DEFAULT = 1400, BOUNCE_DEFAULT = 0.58;
+  let G = G_DEFAULT;           // gravity strength, px / s^2 (settings slider)
+  let BOUNCE = BOUNCE_DEFAULT; // how much speed survives a bounce (settings slider)
 
   function floatTick(t){
     const dt = Math.min(0.05, (t - floatLastT) / 1000);
@@ -2513,6 +2402,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     const W = window.innerWidth, H = window.innerHeight;
     floatWins.forEach(w => {
       if(w.mode !== 'floating') return;
+      if(floatPhysics === 'still') return; // windows stay exactly where they are
       // hovering (or typing inside) eases the window to a stop; leaving lets it move again
       const holding = (w.hover && !w.ignoreHover) || w.el.contains(document.activeElement);
       const target = holding ? 0 : 1;
@@ -2536,7 +2426,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
         if(w.speedF > 0.05) w.vy += (floatPhysics === 'gravity' ? G : -G) * dt;
         const floor = floatPhysics === 'gravity' ? (w.y + hh >= H - 0.5) : (w.y <= 0.5);
         if(floor){ w.vx *= Math.exp(-2.5 * dt); }
-        damp = 0.58;
+        damp = BOUNCE;
       } else if(floatPhysics === 'magnet'){
         const dx = mouseX - (w.x + ww / 2), dy = mouseY - (w.y + hh / 2);
         const d = Math.hypot(dx, dy) || 1;
@@ -2793,13 +2683,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     return '';
   }
 
-  function makeCmdButton(label, cmd, cls){
-    const b = el('button', cls || '', esc(label));
-    b.type = 'button';
-    b.addEventListener('click', () => runCommand(cmd));
-    return b;
-  }
-
   function rowButton(name, cmd, tagCls, kindText, thumbEl){
     const wrap = el('div', '');
     const btn = el('button', '', '');
@@ -2831,6 +2714,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     box.appendChild(rowButton('contact.txt', 'cat contact.txt', '', 'text'));
     box.appendChild(rowButton('work/', 'ls work', 'tag-dir', 'dir · 3 items'));
     box.appendChild(rowButton('journal/', 'ls journal', 'tag-dir', 'dir · 3 items'));
+    box.appendChild(buildSettingsRow());
     rootPanelBody.appendChild(box);
     if(isNarrow()) smoothScrollOutput(0); else scrollBottom();
   }
@@ -2878,29 +2762,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     });
     body.appendChild(box);
     decodeInRows(box, 0.05, 0.4);
-  }
-
-  function printHelp(){
-    const body = printPanel('help', true, 'help');
-    HELP.forEach(section => {
-      body.appendChild(el('div', 'help-group', esc(section.group)));
-      const box = el('div', 'listing');
-      section.items.forEach(([cmd, desc]) => {
-        const wrap = el('div', '');
-        wrap.innerHTML = '<span>' + esc(cmd) + '</span><span class="kind">' + esc(desc) + '</span>';
-        box.appendChild(wrap);
-      });
-      body.appendChild(box);
-    });
-    const sc = el('div', 'shortcuts');
-    ['ls', 'cat about.txt', 'cd work', 'cd journal', 'contact'].forEach(c => {
-      sc.appendChild(makeCmdButton('[' + c + ']', c));
-    });
-    body.appendChild(sc);
-    if(isNarrow()){
-      body.appendChild(el('div', 'line dim help-hint', esc('on a phone? tap any file or folder, or type a command below.')));
-    }
-    body.appendChild(el('div', 'line dim help-hint', esc('p.s. not everything here is a command. some words want to be clicked, and some commands mean more than they say.')));
   }
 
   function updatePrompt(){
@@ -3424,58 +3285,8 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     }
   }
 
-  function sequentialReveal(items, stepMs, decodeMs){
-    items.forEach(item => {
-      item.elm.textContent = item.text;
-      item.elm.style.opacity = '0';
-    });
-    items.forEach((item, i) => {
-      const delayMs = i * stepMs;
-      setTimeout(() => { item.elm.style.opacity = '1'; }, delayMs);
-      scrambleInto(item.elm, delayMs / 1000, decodeMs / 1000);
-    });
-  }
-
-  function clearOutput(){
-    output.innerHTML = '';
-    currentPanel = null;
-    rootPanelBody = null;
-    currentEntry = null;
-    panelNavStack = [];
-    currentPanelCmd = null;
-    closeGallery();
-    closeVideoGallery();
-
-    const sentences = [
-      'there is nothing.',
-      'perhaps you will find your answer upon rebirth.',
-      'until then, submit to silence.'
-    ];
-    const items = sentences.map(text => {
-      const lineEl = el('div', 'line dim quote-line');
-      output.appendChild(lineEl);
-      return { elm: lineEl, text };
-    });
-    sequentialReveal(items, 6000, 3000);
-
-    const inputRow = document.querySelector('.inputrow');
-    if(inputRow) inputRow.classList.add('gone');
-    if(mobileDock) mobileDock.classList.add('gone');
-    closeAllFloatWins(false);
-
-    document.querySelectorAll('.topbar > span').forEach(span => {
-      let out = '';
-      for(const ch of span.textContent){
-        out += ch === ' ' ? ' ' : SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0];
-      }
-      span.textContent = out;
-    });
-
-    try{ location.hash = 'ended'; }catch(e){}
-  }
-
   /* =====================================================================
-     extras: crt gutters, auto-hiding scrollbars, :) , serpent, ghost
+     extras: crt gutters, auto-hiding scrollbars
      ===================================================================== */
   function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || '#ccc'; }
   function rint(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
@@ -3541,544 +3352,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     crtGutters = [];
   }
 
-  /* ---------- :) ---------- */
-  let surpriseUp = false;
-  function surprise(){
-    if(surpriseUp) return;
-    surpriseUp = true;
-    // on phones, drop the on-screen keyboard so the whole image is visible
-    input.blur();
-    if(document.activeElement && document.activeElement !== document.body){
-      document.activeElement.blur();
-    }
-    const o = el('div', 'surprise');
-    const img = document.createElement('img');
-    img.src = SURPRISE_DATA_URI;
-    img.alt = '';
-    o.appendChild(img);
-    document.body.appendChild(o);
-    setTimeout(() => o.classList.add('out'), 2300);
-    setTimeout(() => { o.remove(); surpriseUp = false; }, 2800);
-  }
-
-  /* ---------- page transition around games ---------- */
-  let pageSaved = null;
-  let pageBusy = false;
-  function pageTextNodes(){
-    const roots = [document.querySelector('.app-shell'), floatLayer].filter(Boolean);
-    const out = [];
-    roots.forEach(r => {
-      const w = document.createTreeWalker(r, NodeFilter.SHOW_TEXT, {
-        acceptNode(n){ return n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; }
-      });
-      while(w.nextNode()) out.push(w.currentNode);
-    });
-    return out;
-  }
-  // every piece of text un-types itself into noise, images and borders fade, then the game takes over
-  function pageOut(cb){
-    pageBusy = true;
-    input.blur();
-    const nodes = pageTextNodes().map(n => ({ n, text: n.nodeValue }));
-    pageSaved = nodes;
-    document.body.classList.add('page-decoding-out');
-    if(REDUCED_MOTION){ document.body.classList.add('page-away'); pageBusy = false; cb(); return; }
-    const start = performance.now(), dur = 700;
-    function f(now){
-      const p = Math.min(1, (now - start) / dur);
-      nodes.forEach(o => {
-        const len = o.text.length;
-        const keep = Math.floor(len * (1 - p) * (0.6 + 0.4 * ((o.text.charCodeAt(0) % 7) / 7)));
-        let str = o.text.slice(0, keep);
-        if(p < 1){
-          const tail = Math.min(4, len - keep);
-          for(let i = 0; i < tail; i++) str += SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0];
-        }
-        o.n.nodeValue = str;
-      });
-      if(p < 1) requestAnimationFrame(f);
-      else { document.body.classList.add('page-away'); pageBusy = false; cb(); }
-    }
-    requestAnimationFrame(f);
-  }
-  function pageIn(){
-    document.body.classList.remove('page-away');
-    requestAnimationFrame(() => document.body.classList.remove('page-decoding-out'));
-    if(!pageSaved) return;
-    pageSaved.forEach(o => {
-      if(!o.n.isConnected) return;
-      o.n.nodeValue = o.text;
-      if(!REDUCED_MOTION) scrambleTextNode(o.n, Math.random() * 0.2, 0.55 + Math.random() * 0.3);
-    });
-    pageSaved = null;
-  }
-  function launchGame(fn){
-    if(activeGame || pageBusy) return;
-    pageOut(fn);
-  }
-
-  /* ---------- shared game shell ---------- */
-  let activeGame = null;
-  function gameShell(title, hint){
-    const layer = el('div', 'game-layer');
-    const hud = el('div', 'game-hud');
-    const left = el('span', '', esc(title));
-    const score = el('span', 'game-score', '');
-    hud.appendChild(left);
-    hud.appendChild(score);
-    const stage = el('div', 'game-stage');
-    const canvas = document.createElement('canvas');
-    stage.appendChild(canvas);
-    const foot = el('div', 'game-foot', esc(hint));
-    const msg = el('div', 'game-msg', '');
-    stage.appendChild(msg);
-    layer.appendChild(hud);
-    layer.appendChild(stage);
-    layer.appendChild(foot);
-    document.body.appendChild(layer);
-    input.blur();
-    return { layer, hud, score, stage, canvas, msg, ctx: canvas.getContext('2d') };
-  }
-  function sizeCanvas(canvas, w, h){
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    canvas.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  const KEY_DIRS = {
-    ArrowUp:[0,-1], ArrowDown:[0,1], ArrowLeft:[-1,0], ArrowRight:[1,0],
-    w:[0,-1], s:[0,1], a:[-1,0], d:[1,0], W:[0,-1], S:[0,1], A:[-1,0], D:[1,0],
-  };
-  function bindControls(layer, onDir, onQuit){
-    const kd = (e) => {
-      if(e.key === 'Escape'){ e.preventDefault(); onQuit(); return; }
-      const d = KEY_DIRS[e.key];
-      if(d){ e.preventDefault(); e.stopPropagation(); onDir(d[0], d[1]); }
-    };
-    window.addEventListener('keydown', kd, true);
-    let sx = null, sy = null;
-    const ts = (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; };
-    const te = (e) => {
-      if(sx === null) return;
-      const t = e.changedTouches[0];
-      const dx = t.clientX - sx, dy = t.clientY - sy;
-      sx = null;
-      if(Math.max(Math.abs(dx), Math.abs(dy)) < 24) return;
-      if(Math.abs(dx) > Math.abs(dy)) onDir(dx > 0 ? 1 : -1, 0); else onDir(0, dy > 0 ? 1 : -1);
-    };
-    const tm = (e) => e.preventDefault();
-    layer.addEventListener('touchstart', ts, { passive: true });
-    layer.addEventListener('touchend', te, { passive: true });
-    layer.addEventListener('touchmove', tm, { passive: false });
-    return () => window.removeEventListener('keydown', kd, true);
-  }
-  function endGame(shell, unbind, line){
-    if(activeGame && activeGame.raf) cancelAnimationFrame(activeGame.raf);
-    if(activeGame && activeGame.timer) clearInterval(activeGame.timer);
-    unbind();
-    shell.layer.classList.add('out');
-    setTimeout(pageIn, 150);
-    setTimeout(() => shell.layer.remove(), 450);
-    activeGame = null;
-    if(line) printLine(line, 'dim');
-    focusInput();
-  }
-
-  /* ---------- serpent: snake, eating the logo ---------- */
-  const SNAKE_WORD = 'ELIJAHHALFORD';
-  function startSerpent(){
-    if(activeGame) return;
-    const shell = gameShell('serpent', isNarrow() ? 'swipe to steer · eat the logo' : 'arrows / wasd to steer · eat the logo · esc to quit');
-    const W = window.innerWidth, H = window.innerHeight;
-    const cell = isNarrow() ? 18 : 22;
-    const cols = Math.max(12, Math.floor((W - 32) / cell));
-    const rows = Math.max(12, Math.floor((H - 130) / cell));
-    sizeCanvas(shell.canvas, cols * cell, rows * cell);
-    shell.hud.style.width = shell.canvas.style.width;
-    const ctx = shell.ctx;
-    const apple = document.createElement('img');
-    apple.src = LOGO_GIF_DATA_URI;
-    apple.className = 'game-sprite';
-    apple.style.width = apple.style.height = Math.round(cell * 1.5) + 'px';
-    shell.stage.appendChild(apple);
-
-    const mid = Math.floor(rows / 2);
-    let snake = [{x:5,y:mid},{x:4,y:mid},{x:3,y:mid},{x:2,y:mid}];
-    let dir = [1,0];
-    const queue = [];
-    let food = null, eaten = 0, step = 110, alive = true;
-    const colFg = cssVar('--fg'), colHead = cssVar('--dir'), colLine = cssVar('--line'), colDim = cssVar('--fg-dim');
-
-    function placeFood(){
-      do { food = { x: rint(1, cols - 2), y: rint(1, rows - 2) }; }
-      while(snake.some(s => s.x === food.x && s.y === food.y));
-      apple.style.left = (food.x * cell + cell / 2) + 'px';
-      apple.style.top = (food.y * cell + cell / 2) + 'px';
-    }
-    function draw(){
-      ctx.clearRect(0, 0, cols * cell, rows * cell);
-      ctx.strokeStyle = colLine; ctx.lineWidth = 1;
-      ctx.strokeRect(0.5, 0.5, cols * cell - 1, rows * cell - 1);
-      ctx.font = '700 ' + Math.round(cell * 0.78) + "px 'JetBrains Mono', monospace";
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      snake.forEach((s, i) => {
-        ctx.fillStyle = i === 0 ? colHead : (i % 2 ? colFg : colDim);
-        ctx.fillText(SNAKE_WORD[i % SNAKE_WORD.length], s.x * cell + cell / 2, s.y * cell + cell / 2 + 1);
-      });
-      shell.score.textContent = 'logos eaten: ' + eaten;
-    }
-    function tick(){
-      if(!alive) return;
-      if(queue.length) dir = queue.shift();
-      const head = { x: snake[0].x + dir[0], y: snake[0].y + dir[1] };
-      if(head.x < 0 || head.y < 0 || head.x >= cols || head.y >= rows || snake.some(s => s.x === head.x && s.y === head.y)){
-        alive = false;
-        shell.msg.textContent = 'game over · ' + eaten + ' logo' + (eaten === 1 ? '' : 's');
-        shell.layer.classList.add('dead');
-        setTimeout(() => endGame(shell, unbind, 'the serpent ate ' + eaten + ' logo' + (eaten === 1 ? '' : 's') + ' before it bit itself.'), 1400);
-        return;
-      }
-      snake.unshift(head);
-      if(head.x === food.x && head.y === food.y){
-        eaten++;
-        placeFood();
-        step = Math.max(55, step - 4);
-        clearInterval(activeGame.timer);
-        activeGame.timer = setInterval(tick, step);
-      } else snake.pop();
-      draw();
-    }
-    const unbind = bindControls(shell.layer, (dx, dy) => {
-      const last = queue.length ? queue[queue.length - 1] : dir;
-      if(dx === -last[0] && dy === -last[1]) return;
-      if(dx === last[0] && dy === last[1]) return;
-      if(queue.length < 3) queue.push([dx, dy]);
-    }, () => { alive = false; endGame(shell, unbind, 'serpent quit.'); });
-    activeGame = { timer: null };
-    placeFood();
-    draw();
-    shell.msg.textContent = 'ready';
-    setTimeout(() => { if(!alive) return; shell.msg.textContent = ''; activeGame.timer = setInterval(tick, step); }, 700);
-  }
-
-  /* ---------- ghost: pac-man built from the site's own words ---------- */
-  const MAZE = [
-    "#####################",
-    "#.........#.........#",
-    "#o###.###.#.###.###o#",
-    "#...................#",
-    "#.###.#.#####.#.###.#",
-    "#.....#...#...#.....#",
-    "#####.### # ###.#####",
-    "    #.#       #.#    ",
-    "#####.# ##-## #.#####",
-    "     .  #GGG#  .     ",
-    "#####.# ##### #.#####",
-    "    #.#       #.#    ",
-    "#####.# ##### #.#####",
-    "#.........#.........#",
-    "#.###.###.#.###.###.#",
-    "#o..#.....P.....#..o#",
-    "###.#.#.#####.#.#.###",
-    "#.....#...#...#.....#",
-    "#.#######.#.#######.#",
-    "#...................#",
-    "#####################",
-  ];
-  const WALL_WORDS = ['ELIJAH','HALFORD','FILMMAKER','PHOTOGRAPHER','ORLANDO','FLORIDA','VIDEO','PHOTO','PORTRA',
-    'CINESTILL','EKTAR','KENTMERE','DELTA','FUJI','SONY','CANON','FX3','A7C','AE1','35MM','EDIT','GRADE','WEDDINGS',
-    'EVENTS','MUSIC','JOURNAL','WORK','ABOUT','CONTACT','TTY01','SHUTTER','APERTURE','ISO','FOCUS','DEVELOP','NEGATIVE'];
-  // the classic board's middle 19 columns repeat sideways until the maze fills the screen
-  function buildWideMaze(copies){
-    const houseCopy = Math.floor(copies / 2);
-    return MAZE.map(row => {
-      let mid = '';
-      for(let i = 0; i < copies; i++){
-        let part = row.slice(1, 20);
-        if(i !== houseCopy) part = part.replace(/G/g, ' ').replace(/-/g, '#').replace(/P/g, '.');
-        mid += part;
-      }
-      return row[0] + mid + row[20];
-    });
-  }
-  function startGhost(){
-    if(activeGame) return;
-    const shell = gameShell('ghost', isNarrow() ? 'swipe to steer · eat every dot' : 'arrows / wasd · eat every dot · power dots turn the tables · esc to quit');
-    const W = window.innerWidth, H = window.innerHeight;
-    const rowsN = MAZE.length;
-    const fitCell = Math.max(12, Math.min(34, Math.floor((H - 130) / rowsN)));
-    const copies = Math.max(1, Math.floor(((W - 32) / fitCell - 2) / 19));
-    const BOARD = buildWideMaze(copies);
-    const R = BOARD.length, C = BOARD[0].length;
-    const cell = Math.max(12, Math.min(fitCell, Math.floor((W - 32) / C)));
-    const WALL_WORD = shuffled(WALL_WORDS).join('');
-    sizeCanvas(shell.canvas, C * cell, R * cell);
-    shell.hud.style.width = shell.canvas.style.width;
-    const ctx = shell.ctx;
-    const colFg = cssVar('--fg'), colDim = cssVar('--fg-dim'), colLine = cssVar('--line'), colMedia = cssVar('--media');
-    const GHOST_COLS = [cssVar('--err'), '#f48fd1', '#5fd6e8', '#f2a65a'];
-
-    const walls = [], dots = new Set(), power = new Set();
-    let start = null, house = [], doorCell = null;
-    for(let y = 0; y < R; y++){
-      walls.push([]);
-      for(let x = 0; x < C; x++){
-        const ch = BOARD[y][x];
-        walls[y][x] = ch === '#';
-        if(ch === '.') dots.add(x + ',' + y);
-        if(ch === 'o') power.add(x + ',' + y);
-        if(ch === 'P') start = { x, y };
-        if(ch === 'G') house.push({ x, y });
-        if(ch === '-') doorCell = { x, y };
-      }
-    }
-    const exitCell = { x: doorCell.x, y: doorCell.y - 1 };
-    const tunnelRow = 9;
-    const isDoor = (x, y) => x === doorCell.x && y === doorCell.y;
-    function open(x, y, ghost){
-      if(y === tunnelRow && (x < 0 || x >= C)) return true;
-      if(x < 0 || y < 0 || x >= C || y >= R) return false;
-      if(walls[y][x]) return false;
-      if(isDoor(x, y)) return !!ghost;
-      return true;
-    }
-    const wrap = (x) => (x + C) % C;
-
-    const player = document.createElement('img');
-    player.src = LOGO_GIF_DATA_URI;
-    player.className = 'game-sprite';
-    player.style.width = player.style.height = Math.round(cell * 1.35) + 'px';
-    shell.stage.appendChild(player);
-
-    // power dots are little rounds cut from the photography, bonus items are album covers
-    const photoSrcs = shuffled(getAllSitePhotos().map(p => p.src).filter(Boolean));
-    const powerImgs = new Map();
-    power.forEach(k => {
-      const [x, y] = k.split(',').map(Number);
-      const im = document.createElement('img');
-      im.className = 'game-sprite game-power';
-      im.src = photoSrcs.length ? photoSrcs[powerImgs.size % photoSrcs.length] : LOGO_GIF_DATA_URI;
-      im.style.width = im.style.height = Math.round(cell * 0.86) + 'px';
-      im.style.left = (x * cell + cell / 2) + 'px';
-      im.style.top = (y * cell + cell / 2) + 'px';
-      shell.stage.appendChild(im);
-      powerImgs.set(k, im);
-    });
-    const musicDir = resolveDirNode('journal/music');
-    const covers = musicDir ? Object.values(musicDir.files).map(f => f.cover).filter(Boolean) : [];
-    const bonusImg = document.createElement('img');
-    bonusImg.className = 'game-sprite game-bonus';
-    bonusImg.style.width = bonusImg.style.height = Math.round(cell * 1.05) + 'px';
-    bonusImg.style.display = 'none';
-    shell.stage.appendChild(bonusImg);
-    let bonus = null, bonusClock = 14;
-
-    let lives = 3, score = 0, alive = true, paused = true, frightT = 0, eatChain = 0;
-    const pac = { x: start.x, y: start.y, fx: start.x, fy: start.y, dir: [0,0], want: [-1,0], t: 0, step: 0.14 };
-    let ghosts = [];
-    function resetActors(){
-      pac.x = pac.fx = start.x; pac.y = pac.fy = start.y; pac.dir = [0,0]; pac.want = [-1,0]; pac.t = 0;
-      ghosts = house.map((h, i) => ({
-        x: h.x, y: h.y, fx: h.x, fy: h.y, px: h.x, py: h.y, dir: [0,-1], t: 0,
-        color: GHOST_COLS[i % GHOST_COLS.length], inHouse: true, release: 1 + i * 2.2,
-        mode: 'normal', idx: i,
-      }));
-      ghosts.push({ x: exitCell.x, y: exitCell.y, fx: exitCell.x, fy: exitCell.y, px: exitCell.x, py: exitCell.y, dir: [-1,0], t: 0, color: GHOST_COLS[3], inHouse: false, release: 0, mode: 'normal', idx: 3 });
-      frightT = 0;
-    }
-
-    function ghostTarget(g){
-      if(g.mode === 'eaten') return exitCell;
-      if(g.inHouse) return exitCell;
-      if(g.idx === 1) return { x: pac.x + pac.dir[0] * 4, y: pac.y + pac.dir[1] * 4 };
-      if(g.idx === 2 && Math.random() < 0.5) return { x: rint(0, C - 1), y: rint(0, R - 1) };
-      if(g.idx === 3){
-        const d = Math.hypot(g.x - pac.x, g.y - pac.y);
-        if(d < 7) return { x: 1, y: R - 2 };
-      }
-      return { x: pac.x, y: pac.y };
-    }
-    function chooseGhostDir(g){
-      const opts = [[0,-1],[-1,0],[0,1],[1,0]].filter(d => {
-        if(d[0] === -g.dir[0] && d[1] === -g.dir[1]) return false;
-        const nx = g.x + d[0], ny = g.y + d[1];
-        if(!open(nx, ny, g.inHouse || g.mode === 'eaten')) return false;
-        return true;
-      });
-      if(!opts.length) return [-g.dir[0], -g.dir[1]];
-      if(g.mode === 'fright') return pick(opts);
-      const t = ghostTarget(g);
-      opts.sort((a, b) => Math.hypot(g.x + a[0] - t.x, g.y + a[1] - t.y) - Math.hypot(g.x + b[0] - t.x, g.y + b[1] - t.y));
-      return opts[0];
-    }
-
-    function stepPac(){
-      pac.fx = pac.x; pac.fy = pac.y;
-      if(open(pac.x + pac.want[0], pac.y + pac.want[1], false)) pac.dir = pac.want.slice();
-      if(!open(pac.x + pac.dir[0], pac.y + pac.dir[1], false)){ pac.dir = [0,0]; return; }
-      pac.x = wrap(pac.x + pac.dir[0]); pac.y += pac.dir[1];
-      if(Math.abs(pac.x - pac.fx) > 1) pac.fx = pac.x - pac.dir[0];
-      const k = pac.x + ',' + pac.y;
-      if(dots.delete(k)) score += 10;
-      if(bonus && bonus.x === pac.x && bonus.y === pac.y){
-        score += 500; bonus = null; bonusImg.style.display = 'none';
-      }
-      if(power.delete(k)){
-        const im = powerImgs.get(k); if(im) im.remove();
-        score += 50; frightT = 7; eatChain = 0;
-        ghosts.forEach(g => { if(g.mode === 'normal' && !g.inHouse){ g.mode = 'fright'; g.dir = [-g.dir[0], -g.dir[1]]; } });
-      }
-    }
-    function stepGhost(g){
-      g.fx = g.x; g.fy = g.y;
-      if(g.inHouse && g.release > 0) return;
-      g.dir = chooseGhostDir(g);
-      g.x = wrap(g.x + g.dir[0]); g.y += g.dir[1];
-      if(Math.abs(g.x - g.fx) > 1) g.fx = g.x - g.dir[0];
-      if(g.x === exitCell.x && g.y === exitCell.y){
-        if(g.inHouse) g.inHouse = false;
-        if(g.mode === 'eaten'){ g.mode = 'normal'; }
-      }
-    }
-    function collide(){
-      for(const g of ghosts){
-        const same = g.x === pac.x && g.y === pac.y;
-        const swapped = g.fx === pac.x && g.fy === pac.y && g.x === pac.fx && g.y === pac.fy;
-        if(!same && !swapped) continue;
-        if(g.mode === 'fright'){
-          g.mode = 'eaten'; eatChain++; score += 200 * eatChain;
-        } else if(g.mode === 'normal'){
-          return true;
-        }
-      }
-      return false;
-    }
-
-    function drawGhost(g, gx, gy){
-      const r = cell * 0.46;
-      const cx = gx * cell + cell / 2, cy = gy * cell + cell / 2;
-      if(g.mode !== 'eaten'){
-        let col = g.color;
-        if(g.mode === 'fright') col = (frightT < 2 && Math.floor(frightT * 6) % 2) ? colFg : '#3550ff';
-        ctx.fillStyle = col;
-        ctx.beginPath();
-        ctx.arc(cx, cy - r * 0.15, r, Math.PI, 0);
-        ctx.lineTo(cx + r, cy + r);
-        const waves = 3;
-        for(let i = 0; i < waves; i++){
-          const x1 = cx + r - (2 * r / waves) * (i + 0.5);
-          const x2 = cx + r - (2 * r / waves) * (i + 1);
-          ctx.lineTo(x1, cy + r * 0.62);
-          ctx.lineTo(x2, cy + r);
-        }
-        ctx.closePath();
-        ctx.fill();
-      }
-      ctx.fillStyle = '#fff';
-      [-0.36, 0.36].forEach(o => { ctx.beginPath(); ctx.arc(cx + o * r, cy - r * 0.2, r * 0.26, 0, Math.PI * 2); ctx.fill(); });
-      ctx.fillStyle = '#123';
-      [-0.36, 0.36].forEach(o => { ctx.beginPath(); ctx.arc(cx + o * r + g.dir[0] * r * 0.1, cy - r * 0.2 + g.dir[1] * r * 0.1, r * 0.12, 0, Math.PI * 2); ctx.fill(); });
-    }
-    function lerp(a, b, t){ return a + (b - a) * t; }
-    function draw(){
-      ctx.clearRect(0, 0, C * cell, R * cell);
-      ctx.font = '700 ' + Math.round(cell * 0.72) + "px 'JetBrains Mono', monospace";
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      let n = 0;
-      ctx.font = '400 ' + Math.round(cell * 0.62) + "px 'JetBrains Mono', monospace";
-      ctx.globalAlpha = 0.38;
-      ctx.fillStyle = colDim;
-      for(let y = 0; y < R; y++) for(let x = 0; x < C; x++){
-        if(walls[y][x]) ctx.fillText(WALL_WORD[n++ % WALL_WORD.length], x * cell + cell / 2, y * cell + cell / 2 + 1);
-      }
-      ctx.globalAlpha = 1;
-      for(let y = 0; y < R; y++) for(let x = 0; x < C; x++){
-        if(isDoor(x, y)){
-          ctx.fillStyle = colMedia;
-          ctx.fillRect(x * cell + 2, y * cell + cell / 2 - 1, cell - 4, 2);
-        }
-      }
-      ctx.fillStyle = colFg;
-      ctx.shadowColor = colFg; ctx.shadowBlur = 6;
-      dots.forEach(k => { const [x, y] = k.split(',').map(Number); ctx.beginPath(); ctx.arc(x * cell + cell / 2, y * cell + cell / 2, Math.max(2, cell * 0.1), 0, Math.PI * 2); ctx.fill(); });
-      ctx.shadowBlur = 0;
-      const pulse = 0.82 + 0.18 * Math.sin(performance.now() / 160);
-      powerImgs.forEach((im, k) => { if(power.has(k)) im.style.transform = 'translate(-50%,-50%) scale(' + pulse.toFixed(3) + ')'; });
-      if(bonus){
-        bonusImg.style.left = (bonus.x * cell + cell / 2) + 'px';
-        bonusImg.style.top = (bonus.y * cell + cell / 2) + 'px';
-      }
-      ghosts.forEach(g => {
-        const t = g.inHouse && g.release > 0 ? 1 : Math.min(1, g.t / ghostStep(g));
-        drawGhost(g, lerp(g.fx, g.x, t), lerp(g.fy, g.y, t));
-      });
-      const pt = Math.min(1, pac.t / pac.step);
-      const px = lerp(pac.fx, pac.x, pt), py = lerp(pac.fy, pac.y, pt);
-      player.style.left = (px * cell + cell / 2) + 'px';
-      player.style.top = (py * cell + cell / 2) + 'px';
-      const flip = pac.dir[0] < 0 ? -1 : 1;
-      const rot = pac.dir[1] < 0 ? -90 : (pac.dir[1] > 0 ? 90 : 0);
-      player.style.transform = 'translate(-50%,-50%) rotate(' + rot + 'deg) scaleX(' + flip + ')';
-      shell.score.textContent = 'score ' + score + '   lives ' + '●'.repeat(Math.max(0, lives));
-    }
-    function ghostStep(g){ return g.mode === 'eaten' ? 0.07 : g.mode === 'fright' ? 0.26 : 0.165; }
-
-    let last = performance.now();
-    function frame(now){
-      const dt = Math.min(0.05, (now - last) / 1000); last = now;
-      if(!paused && alive){
-        if(frightT > 0){ frightT -= dt; if(frightT <= 0) ghosts.forEach(g => { if(g.mode === 'fright') g.mode = 'normal'; }); }
-        // an album cover shows up now and then as a bonus
-        bonusClock -= dt;
-        if(bonusClock <= 0){
-          if(bonus){ bonus = null; bonusImg.style.display = 'none'; bonusClock = 12 + Math.random() * 10; }
-          else if(covers.length){
-            bonus = { x: start.x, y: start.y };
-            bonusImg.src = pick(covers);
-            bonusImg.style.display = '';
-            bonusClock = 9;
-          }
-        }
-        pac.t += dt;
-        if(pac.t >= pac.step){ pac.t = 0; stepPac(); }
-        ghosts.forEach(g => {
-          if(g.inHouse && g.release > 0){ g.release -= dt; return; }
-          g.t += dt;
-          if(g.t >= ghostStep(g)){ g.t = 0; stepGhost(g); }
-        });
-        if(collide()) loseLife();
-        if(!dots.size && !power.size){
-          alive = false;
-          shell.msg.textContent = 'cleared · ' + score;
-          setTimeout(() => endGame(shell, unbind, 'you cleared the maze. score ' + score + '.'), 1600);
-        }
-      }
-      draw();
-      if(activeGame) activeGame.raf = requestAnimationFrame(frame);
-    }
-    function loseLife(){
-      lives--;
-      paused = true;
-      if(lives <= 0){
-        alive = false;
-        shell.msg.textContent = 'game over · ' + score;
-        shell.layer.classList.add('dead');
-        setTimeout(() => endGame(shell, unbind, 'the ghosts got you. score ' + score + '.'), 1500);
-        return;
-      }
-      shell.msg.textContent = 'caught';
-      setTimeout(() => { resetActors(); shell.msg.textContent = ''; paused = false; }, 1100);
-    }
-    const unbind = bindControls(shell.layer, (dx, dy) => { pac.want = [dx, dy]; }, () => { alive = false; endGame(shell, unbind, 'ghost quit.'); });
-    activeGame = { raf: null };
-    resetActors();
-    shell.msg.textContent = 'ready';
-    setTimeout(() => { if(alive){ shell.msg.textContent = ''; paused = false; } }, 900);
-    activeGame.raf = requestAnimationFrame(frame);
-  }
-
   /* ---------- looks: themes, layout fx, physics ---------- */
   const THEMES = ['geocity', 'crt', 'darkroom'];
   const THEME_VARS = ['--bg', '--fg', '--fg-dim', '--line', '--dir', '--media', '--err'];
@@ -4114,18 +3387,19 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     darkroom: 'safelight on. let your eyes adjust.',
   };
 
-  function applyTheme(name){
+  function applyTheme(name, quiet){
     const already = document.body.classList.contains('theme-' + name);
     THEMES.forEach(t => document.body.classList.remove('theme-' + t));
     stopCrtGutters();
     restoreVars();
-    if(already && name !== 'geocity'){ printLine(name + ' off.', 'dim'); return; }
+    if(already && name !== 'geocity'){ if(!quiet) printLine(name + ' off.', 'dim'); refreshSettings(); return; }
     document.body.classList.add('theme-' + name);
     if(name === 'geocity') setVars(garishPalette());
     if(name === 'crt') startCrtGutters();
     if(name === 'crt') setVars({ '--bg':'#020b04', '--fg':'#5dff8f', '--fg-dim':'#2d9a55', '--line':'#0f3a1d', '--dir':'#b6ffcb', '--media':'#9dff3a', '--err':'#ffd84d' });
     if(name === 'darkroom') setVars({ '--bg':'#080000', '--fg':'#ff4a3d', '--fg-dim':'#9c241c', '--line':'#3a0905', '--dir':'#ff7a5c', '--media':'#ff2a1a', '--err':'#ffb199' });
-    printLine(THEME_LINES[name] + "  (type 'reset' to go back)", 'dim');
+    if(!quiet) printLine(THEME_LINES[name] + "  (type 'reset' to go back)", 'dim');
+    refreshSettings();
   }
 
   const FX_LINES = {
@@ -4134,10 +3408,11 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     mirror: '.sdrawkcab ti daer',
     tilt: 'someone bumped the desk.',
   };
-  function toggleFx(name){
+  function toggleFx(name, quiet){
     const on = !document.documentElement.classList.contains('fx-' + name);
     document.documentElement.classList.toggle('fx-' + name, on);
-    printLine(on ? FX_LINES[name] : name + ' off.', 'dim');
+    if(!quiet) printLine(on ? FX_LINES[name] : name + ' off.', 'dim');
+    refreshSettings();
   }
 
   const PHYSICS_LINES = {
@@ -4145,24 +3420,168 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     antigravity: 'gravity reversed. up is the new down.',
     magnet: 'the pop-out windows are drawn to your cursor now.',
     drift: 'zero g. everything drifts again.',
+    still: 'the pop-out windows stay where you put them.',
   };
-  function setPhysics(mode){
+  function setPhysics(mode, quiet){
     floatPhysics = mode;
     floatWins.forEach(w => { if(mode !== 'drift'){ w.ignoreHover = false; } });
     let line = PHYSICS_LINES[mode];
     if(!floatWins.length && mode !== 'drift') line += " (open about, contact or work/equipment.txt to see it)";
-    printLine(line, 'dim');
+    if(!quiet) printLine(line, 'dim');
     if(floatWins.length) startFloatLoop();
+    refreshSettings();
   }
 
-  function resetLooks(){
+  function resetLooks(quiet){
     stopCrtGutters();
     THEMES.forEach(t => document.body.classList.remove('theme-' + t));
     Object.keys(FX_LINES).forEach(f => document.documentElement.classList.remove('fx-' + f));
     restoreVars();
     floatPhysics = 'drift';
-    printLine('back to normal.', 'dim');
+    G = G_DEFAULT; BOUNCE = BOUNCE_DEFAULT;
+    if(!quiet) printLine('back to normal.', 'dim');
+    refreshSettings();
   }
+  /* ---------- settings: a dropdown in the ~ listing (replaces the old help console) ---------- */
+  const REFORMAT_OPTIONS = [
+    { label:'geocity',   kind:'theme', name:'geocity' },
+    { label:'crt',       kind:'theme', name:'crt' },
+    { label:'darkroom',  kind:'theme', name:'darkroom' },
+    { label:'negative',  kind:'fx',    name:'negative' },
+    { label:'australia', kind:'fx',    name:'australia' },
+    { label:'mirror',    kind:'fx',    name:'mirror' },
+    { label:'tilt',      kind:'fx',    name:'tilt' },
+  ];
+  const PHYSICS_OPTIONS = [
+    { label:'drift',       mode:'drift' },
+    { label:'still',       mode:'still' },
+    { label:'gravity',     mode:'gravity' },
+    { label:'antigravity', mode:'antigravity' },
+    { label:'magnet',      mode:'magnet' },
+  ];
+  let settingsOpen = false;
+  let settingsEls = null;
+
+  function settingsBtn(label, onClick){
+    const b = el('button', 'set-btn', esc(label));
+    b.type = 'button';
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', (e) => { e.stopPropagation(); onClick(); });
+    return b;
+  }
+
+  function settingsSlider(label, min, max, step, get, set, fmt){
+    const row = el('label', 'set-slider');
+    const name = el('span', 'set-slider-name', esc(label));
+    const val = el('span', 'set-slider-val', '');
+    const r = document.createElement('input');
+    r.type = 'range'; r.min = min; r.max = max; r.step = step;
+    r.setAttribute('aria-label', label);
+    const show = () => { val.textContent = fmt(get()); };
+    r.addEventListener('input', () => { set(parseFloat(r.value)); show(); if(floatWins.length) startFloatLoop(); });
+    row.appendChild(name); row.appendChild(r); row.appendChild(val);
+    return { row, sync(){ r.value = get(); show(); } };
+  }
+
+  function buildSettingsRow(){
+    const wrap = el('div', 'settings-wrap');
+    const btn = el('button', 'settings-toggle', '');
+    btn.type = 'button';
+    btn.setAttribute('aria-controls', 'settingsDrop');
+    btn.appendChild(el('span', 'tag-settings', esc('settings')));
+    const chev = el('span', 'settings-chev', '▸');
+    chev.setAttribute('aria-hidden', 'true');
+    btn.appendChild(chev);
+    btn.appendChild(el('span', 'kind', esc('reformat' + (isNarrow() ? '' : ' · pop-out physics'))));
+    wrap.appendChild(btn);
+
+    const drop = el('div', 'settings-drop');
+    drop.id = 'settingsDrop';
+
+    // window 1: reformat
+    const fmtWin = el('div', 'settings-win');
+    fmtWin.appendChild(el('div', 'settings-title', esc('reformat')));
+    const fmtBtns = el('div', 'set-btns');
+    const fmtMap = REFORMAT_OPTIONS.map(o => {
+      const b = settingsBtn(o.label, () => o.kind === 'theme' ? applyTheme(o.name, true) : toggleFx(o.name, true));
+      fmtBtns.appendChild(b);
+      return { o, b };
+    });
+    fmtBtns.appendChild(settingsBtn('reset', () => resetLooks(true)));
+    fmtWin.appendChild(fmtBtns);
+    drop.appendChild(fmtWin);
+
+    // window 2: pop-out physics (pop-outs only exist on the desktop layout)
+    let physMap = [], sliders = [];
+    if(!isNarrow()){
+      const physWin = el('div', 'settings-win');
+      physWin.appendChild(el('div', 'settings-title', esc('pop-out physics')));
+      const physBtns = el('div', 'set-btns');
+      physMap = PHYSICS_OPTIONS.map(o => {
+        const b = settingsBtn(o.label, () => setPhysics(o.mode, true));
+        physBtns.appendChild(b);
+        return { o, b };
+      });
+      physWin.appendChild(physBtns);
+      sliders = [
+        settingsSlider('gravity', 200, 4000, 50, () => G, v => { G = v; }, v => (v / G_DEFAULT).toFixed(1) + '×'),
+        settingsSlider('bounce', 0, 0.95, 0.01, () => BOUNCE, v => { BOUNCE = v; }, v => Math.round(v * 100) + '%'),
+      ];
+      sliders.forEach(sl => physWin.appendChild(sl.row));
+      physWin.appendChild(el('div', 'set-note', esc('open about.txt, contact.txt or work/equipment.txt to see the pop-outs.')));
+      drop.appendChild(physWin);
+    }
+    wrap.appendChild(drop);
+
+    btn.addEventListener('click', () => {
+      settingsOpen = !settingsOpen;
+      applySettingsOpen();
+      if(settingsOpen) requestAnimationFrame(() => {
+        const r = wrap.getBoundingClientRect(), o = output.getBoundingClientRect();
+        if(r.bottom > o.bottom) smoothScrollOutput(output.scrollTop + (r.bottom - o.bottom) + 12);
+      });
+    });
+
+    settingsEls = { wrap, btn, chev, drop, fmtMap, physMap, sliders };
+    applySettingsOpen();
+    refreshSettings();
+    return wrap;
+  }
+
+  function applySettingsOpen(){
+    if(!settingsEls) return;
+    settingsEls.btn.setAttribute('aria-expanded', settingsOpen ? 'true' : 'false');
+    settingsEls.chev.textContent = settingsOpen ? '▾' : '▸';
+    settingsEls.drop.hidden = !settingsOpen;
+  }
+
+  function refreshSettings(){
+    if(!settingsEls) return;
+    const body = document.body.classList, html = document.documentElement.classList;
+    settingsEls.fmtMap.forEach(({ o, b }) => {
+      const on = o.kind === 'theme' ? body.contains('theme-' + o.name) : html.contains('fx-' + o.name);
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    settingsEls.physMap.forEach(({ o, b }) => {
+      const on = floatPhysics === o.mode;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    settingsEls.sliders.forEach(sl => sl.sync());
+  }
+
+  function openSettings(){
+    settingsOpen = true;
+    if(settingsEls && settingsEls.wrap.isConnected){
+      applySettingsOpen();
+      const r = settingsEls.wrap.getBoundingClientRect(), o = output.getBoundingClientRect();
+      smoothScrollOutput(output.scrollTop + r.top - o.top - 12);
+    } else {
+      printRootListing();
+    }
+  }
+
 
   function runCommand(raw){
     const cmdLine = raw.trim();
@@ -4176,27 +3595,15 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     const arg = parts.slice(1).join(' ');
 
     switch(cmd){
-      case 'help': case 'menu': printHelp(); break;
+      case 'help': case 'menu': case 'settings': openSettings(); break;
       case 'ls': doLs(arg); break;
       case 'cd': doCd(arg); break;
       case 'cat': case 'open': case 'less': case 'more': doCat(arg); break;
       case 'pwd': printLine(cwd ? '~/' + cwd : '~'); break;
-      case 'whoami':
-        (async () => {
-          try{
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            printLine("you're " + data.ip + ', of course!');
-          }catch(e){
-            printLine("you're a mystery, apparently.", 'dim');
-          }
-        })();
-        break;
       case 'contact': doCat('contact.txt'); break;
       case 'about': doCat('about.txt'); break;
       case 'work': doLs('work'); break;
       case 'journal': doLs('journal'); break;
-      case 'clear': clearOutput(); break;
       case 'geocity': case 'geocities': applyTheme('geocity'); break;
       case 'crt': applyTheme('crt'); break;
       case 'darkroom': applyTheme('darkroom'); break;
@@ -4206,14 +3613,8 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       case 'tilt': toggleFx('tilt'); break;
       case 'gravity': case 'antigravity': case 'magnet': case 'zerog': setPhysics(cmd === 'zerog' ? 'drift' : cmd); break;
       case 'reset': case 'normal': resetLooks(); break;
-      case 'serpent': case 'snake': launchGame(startSerpent); break;
-      case 'ghost': case 'pacman': launchGame(startGhost); break;
-      case ':)': surprise(); break;
-      case 'sudo': case 'rm': case 'vim': case 'emacs': printLine('no.', 'dim'); break;
-      case 'exit': case 'logout': case 'quit':
-        printLine("there's no escaping a static site. thanks for stopping by though.", 'dim'); break;
       default:
-        printLine("why can't i find you? type 'help' for a list of commands.", 'err');
+        printLine("command not found: " + cmd + ". try ls, cat, cd or settings.", 'err');
     }
     focusInput();
   }
@@ -4327,7 +3728,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     textCol.appendChild(el('div', 'line dim', esc('connected to elijahhalford.tty — session started')));
     textCol.appendChild(el('div', 'line dim', esc(isNarrow()
       ? "video & photo, orlando. tap anything below to get started."
-      : "video & photo, orlando. type 'help' to get started.")));
+      : "video & photo, orlando. click anything below, or type ls / cat / cd.")));
     introRow.appendChild(textCol);
     const logo = document.createElement('img');
     logo.className = 'boot-logo';
@@ -4343,38 +3744,13 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     runBootFlicker();
   }
 
-  function reviveThenBoot(){
-    const overlay = el('div', 'revive-overlay');
-    const gif = document.createElement('img');
-    gif.className = 'revive-gif';
-    gif.src = REBIRTH_GIF_DATA_URI;
-    gif.alt = '';
-    gif.draggable = false;
-    overlay.appendChild(gif);
-    const msg = el('div', 'line dim');
-    msg.textContent = 'very well...';
-    msg.style.opacity = '0';
-    overlay.appendChild(msg);
-    document.body.appendChild(overlay);
-
-    setTimeout(() => { msg.style.opacity = '1'; gif.style.opacity = '0.5'; }, 0);
-    scrambleInto(msg, 0, 1);
-
-    setTimeout(() => { location.reload(); }, 1800);
-  }
-
-  if(mobileDock){
-    mobileDock.querySelectorAll('[data-cmd]').forEach(btn => {
-      btn.addEventListener('click', () => runCommand(btn.dataset.cmd));
-    });
-  }
   const onLayoutChange = () => updatePrompt();
   if(MQ_NARROW.addEventListener) MQ_NARROW.addEventListener('change', onLayoutChange);
   else if(MQ_NARROW.addListener) MQ_NARROW.addListener(onLayoutChange);
 
-  // once the page is up, quietly fetch the easter-egg images so they appear instantly
+  // once the page is up, quietly fetch the about gif so it appears instantly
   function warmSiteImages(){
-    [ABOUT_GIF_DATA_URI, SURPRISE_DATA_URI, REBIRTH_GIF_DATA_URI].forEach(u => { const i = new Image(); i.src = u; });
+    const i = new Image(); i.src = ABOUT_GIF_DATA_URI;
   }
   window.addEventListener('load', () => {
     if('requestIdleCallback' in window) requestIdleCallback(warmSiteImages, { timeout: 4000 });
@@ -4386,10 +3762,8 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     if(location.hash === '#ended'){
       try{ history.replaceState(null, '', location.pathname + location.search); }
       catch(e){ location.hash = ''; }
-      reviveThenBoot();
-    } else {
-      boot();
     }
+    boot();
   }
   startup();
 })();
