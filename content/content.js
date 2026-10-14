@@ -526,138 +526,240 @@ window.SITE_CONTENT = {
    {
     "id": "18kkiwDnuTxGntJbfLf3-IGXA08-N1KVi",
     "file": "10-09-26 (84).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 22:08:54",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Evanora Unlimited."
+    "description": "Evanora Unlimited.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 2000,
+     "focal": 24
+    }
    },
    {
     "id": "1NmX_QS0Rcl3SZeJ8mIW44oLG5dDgZ0PZ",
     "file": "10-09-26 (100).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 22:13:31",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "The promoter."
+    "description": "The promoter.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 320,
+     "focal": 24
+    }
    },
    {
     "id": "1I2i9itY1NlUY7ems_7lw32VUTXVlfDty",
     "file": "10-09-26 (121).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 22:18:50",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Couple of gents on the decks."
+    "description": "Couple of gents on the decks.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 2500,
+     "focal": 24
+    }
    },
    {
     "id": "1smd2NAe4XqUsR3ZS10QxkKJ4ev5bU0lv",
     "file": "10-09-26 (139).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 22:22:42",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Man on right was named Cash, man on left was named Lincoln. True story."
+    "description": "Man on right was named Cash, man on left was named Lincoln. True story.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 320,
+     "focal": 24
+    }
    },
    {
     "id": "1a6T3O3I5AGR4cMEmwEq9spj3i1HG7ggJ",
     "file": "10-09-26 (179).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 22:45:27",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Brain melting bass has done its job."
+    "description": "Brain melting bass has done its job.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 2000,
+     "focal": 24
+    }
    },
    {
     "id": "1sGUUDodg7Bz6_xjdB7uHAWK8NMgVvkw5",
     "file": "10-09-26 (215).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 22:52:00",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "DJ."
+    "description": "DJ.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 2500,
+     "focal": 24
+    }
    },
    {
     "id": "19z7ABOcYAcOdiU91yVk9Q_JrEman1DsI",
     "file": "10-09-26 (247).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:00:07",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Alley cat."
+    "description": "Alley cat.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 8000,
+     "focal": 24
+    }
    },
    {
     "id": "1erUxEV7QE7bgjzgecAnGrheVHqi8sRQz",
     "file": "10-09-26 (276).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:10:20",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Ravers."
+    "description": "Ravers.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 1600,
+     "focal": 24
+    }
    },
    {
     "id": "1dvGNoBFOS1dx_eMWOkf2aBKJovhOWKeG",
     "file": "10-09-26 (278).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:10:38",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Big Ass Fans."
+    "description": "Big Ass Fans.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 4000,
+     "focal": 24
+    }
    },
    {
     "id": "1T4SCafkjhPnpDy3oTzluPW19dA6gPa2F",
     "file": "10-09-26 (315).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:23:48",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Painter and the painted."
+    "description": "Painter and the painted.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 4000,
+     "focal": 24
+    }
    },
    {
     "id": "17ZYbpnXLCsAaMe22y3KD-TN9y1nSiZ2n",
     "file": "10-09-26 (317).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:23:56",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Airbrush refill."
+    "description": "Airbrush refill.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 3200,
+     "focal": 24
+    }
    },
    {
     "id": "1O47lhoak5oFm1u51tkgkgPEYOMd_MJTE",
     "file": "10-09-26 (353).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:32:59",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "I was experimenting with light trying to get the “hero shot”."
+    "description": "I was experimenting with light trying to get the “hero shot”.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 1000,
+     "focal": 24
+    }
    },
    {
     "id": "1EPBtdnzZDPnmNk4xthLwxa1uPyGHvN6D",
     "file": "10-09-26 (360).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:34:32",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "“If you share any of these and my nose looks big, I’m going to find you and kill you.” - Unknown Raver."
+    "description": "“If you share any of these and my nose looks big, I’m going to find you and kill you.” - Unknown Raver.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 1600,
+     "focal": 24
+    }
    },
    {
     "id": "1eJVf9S-ZjOSJGGueU3swsT34PI0HoVsz",
     "file": "10-09-26 (381).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:39:47",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Evanora looks through."
+    "description": "Evanora looks through.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 1000,
+     "focal": 24
+    }
    },
    {
     "id": "14l7UpD0bsBgbqfjm3Q6Rw3PU875uX8ah",
     "file": "10-09-26 (394).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:43:33",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "The kickflip nobody notices is usually the best you’ve accomplished."
+    "description": "The kickflip nobody notices is usually the best you’ve accomplished.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 25600,
+     "focal": 24
+    }
    },
    {
     "id": "18pipJMka7Fi_hNoFDySomLng0QnQAbYM",
     "file": "10-09-26 (397).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:44:37",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Nonchalant af."
+    "description": "Nonchalant af.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 5000,
+     "focal": 24
+    }
    },
    {
     "id": "1jd-W9y1h2rufzFupu77mwU09Fc64zyrf",
     "file": "10-09-26 (416).jpg",
-    "date": "2026-10-09",
+    "date": "2026-10-09 23:50:51",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Everything you’re looking for is in this image."
+    "description": "Everything you’re looking for is in this image.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 25600,
+     "focal": 24
+    }
    },
    {
     "id": "1uHaIKpOZwHm4OUX0Yk5QVyAlSc8wrSdP",
@@ -665,7 +767,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Performance."
+    "description": "Performance.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 1000,
+     "focal": 24
+    }
    },
    {
     "id": "1U2iIGDe3Ydnz13kWuGr6xpNDIt01jH-K",
@@ -673,7 +781,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Rose colored glasses on, party on."
+    "description": "Rose colored glasses on, party on.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 2000,
+     "focal": 24
+    }
    },
    {
     "id": "1TDaj-C2ZbuxkqdW3dsr34CLcuEHmgMTd",
@@ -681,7 +795,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Performance."
+    "description": "Performance.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 1600,
+     "focal": 24
+    }
    },
    {
     "id": "1ewkGlpiiDXXtzGx5sQ6H9tuRH9t9EPzV",
@@ -689,7 +809,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Hot and humid stage but nobody cared."
+    "description": "Hot and humid stage but nobody cared.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 400,
+     "focal": 24
+    }
    },
    {
     "id": "1FtZ0uItSxH7HlawJZWsiuugIR2N0SwaA",
@@ -697,7 +823,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Parking lot portrait."
+    "description": "Parking lot portrait.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 800,
+     "focal": 24
+    }
    },
    {
     "id": "1L230yaGsE5p4wZHp8xu05iZ4I6KYsgqs",
@@ -705,7 +837,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Like an angel who pulled their own wings off."
+    "description": "Like an angel who pulled their own wings off.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 10000,
+     "focal": 24
+    }
    },
    {
     "id": "1vGwmxJUPF1ZCj9K5-GUXxHj-2A1voR7h",
@@ -713,7 +851,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Evanora."
+    "description": "Evanora.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 1250,
+     "focal": 24
+    }
    },
    {
     "id": "11dbgFVxGXZvLnvvcEvrbvtRAcC37m5NJ",
@@ -721,7 +865,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "How it feels sometimes."
+    "description": "How it feels sometimes.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 6400,
+     "focal": 24
+    }
    },
    {
     "id": "1Txj1qNlqalvxMbp-ycsqWkiIKcR0M3Pt",
@@ -729,7 +879,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Obscura."
+    "description": "Obscura.",
+    "exif": {
+     "shutter": "1/200s",
+     "f": "2.8",
+     "iso": 32000,
+     "focal": 24
+    }
    },
    {
     "id": "1qGPTUQOc7j2LQOOLvNnFyp47k6Vw-4RC",
@@ -737,7 +893,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Prismatic glass."
+    "description": "Prismatic glass.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 400,
+     "focal": 24
+    }
    },
    {
     "id": "1_WlMG-4-kM3PxGM8QXloJX9vJbRqyPvX",
@@ -745,7 +907,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "WILL."
+    "description": "WILL.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 160,
+     "focal": 24
+    }
    },
    {
     "id": "1CY9va0iqWpU1_99tAsUBGfzLaJK7X9dX",
@@ -753,7 +921,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Worship."
+    "description": "Worship.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 2500,
+     "focal": 24
+    }
    },
    {
     "id": "1XZx-tvvtGMqHRMdJDCfSF7YbeNvDhzMT",
@@ -761,7 +935,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "The face of a weary world."
+    "description": "The face of a weary world.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 200,
+     "focal": 24
+    }
    },
    {
     "id": "1qwDUcUHdfp6PZxlyGSUpf3rX8lRyDpI5",
@@ -769,87 +949,153 @@ window.SITE_CONTENT = {
     "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "After I took this, I felt compelled to speak. “Not only have I now met the most interesting person in the world, but you’re going to become a myth among men.” That got a big smile out of them. I think I’ll keep that photo."
+    "description": "After I took this, I felt compelled to speak. “Not only have I now met the most interesting person in the world, but you’re going to become a myth among men.” That got a big smile out of them. I think I’ll keep that photo.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 400,
+     "focal": 24
+    }
    },
    {
     "id": "1m4JeRhcf4wKfA7Vbuwdo4GCegTxMiwx5",
     "file": "10-03-26 (6).jpg",
-    "date": "2026-10-03",
+    "date": "2026-10-03 13:48:49",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Can’t park there, mate."
+    "description": "Can’t park there, mate.",
+    "exif": {
+     "shutter": "1/1250s",
+     "f": "5.6",
+     "iso": 100,
+     "focal": 24
+    }
    },
    {
     "id": "1aYGCsN3sfkhtN1gZ8lvkoVHZjrJg3ZIR",
     "file": "10-03-26 (7).jpg",
-    "date": "2026-10-03",
+    "date": "2026-10-03 13:50:04",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Forgotten at sea."
+    "description": "Forgotten at sea.",
+    "exif": {
+     "shutter": "1/1250s",
+     "f": "5.6",
+     "iso": 100,
+     "focal": 24
+    }
    },
    {
     "id": "1BalQqp3eqBlr1schKx_09jgDUWRMrB4K",
     "file": "10-03-26 (8).jpg",
-    "date": "2026-10-03",
+    "date": "2026-10-03 13:51:07",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "PROPHET’S REVENGE."
+    "description": "PROPHET’S REVENGE.",
+    "exif": {
+     "shutter": "1/1600s",
+     "f": "5.6",
+     "iso": 100,
+     "focal": 24
+    }
    },
    {
     "id": "1wersvGg8uaDEkH38R8_Z8M95uT4QEaIY",
     "file": "10-03-26 (10).jpg",
-    "date": "2026-10-03",
+    "date": "2026-10-03 14:04:14",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "The beach."
+    "description": "The beach.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "22",
+     "iso": 100,
+     "focal": 24
+    }
    },
    {
     "id": "1rwHjHaZZvd8aYw3ykhpqcThrxYZzHhVG",
     "file": "10-03-26 (16).jpg",
-    "date": "2026-10-03",
+    "date": "2026-10-03 14:07:58",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "New Oasis."
+    "description": "New Oasis.",
+    "exif": {
+     "shutter": "1/1000s",
+     "f": "5.6",
+     "iso": 100,
+     "focal": 24
+    }
    },
    {
     "id": "1byrth5M8duLob_xnciTe9OZvWvizOPSy",
     "file": "09-27-26 (3).jpg",
     "date": "2026-09-27",
     "camera": "sony a7c",
-    "lens": "sony fe 24mm f/2.8 g",
-    "description": "Get a room."
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Get a room.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "22",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1n7G108T6yGo8SGnkCwW7FK6h2-OpkvBq",
     "file": "09-27-26 (32).jpg",
-    "date": "2026-09-27",
+    "date": "2026-09-27 11:24:29",
     "camera": "sony a7c",
-    "lens": "sony fe 24mm f/2.8 g",
-    "description": "Another view of that building."
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Another view of that building.",
+    "exif": {
+     "shutter": "1/2000s",
+     "f": "2.5",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1HKDGgcPmIMMMkP9OrM4_VTrV-xWjApA0",
     "file": "09-27-26 (44).jpg",
-    "date": "2026-09-27",
+    "date": "2026-09-27 12:07:09",
     "camera": "sony a7c",
-    "lens": "sony fe 24mm f/2.8 g",
-    "description": "Falun Gong."
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Falun Gong.",
+    "exif": {
+     "shutter": "1/640s",
+     "f": "2.5",
+     "iso": 160,
+     "focal": 40
+    }
    },
    {
     "id": "1zUOmefU25zzyug30enIHVqas6M-5EzL_",
     "file": "09-27-26 (48).jpg",
-    "date": "2026-09-27",
+    "date": "2026-09-27 12:20:19",
     "camera": "sony a7c",
-    "lens": "sony fe 24mm f/2.8 g",
-    "description": "The view one gets from below."
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "The view one gets from below.",
+    "exif": {
+     "shutter": "1/640s",
+     "f": "7.1",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1Dy6WJUHmCax4q251-Bd88kB7Qb0L9FWX",
     "file": "09-27-26 (58).jpg",
-    "date": "2026-09-27",
+    "date": "2026-09-27 12:31:26",
     "camera": "sony a7c",
-    "lens": "sony fe 24mm f/2.8 g",
-    "description": "Setting sun, frigid shadow."
+    "lens": "sony fe 40mm f/2.5 g",
+    "description": "Setting sun, frigid shadow.",
+    "exif": {
+     "shutter": "1/640s",
+     "f": "2.8",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1f-4zB-KGz6u58rEgkuVABnH1cYSeyzjS",
@@ -857,7 +1103,13 @@ window.SITE_CONTENT = {
     "date": "2026-09-13",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Big fan of this photo op, I intend to shoot there every visit to Universal Studios."
+    "description": "Big fan of this photo op, I intend to shoot there every visit to Universal Studios.",
+    "exif": {
+     "shutter": "1/125s",
+     "f": "2.5",
+     "iso": 6400,
+     "focal": 40
+    }
    },
    {
     "id": "1buDg_VOJyymrn77spJjShcm4bC58Dxbk",
@@ -865,7 +1117,13 @@ window.SITE_CONTENT = {
     "date": "2026-09-13",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Precious."
+    "description": "Precious.",
+    "exif": {
+     "shutter": "1/125s",
+     "f": "2.8",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1zPapHRAfWwTaIemjAsdyXEw-xGNTuabK",
@@ -873,31 +1131,55 @@ window.SITE_CONTENT = {
     "date": "2026-09-06",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Waiting, waiting."
+    "description": "Waiting, waiting.",
+    "exif": {
+     "shutter": "1/640s",
+     "f": "2.5",
+     "iso": 640,
+     "focal": 40
+    }
    },
    {
     "id": "1wmb_qe2asa4MYXw_IjXcxDfKL-C5rXEC",
     "file": "09-06-26 (147).jpg",
-    "date": "2026-09-06",
+    "date": "2026-09-06 19:39:36",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "F5 tornado, you just had to be there, dude."
+    "description": "F5 tornado, you just had to be there, dude.",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "4",
+     "iso": 200,
+     "focal": 40
+    }
    },
    {
     "id": "1L1A65xsiLIigPP75sQ-MIrjC3lXMydOP",
     "file": "09-06-26 (142).jpg",
-    "date": "2026-09-06",
+    "date": "2026-09-06 19:35:50",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Another gorgeous passenger photo, thank you."
+    "description": "Another gorgeous passenger photo, thank you.",
+    "exif": {
+     "shutter": "1/400s",
+     "f": "4.5",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1gjNd9mNxaD8RmYBXb_uzgfi_66wdKCMg",
     "file": "09-06-26 (111).jpg",
-    "date": "2026-09-06",
+    "date": "2026-09-06 14:17:24",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Tasteful side-balls."
+    "description": "Tasteful side-balls.",
+    "exif": {
+     "shutter": "1/640s",
+     "f": "5",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1ZrId_M0eT8EpaeQwj26au35ccYk5iUAm",
@@ -905,7 +1187,13 @@ window.SITE_CONTENT = {
     "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Parrot. Thank god its owner didn't charge me to take this photo because I haven't carried change since I worked in food service."
+    "description": "Parrot. Thank god its owner didn't charge me to take this photo because I haven't carried change since I worked in food service.",
+    "exif": {
+     "shutter": "1/250s",
+     "f": "2.5",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1Cp-v_XfSYaF7FUxEOg50QWK-oLTnYo8y",
@@ -913,7 +1201,13 @@ window.SITE_CONTENT = {
     "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Big fan of this lady's side profile."
+    "description": "Big fan of this lady's side profile.",
+    "exif": {
+     "shutter": "1/125s",
+     "f": "2.5",
+     "iso": 800,
+     "focal": 40
+    }
    },
    {
     "id": "1lyHoMA4wP95fkwJ6ji8lp6z-t-2HjuUS",
@@ -921,7 +1215,13 @@ window.SITE_CONTENT = {
     "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "What are you looking at?"
+    "description": "What are you looking at?",
+    "exif": {
+     "shutter": "1/125s",
+     "f": "2.5",
+     "iso": 800,
+     "focal": 40
+    }
    },
    {
     "id": "1XZp-Kb5p06QKpn4jDVU7rA7F9zCN1bu2",
@@ -929,7 +1229,13 @@ window.SITE_CONTENT = {
     "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "I'm related to Rob Halford of Judas Priest. I like telling the owner of this record store because he always recalls the same story: meeting Rob in Orlando and being asked by him where the nearest gay bar is."
+    "description": "I'm related to Rob Halford of Judas Priest. I like telling the owner of this record store because he always recalls the same story: meeting Rob in Orlando and being asked by him where the nearest gay bar is.",
+    "exif": {
+     "shutter": "1/125s",
+     "f": "2.5",
+     "iso": 1250,
+     "focal": 40
+    }
    },
    {
     "id": "1IwwyoDQLzVzk6wXUn1sln7BiJn_zgyay",
@@ -937,7 +1243,13 @@ window.SITE_CONTENT = {
     "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Sometimes you just need to rest your camera on your knee, turn off your flash, and get shots without anyone noticing."
+    "description": "Sometimes you just need to rest your camera on your knee, turn off your flash, and get shots without anyone noticing.",
+    "exif": {
+     "shutter": "1/125s",
+     "f": "2.5",
+     "iso": 500,
+     "focal": 40
+    }
    },
    {
     "id": "1B1qmOOT_DJ99wABYBIEasbx5nhlHK1X_",
@@ -945,7 +1257,13 @@ window.SITE_CONTENT = {
     "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Do you know how long it took me to make this lady smile? She hates me!"
+    "description": "Do you know how long it took me to make this lady smile? She hates me!",
+    "exif": {
+     "shutter": "1/125s",
+     "f": "2.5",
+     "iso": 200,
+     "focal": 40
+    }
    },
    {
     "id": "1GI5H_U8PDjypa2a9pJLtHYyeVqq-9Gmb",
@@ -953,103 +1271,181 @@ window.SITE_CONTENT = {
     "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Professional headshots for my hairdresser. I came in to take her photos shortly after shaving my head, I'm sure she felt betrayed."
+    "description": "Professional headshots for my hairdresser. I came in to take her photos shortly after shaving my head, I'm sure she felt betrayed.",
+    "exif": {
+     "shutter": "1/125s",
+     "f": "2.5",
+     "iso": 200,
+     "focal": 40
+    }
    },
    {
     "id": "1likmMKN_uQHi_yIMPnEpfPJqfoYtWTxl",
     "file": "08-22-26 (30).jpg",
-    "date": "2026-08-22",
+    "date": "2026-08-22 16:49:43",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Apparently turning your hazards on in thick rainfall is illegal."
+    "description": "Apparently turning your hazards on in thick rainfall is illegal.",
+    "exif": {
+     "shutter": "1/250s",
+     "f": "4.5",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1G-8k23eUCxJW2IC2qXRs8NbJfzInzzU5",
     "file": "08-20-26 (70).jpg",
-    "date": "2026-08-20",
+    "date": "2026-08-20 17:24:11",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "Sister in the hospital — again."
+    "description": "Sister in the hospital — again.",
+    "exif": {
+     "shutter": "1/320s",
+     "f": "2.5",
+     "iso": 50,
+     "focal": 40
+    }
    },
    {
     "id": "1zLFUVl6HD-eIAqN7blAp2x5loTQvgpn8",
     "file": "08-20-26 (34).jpg",
-    "date": "2026-08-20",
+    "date": "2026-08-20 16:45:20",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "How you grade your photos is very important. This was a nice sunny day, too. I'm just hella emo when I drive."
+    "description": "How you grade your photos is very important. This was a nice sunny day, too. I'm just hella emo when I drive.",
+    "exif": {
+     "shutter": "1/1000s",
+     "f": "4.5",
+     "iso": 100,
+     "focal": 40
+    }
    },
    {
     "id": "1Hm_OXulpRHubwqxuccq1AWyVLIIDCSVE",
     "file": "08-20-26 (17).jpg",
-    "date": "2026-08-20",
+    "date": "2026-08-20 16:03:41",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
-    "description": "I've always been told I shoot too tight. How about fuck you? Do you even see this fucking bee?"
+    "description": "I've always been told I shoot too tight. How about fuck you? Do you even see this fucking bee?",
+    "exif": {
+     "shutter": "1/400s",
+     "f": "2.5",
+     "iso": 64,
+     "focal": 40
+    }
    },
    {
     "id": "14BSrjF6RJPgu1NyUclTZPBCj-JLGa8_9",
     "file": "08-21-26 (5).jpg",
-    "date": "2026-08-21",
+    "date": "2026-08-21 20:37:13",
     "camera": "sony a7c",
-    "lens": "sony fe 40mm f/2.5 g",
-    "description": "I got bit by a lot of mosquitoes for this shot, frame it or something."
+    "lens": "sony fe 16-35mm f/2.8 gm",
+    "description": "I got bit by a lot of mosquitoes for this shot, frame it or something.",
+    "exif": {
+     "shutter": "15s",
+     "f": "22",
+     "iso": 100,
+     "focal": 16
+    }
    },
    {
     "id": "1ogUdJejwQWSx3zh9avC1QP7jK2Fob24R",
     "file": "08-21-26 (3).jpg",
-    "date": "2026-08-21",
+    "date": "2026-08-21 20:30:08",
     "camera": "sony a7c",
-    "lens": "sony fe 40mm f/2.5 g",
-    "description": "Is it betraying the quality of digital to still grade like film?"
+    "lens": "sony fe 16-35mm f/2.8 gm",
+    "description": "Is it betraying the quality of digital to still grade like film?",
+    "exif": {
+     "shutter": "15s",
+     "f": "11",
+     "iso": 100,
+     "focal": 16
+    }
    },
    {
     "id": "1Fcqt2tkEko2XWk-ZkHevz1ys6oAPxt3R",
     "file": "08-21-26 (2).jpg",
-    "date": "2026-08-21",
+    "date": "2026-08-21 20:26:06",
     "camera": "sony a7c",
-    "lens": "sony fe 40mm f/2.5 g",
-    "description": "Took a stab at shooting the same spot with digital. My professional peers can't tell the difference."
+    "lens": "sony fe 16-35mm f/2.8 gm",
+    "description": "Took a stab at shooting the same spot with digital. My professional peers can't tell the difference.",
+    "exif": {
+     "shutter": "16s",
+     "f": "11",
+     "iso": 100,
+     "focal": 28
+    }
    },
    {
     "id": "195kAVA-iWkDRPvf-Q-jfs4ZknmWSTrXd",
     "file": "04-07-26 (4).jpg",
     "date": "2026-04-07",
-    "camera": "canon eos r5 mark ii",
-    "lens": "canon rf 24-70mm f/2.8l is usm",
-    "description": "Choose a family."
+    "camera": "canon eos r5m2",
+    "lens": "canon rf15-35mm f/2.8 l is usm",
+    "description": "Choose a family.",
+    "exif": {
+     "shutter": "1/250s",
+     "f": "2.8",
+     "iso": 800,
+     "focal": 27
+    }
    },
    {
     "id": "1-QMiEk4m7JWeTrtjU3dUsPwcszlWng0d",
     "file": "04-07-26 (3).jpg",
     "date": "2026-04-07",
-    "camera": "canon eos r5 mark ii",
-    "lens": "canon rf 24-70mm f/2.8l is usm",
-    "description": "Choose a career."
+    "camera": "canon eos r5m2",
+    "lens": "canon rf15-35mm f/2.8 l is usm",
+    "description": "Choose a career.",
+    "exif": {
+     "shutter": "1/250s",
+     "f": "2.8",
+     "iso": 800,
+     "focal": 23
+    }
    },
    {
     "id": "1p6TxB7L1pSTXYUDpZmWRDp5Xo4_pnZs1",
     "file": "04-07-26 (1).jpg",
     "date": "2026-04-07",
-    "camera": "canon eos r5 mark ii",
-    "lens": "canon rf 24-70mm f/2.8l is usm",
-    "description": "Choose life."
+    "camera": "canon eos r5m2",
+    "lens": "canon rf15-35mm f/2.8 l is usm",
+    "description": "Choose life.",
+    "exif": {
+     "shutter": "1/250s",
+     "f": "2.8",
+     "iso": 800,
+     "focal": 35
+    }
    },
    {
     "id": "1lBUPw_qKvIZUohOG-2lh_L2m1NkHeqcp",
     "file": "04-07-26 (2).jpg",
     "date": "2026-04-07",
-    "camera": "canon eos r5 mark ii",
-    "lens": "canon rf 24-70mm f/2.8l is usm",
-    "description": "Choose a job."
+    "camera": "canon eos r5m2",
+    "lens": "canon rf15-35mm f/2.8 l is usm",
+    "description": "Choose a job.",
+    "exif": {
+     "shutter": "1/250s",
+     "f": "2.8",
+     "iso": 800,
+     "focal": 35
+    }
    },
    {
     "id": "1_dg6ExBBnIjhYzkzHlDNZyzgIXvpKgQ1",
     "file": "07-17-26 (1).jpg",
     "date": "2026-07-17",
-    "camera": "canon eos r5 mark ii",
-    "lens": "canon rf 24-70mm f/2.8l is usm",
-    "description": "What the fuck r u looking at?"
+    "camera": "canon eos r5 c",
+    "lens": "canon rf28-70mm f/2 l usm",
+    "description": "What the fuck r u looking at?",
+    "exif": {
+     "shutter": "1/500s",
+     "f": "5.6",
+     "iso": 800,
+     "focal": 34
+    }
    },
    {
     "id": "1_kiD94QeS3r7Y5LEO0SOcKyRyN_ypl5L",
@@ -1063,17 +1459,25 @@ window.SITE_CONTENT = {
     "id": "1lpw0oqXAySt75vhWZ1i9OpHkwjs5-OFA",
     "file": "10-31-23 (1).jpg",
     "date": "2023-10-31",
-    "camera": "canon eos m50 mark ii",
+    "camera": "canon eos m50m2",
     "lens": "meike mk-6.5mm f/2",
-    "description": "That one guy."
+    "description": "That one guy.",
+    "exif": {
+     "shutter": "1/30s",
+     "iso": 800
+    }
    },
    {
     "id": "1hGPXxNXOSCgF3QwcsdjkP172rEIRYEX6",
     "file": "10-31-23 (2).jpg",
     "date": "2023-10-31",
-    "camera": "canon eos m50 mark ii",
+    "camera": "canon eos m50m2",
     "lens": "meike mk-6.5mm f/2",
-    "description": "Checkmate."
+    "description": "Checkmate.",
+    "exif": {
+     "shutter": "1/13s",
+     "iso": 800
+    }
    }
   ],
   "stills": [
