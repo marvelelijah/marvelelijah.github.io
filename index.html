@@ -445,23 +445,7 @@
     padding-bottom:calc(18px + var(--room, 0px));
   }
 
-  /* minimal scrollbars that only show while scrolling */
-  .output, .gallerybody, .about-float, .lightbox{
-    scrollbar-width:thin;
-    scrollbar-color:transparent transparent;
-  }
-  .output.is-scrolling, .gallerybody.is-scrolling, .about-float.is-scrolling, .lightbox.is-scrolling{
-    scrollbar-color:var(--fg-dim) transparent;
-  }
-  .output::-webkit-scrollbar, .gallerybody::-webkit-scrollbar,
-  .about-float::-webkit-scrollbar, .lightbox::-webkit-scrollbar{ width:5px; height:5px; }
-  .output::-webkit-scrollbar-track, .gallerybody::-webkit-scrollbar-track,
-  .about-float::-webkit-scrollbar-track, .lightbox::-webkit-scrollbar-track{ background:transparent; }
-  .output::-webkit-scrollbar-thumb, .gallerybody::-webkit-scrollbar-thumb,
-  .about-float::-webkit-scrollbar-thumb, .lightbox::-webkit-scrollbar-thumb{ background:transparent; border-radius:3px; }
-  .output.is-scrolling::-webkit-scrollbar-thumb, .gallerybody.is-scrolling::-webkit-scrollbar-thumb,
-  .about-float.is-scrolling::-webkit-scrollbar-thumb, .lightbox.is-scrolling::-webkit-scrollbar-thumb{ background:var(--fg-dim); }
-  .output::-webkit-scrollbar-button, .gallerybody::-webkit-scrollbar-button{ display:none; }
+  /* scrollbars are drawn by js/scroller.js */
 
   .line{
     white-space:pre-wrap;
@@ -1095,6 +1079,7 @@
 
 <script src="content/content.js"></script>
 <script src="js/markdown.js"></script>
+<script src="js/scroller.js"></script>
 <script src="img/manifest.js"></script>
 <script>
 (function(){
@@ -1180,7 +1165,9 @@
   function photoSortKey(name, date){
     const d = date && String(date).match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2}))?)?/);
     if(d){
-      const t = d[4] ? (Number(d[4]) * 3600 + Number(d[5]) * 60 + Number(d[6] || 0)) / 100000 : 0;
+      // same day: by the camera's time if known, otherwise by the frame number in the name
+      const fr = String(name || '').match(/\((\d+)\)/);
+      const t = d[4] ? (Number(d[4]) * 3600 + Number(d[5]) * 60 + Number(d[6] || 0)) / 100000 : (fr ? Number(fr[1]) / 10000 : 0);
       return Number(d[1].slice(2) + d[2] + d[3]) + t;
     }
     const m = String(name || '').match(/^(\d{2})-(\d{2})-(\d{2})/);
@@ -3083,14 +3070,6 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
   function hex(n){ let s = ''; while(s.length < n) s += Math.floor(Math.random() * 16).toString(16); return s; }
   function junk(n){ let s = ''; for(let i = 0; i < n; i++) s += SCRAMBLE_CHARS[(Math.random() * SCRAMBLE_CHARS.length) | 0]; return s; }
 
-  /* ---------- auto-hiding scrollbars: visible only while scrolling ---------- */
-  document.addEventListener('scroll', (e) => {
-    const t = e.target;
-    if(!t || !t.classList) return;
-    t.classList.add('is-scrolling');
-    clearTimeout(t._scrollT);
-    t._scrollT = setTimeout(() => t.classList.remove('is-scrolling'), 900);
-  }, true);
 
   /* ---------- crt: busy terminal output streaming down both margins ---------- */
   const CRT_LINES = [

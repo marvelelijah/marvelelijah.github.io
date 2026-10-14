@@ -6,6 +6,7 @@ window.SITE_CONTENT = {
    {
     "id": "1wzf7ZtOvk24zAsLCWptWxFBXHwejFQnI",
     "file": "06-30-26_CineStill500T (34).jpg",
+    "date": "2026-06-30",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "cinestill 500t",
@@ -15,6 +16,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Ob_RMKsHi-kvduYAGI2tsemRXTdJG4aJ",
     "file": "06-30-26_CineStill500T (11).jpg",
+    "date": "2026-06-30",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "cinestill 500t",
@@ -24,6 +26,7 @@ window.SITE_CONTENT = {
    {
     "id": "1FVaYBzv-kTJDROWjP5zz2q6-Dl4gtpey",
     "file": "06-14-26_KodakVision3500T (8).jpg",
+    "date": "2026-06-14",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
     "film": "kodak vision3 500t",
@@ -33,6 +36,7 @@ window.SITE_CONTENT = {
    {
     "id": "1rXJmEp9DkZZMl72YzRh44coTb-WJDKQ6",
     "file": "06-16-26_Portra160 (33).jpg",
+    "date": "2026-06-16",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
     "film": "kodak portra 160",
@@ -42,6 +46,7 @@ window.SITE_CONTENT = {
    {
     "id": "1JZB7l8UqWFi-qXqwv31sZYvRksrw-02F",
     "file": "06-16-26_Portra160 (31).jpg",
+    "date": "2026-06-16",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
     "film": "kodak portra 160",
@@ -51,6 +56,7 @@ window.SITE_CONTENT = {
    {
     "id": "1OhCXL-wQQDNV3sFOYL4RsMybldaoVBay",
     "file": "06-16-26_Portra160 (27).jpg",
+    "date": "2026-06-16",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
     "film": "kodak portra 160",
@@ -60,6 +66,7 @@ window.SITE_CONTENT = {
    {
     "id": "1T0fXcUTwE6bxoohKGcTParN8pZ8FYdVJ",
     "file": "06-16-26_Portra160 (15).jpg",
+    "date": "2026-06-16",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
     "film": "kodak portra 160",
@@ -69,6 +76,7 @@ window.SITE_CONTENT = {
    {
     "id": "1gYpFmT59sepJuxaoeogFVIS7AvuM3ipE",
     "file": "05-17-26_Portra400 (8-9).jpg.png",
+    "date": "2026-05-17",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "kodak portra 400",
@@ -78,6 +86,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Z58AJXsbgA1QtO7aXQWIgtebByDExO2I",
     "file": "05-17-26_Portra400 (28).jpg",
+    "date": "2026-05-17",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "kodak portra 400",
@@ -86,6 +95,7 @@ window.SITE_CONTENT = {
    {
     "id": "16f6jLCmpYvtO3znrOemn03LwHm0Ju56Q",
     "file": "05-17-26_Portra400 (4).jpg",
+    "date": "2026-05-17",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "kodak portra 400",
@@ -95,6 +105,7 @@ window.SITE_CONTENT = {
    {
     "id": "1bhtivlnPfwMCP4Ai-2F9iYtGN87CuYWd",
     "file": "05-06-26_Portra160 (34).jpg",
+    "date": "2026-05-06",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
     "film": "kodak portra 160",
@@ -104,6 +115,7 @@ window.SITE_CONTENT = {
    {
     "id": "1BmuJCryxFygE38RwNZ5ZB7S_3BC3SuCC",
     "file": "05-06-26_Portra160 (15).jpg",
+    "date": "2026-05-06",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
     "film": "kodak portra 160",
@@ -113,6 +125,7 @@ window.SITE_CONTENT = {
    {
     "id": "1hk26vzEY0aO4ymOdFXsFborFp_r-Cn1E",
     "file": "04-17-26_Portra400 (34).jpg",
+    "date": "2026-04-17",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "kodak portra 400",
@@ -122,6 +135,7 @@ window.SITE_CONTENT = {
    {
     "id": "1-M4f-dfmCVmjvmaUIAI0d0L3nBcNc6sN",
     "file": "03-29-26_Portra800 (34).jpg",
+    "date": "2026-03-29",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "kodak portra 800",
@@ -130,6 +144,7 @@ window.SITE_CONTENT = {
    {
     "id": "1eukdvKmCr7BSlDDj3Yo88uupkkbgSCCz",
     "file": "03-29-26_Portra800 (32).jpg",
+    "date": "2026-03-29",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "kodak portra 800",
@@ -139,6 +154,7 @@ window.SITE_CONTENT = {
    {
     "id": "138yN-lbRnc_D1xsEKS3YPb7Pnw41rBF1",
     "file": "03-29-26_Portra800 (28).jpg",
+    "date": "2026-03-29",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "kodak portra 800",
@@ -148,6 +164,7 @@ window.SITE_CONTENT = {
    {
     "id": "1oSVO9bYzqzaZHfk_xDtYDEKmPRbRm2OG",
     "file": "03-29-26_Portra800 (16).jpg",
+    "date": "2026-03-29",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "kodak portra 800",
@@ -157,6 +174,7 @@ window.SITE_CONTENT = {
    {
     "id": "1SXG1l9N2T6d5ImGvm2QikoUGp5wvnUBn",
     "file": "03-25-26_Delta100 (36).jpg",
+    "date": "2026-03-25",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "ilford delta 100",
@@ -166,6 +184,7 @@ window.SITE_CONTENT = {
    {
     "id": "1pZCnXLdQ0YGZqJE6it60B8F2kz2XqGam",
     "file": "03-25-26_Delta100 (32).jpg",
+    "date": "2026-03-25",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "ilford delta 100",
@@ -175,6 +194,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Z3t09d2TwNUMTn6XwTYKwxen2rElCqWV",
     "file": "03-25-26_Delta100 (14).jpg",
+    "date": "2026-03-25",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "ilford delta 100",
@@ -184,6 +204,7 @@ window.SITE_CONTENT = {
    {
     "id": "1zg9hF4SBJfIBhP2pFybOBmQgrd0Ng3tz",
     "file": "02-24-26_Fuji400 (26).jpg",
+    "date": "2026-02-24",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -193,6 +214,7 @@ window.SITE_CONTENT = {
    {
     "id": "1VYcSR82Kre7FJDOyoj3_pJIr2XTB1S7r",
     "file": "02-24-26_Fuji400 (17).jpg",
+    "date": "2026-02-24",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -202,6 +224,7 @@ window.SITE_CONTENT = {
    {
     "id": "1N9kdS3rv7Vxi5vJpcFP86CARa9DBRh4y",
     "file": "02-24-26_Fuji400 (16).jpg",
+    "date": "2026-02-24",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -211,6 +234,7 @@ window.SITE_CONTENT = {
    {
     "id": "13k-Jv2wN78VF6lnAlsMgARuF9853TN64",
     "file": "02-24-26_Fuji400 (15).jpg",
+    "date": "2026-02-24",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -220,6 +244,7 @@ window.SITE_CONTENT = {
    {
     "id": "1G7qkU-oAmwk7UXGXUns_wtPW2H-y4HFj",
     "file": "02-24-26_Fuji400 (11).jpg",
+    "date": "2026-02-24",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -229,6 +254,7 @@ window.SITE_CONTENT = {
    {
     "id": "19EehxpFW70xipDVjZPV3JUXmWEBC7gci",
     "file": "02-24-26_Fuji400 (8).jpg",
+    "date": "2026-02-24",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -238,6 +264,7 @@ window.SITE_CONTENT = {
    {
     "id": "1q7k7XqS2fj3xKgDPzP0uM7JpUa-2ahZ7",
     "file": "02-24-26_Fuji400 (6).jpg",
+    "date": "2026-02-24",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -247,6 +274,7 @@ window.SITE_CONTENT = {
    {
     "id": "1mafl45brzegkVSAnqNlj9fjiqbf3pUcy",
     "file": "02-01-26_Fuji400 (32).jpg",
+    "date": "2026-02-01",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -256,6 +284,7 @@ window.SITE_CONTENT = {
    {
     "id": "1ViBfIkOX8owT0-GWOtze75p-wNm1yO_z",
     "file": "02-01-26_Fuji400 (16).jpg",
+    "date": "2026-02-01",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -265,6 +294,7 @@ window.SITE_CONTENT = {
    {
     "id": "1JynNZSr7xCdiQSYNXUubBVn6Dp9vTB6e",
     "file": "02-01-26_Fuji400 (15).jpg",
+    "date": "2026-02-01",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -274,6 +304,7 @@ window.SITE_CONTENT = {
    {
     "id": "1oEYEbASAj0EvMDssAnaCWhcY3wOufALd",
     "file": "01-25-26_Fuji400 (14).jpg",
+    "date": "2026-01-25",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -283,6 +314,7 @@ window.SITE_CONTENT = {
    {
     "id": "1RZzf0SEEPWDqM6cztL91VgQJirpUkCNp",
     "file": "01-25-26_Fuji400 (11).jpg",
+    "date": "2026-01-25",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -292,6 +324,7 @@ window.SITE_CONTENT = {
    {
     "id": "1f1jK343-v9WGa62J4CehHDB1KZm0OmgJ",
     "file": "01-25-26_Fuji400 (7).jpg",
+    "date": "2026-01-25",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -301,6 +334,7 @@ window.SITE_CONTENT = {
    {
     "id": "1VjbSmihtb-VvH0f97Vy6P2LFIq1YQi29",
     "file": "01-09-26_Fuji400 (37).jpg",
+    "date": "2026-01-09",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -310,6 +344,7 @@ window.SITE_CONTENT = {
    {
     "id": "1NVVDbPpaZiyfki1K0Wr6ajuUB7eTcp1-",
     "file": "01-09-26_Fuji400 (35).jpg",
+    "date": "2026-01-09",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "fujifilm 400",
@@ -319,6 +354,7 @@ window.SITE_CONTENT = {
    {
     "id": "1WNUs1MigAKI-2yTLDDS6vjZfob_0AymR",
     "file": "01-09-26_Fuji400 (26).jpg",
+    "date": "2026-01-09",
     "camera": "canon ae-1 program",
     "lens": "canon fd 50mm f/1.4",
     "film": "fujifilm 400",
@@ -328,6 +364,7 @@ window.SITE_CONTENT = {
    {
     "id": "1iEAMFQ9VdoOk79h0wiGxJg3I6vesIRy4",
     "file": "01-04-26_CineStill400D (4).jpg",
+    "date": "2026-01-04",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "cinestill 400d",
@@ -337,6 +374,7 @@ window.SITE_CONTENT = {
    {
     "id": "15zxFpLGBF6Vu2B84z5a5iEdk-R58aIte",
     "file": "01-06-26_AmberT200 (18).jpg",
+    "date": "2026-01-06",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "amber t200",
@@ -346,6 +384,7 @@ window.SITE_CONTENT = {
    {
     "id": "1KkkACSUCDL9PtimkJ4HCWRueRGlpcdH0",
     "file": "01-06-26_AmberT200 (15).jpg",
+    "date": "2026-01-06",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "amber t200",
@@ -355,6 +394,7 @@ window.SITE_CONTENT = {
    {
     "id": "1evCDOiEKdTh6JPbGAaWuBmHuVaAvi8dd",
     "file": "01-09-25_KentmerePan400 (4).jpg",
+    "date": "2025-01-09",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "ilford kentmere pan 400",
@@ -364,6 +404,7 @@ window.SITE_CONTENT = {
    {
     "id": "1-U4A9YWx4UnpHZQVUmwFHAaOjcoZbobW",
     "file": "01-09-25_KentmerePan400 (36).jpg",
+    "date": "2025-01-09",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
     "film": "ilford kentmere pan 400",
@@ -373,6 +414,7 @@ window.SITE_CONTENT = {
    {
     "id": "17-cVdCELJra3qPpiAzKCREfmlyy_JuBa",
     "file": "11-21-25 (1).jpg",
+    "date": "2025-11-21",
     "displayName": "11-21-25_CineStill800T (1).jpg",
     "camera": "pentax 645",
     "lens": "wide angle (exact lens unknown)",
@@ -383,6 +425,7 @@ window.SITE_CONTENT = {
    {
     "id": "1hqit_mxtrTPPkuybNZTn7isFyYiT8d13",
     "file": "12-25-25 (2).jpg",
+    "date": "2025-12-25",
     "displayName": "12-25-25_CineStill800T (2).jpg",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
@@ -393,6 +436,7 @@ window.SITE_CONTENT = {
    {
     "id": "128pzZXPPB-jkwVwbeZDcvX1kNQxOafwD",
     "file": "11-29-25 (1).png",
+    "date": "2025-11-29",
     "displayName": "11-29-25_KodakEktar100 (1).png",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
@@ -403,6 +447,7 @@ window.SITE_CONTENT = {
    {
     "id": "1EYHeIve1S1NZQOSXmCbZ9iBZ0_1jp6x4",
     "file": "12-25-25 (1).jpg",
+    "date": "2025-12-25",
     "displayName": "12-25-25_CineStill800T (1).jpg",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
@@ -413,6 +458,7 @@ window.SITE_CONTENT = {
    {
     "id": "1fmGxtgSD9nxZXpJc07tx9D7mU-tcxL5H",
     "file": "12-15-25 (2).jpg",
+    "date": "2025-12-15",
     "displayName": "12-15-25_CineStill400D (2).jpg",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
@@ -423,6 +469,7 @@ window.SITE_CONTENT = {
    {
     "id": "1zllDEbspr42ysj4sbuYhNhSmTWFzJGQG",
     "file": "09-12-25 (1).jpg",
+    "date": "2025-09-12",
     "displayName": "09-12-25_CineStill800T (1).jpg",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
@@ -433,6 +480,7 @@ window.SITE_CONTENT = {
    {
     "id": "1If-Wnan5Lm52a_Nza6MMZO4swXLhVoXp",
     "file": "12-20-25 (4).png",
+    "date": "2025-12-20",
     "displayName": "12-20-25_Portra800 (4).png",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
@@ -443,6 +491,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Lu8PjPiavgmJL8UdiFjA0d7okzPYCNQ_",
     "file": "12-15-25 (1).jpg",
+    "date": "2025-12-15",
     "displayName": "12-15-25_CineStill400D (1).jpg",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
@@ -453,6 +502,7 @@ window.SITE_CONTENT = {
    {
     "id": "1DRz8lJZW-RWzvV9c7H2UNG6vX4d1VlFo",
     "file": "12-06-25 (1).jpg",
+    "date": "2025-12-06",
     "displayName": "12-06-25_KodakEktar100 (1).jpg",
     "camera": "canon ae-1 program",
     "lens": "canon fd 28mm f/2.8",
@@ -463,6 +513,7 @@ window.SITE_CONTENT = {
    {
     "id": "11a1PacgLDLmVd5VF8J82jpZSa1i9LsQZ",
     "file": "12-20-25 (1).jpg",
+    "date": "2025-12-20",
     "displayName": "12-20-25_Portra800 (1).jpg",
     "camera": "canon eos 650",
     "lens": "canon ef 50mm f/1.4",
@@ -475,6 +526,7 @@ window.SITE_CONTENT = {
    {
     "id": "18kkiwDnuTxGntJbfLf3-IGXA08-N1KVi",
     "file": "10-09-26 (84).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Evanora Unlimited."
@@ -482,6 +534,7 @@ window.SITE_CONTENT = {
    {
     "id": "1NmX_QS0Rcl3SZeJ8mIW44oLG5dDgZ0PZ",
     "file": "10-09-26 (100).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "The promoter."
@@ -489,6 +542,7 @@ window.SITE_CONTENT = {
    {
     "id": "1I2i9itY1NlUY7ems_7lw32VUTXVlfDty",
     "file": "10-09-26 (121).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Couple of gents on the decks."
@@ -496,6 +550,7 @@ window.SITE_CONTENT = {
    {
     "id": "1smd2NAe4XqUsR3ZS10QxkKJ4ev5bU0lv",
     "file": "10-09-26 (139).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Man on right was named Cash, man on left was named Lincoln. True story."
@@ -503,6 +558,7 @@ window.SITE_CONTENT = {
    {
     "id": "1a6T3O3I5AGR4cMEmwEq9spj3i1HG7ggJ",
     "file": "10-09-26 (179).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Brain melting bass has done its job."
@@ -510,6 +566,7 @@ window.SITE_CONTENT = {
    {
     "id": "1sGUUDodg7Bz6_xjdB7uHAWK8NMgVvkw5",
     "file": "10-09-26 (215).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "DJ."
@@ -517,6 +574,7 @@ window.SITE_CONTENT = {
    {
     "id": "19z7ABOcYAcOdiU91yVk9Q_JrEman1DsI",
     "file": "10-09-26 (247).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Alley cat."
@@ -524,6 +582,7 @@ window.SITE_CONTENT = {
    {
     "id": "1erUxEV7QE7bgjzgecAnGrheVHqi8sRQz",
     "file": "10-09-26 (276).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Ravers."
@@ -531,6 +590,7 @@ window.SITE_CONTENT = {
    {
     "id": "1dvGNoBFOS1dx_eMWOkf2aBKJovhOWKeG",
     "file": "10-09-26 (278).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Big Ass Fans."
@@ -538,6 +598,7 @@ window.SITE_CONTENT = {
    {
     "id": "1T4SCafkjhPnpDy3oTzluPW19dA6gPa2F",
     "file": "10-09-26 (315).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Painter and the painted."
@@ -545,6 +606,7 @@ window.SITE_CONTENT = {
    {
     "id": "17ZYbpnXLCsAaMe22y3KD-TN9y1nSiZ2n",
     "file": "10-09-26 (317).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Airbrush refill."
@@ -552,6 +614,7 @@ window.SITE_CONTENT = {
    {
     "id": "1O47lhoak5oFm1u51tkgkgPEYOMd_MJTE",
     "file": "10-09-26 (353).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "I was experimenting with light trying to get the “hero shot”."
@@ -559,6 +622,7 @@ window.SITE_CONTENT = {
    {
     "id": "1EPBtdnzZDPnmNk4xthLwxa1uPyGHvN6D",
     "file": "10-09-26 (360).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "“If you share any of these and my nose looks big, I’m going to find you and kill you.” - Unknown Raver."
@@ -566,6 +630,7 @@ window.SITE_CONTENT = {
    {
     "id": "1eJVf9S-ZjOSJGGueU3swsT34PI0HoVsz",
     "file": "10-09-26 (381).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Evanora looks through."
@@ -573,6 +638,7 @@ window.SITE_CONTENT = {
    {
     "id": "14l7UpD0bsBgbqfjm3Q6Rw3PU875uX8ah",
     "file": "10-09-26 (394).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "The kickflip nobody notices is usually the best you’ve accomplished."
@@ -580,6 +646,7 @@ window.SITE_CONTENT = {
    {
     "id": "18pipJMka7Fi_hNoFDySomLng0QnQAbYM",
     "file": "10-09-26 (397).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Nonchalant af."
@@ -587,6 +654,7 @@ window.SITE_CONTENT = {
    {
     "id": "1jd-W9y1h2rufzFupu77mwU09Fc64zyrf",
     "file": "10-09-26 (416).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Everything you’re looking for is in this image."
@@ -594,6 +662,7 @@ window.SITE_CONTENT = {
    {
     "id": "1uHaIKpOZwHm4OUX0Yk5QVyAlSc8wrSdP",
     "file": "10-09-26 (475).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Performance."
@@ -601,6 +670,7 @@ window.SITE_CONTENT = {
    {
     "id": "1U2iIGDe3Ydnz13kWuGr6xpNDIt01jH-K",
     "file": "10-09-26 (534).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Rose colored glasses on, party on."
@@ -608,6 +678,7 @@ window.SITE_CONTENT = {
    {
     "id": "1TDaj-C2ZbuxkqdW3dsr34CLcuEHmgMTd",
     "file": "10-09-26 (550).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Performance."
@@ -615,6 +686,7 @@ window.SITE_CONTENT = {
    {
     "id": "1ewkGlpiiDXXtzGx5sQ6H9tuRH9t9EPzV",
     "file": "10-09-26 (566).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Hot and humid stage but nobody cared."
@@ -622,6 +694,7 @@ window.SITE_CONTENT = {
    {
     "id": "1FtZ0uItSxH7HlawJZWsiuugIR2N0SwaA",
     "file": "10-09-26 (637).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Parking lot portrait."
@@ -629,6 +702,7 @@ window.SITE_CONTENT = {
    {
     "id": "1L230yaGsE5p4wZHp8xu05iZ4I6KYsgqs",
     "file": "10-09-26 (672).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Like an angel who pulled their own wings off."
@@ -636,6 +710,7 @@ window.SITE_CONTENT = {
    {
     "id": "1vGwmxJUPF1ZCj9K5-GUXxHj-2A1voR7h",
     "file": "10-09-26 (687).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Evanora."
@@ -643,6 +718,7 @@ window.SITE_CONTENT = {
    {
     "id": "11dbgFVxGXZvLnvvcEvrbvtRAcC37m5NJ",
     "file": "10-09-26 (710).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "How it feels sometimes."
@@ -650,6 +726,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Txj1qNlqalvxMbp-ycsqWkiIKcR0M3Pt",
     "file": "10-09-26 (823).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Obscura."
@@ -657,6 +734,7 @@ window.SITE_CONTENT = {
    {
     "id": "1qGPTUQOc7j2LQOOLvNnFyp47k6Vw-4RC",
     "file": "10-09-26 (859).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Prismatic glass."
@@ -664,6 +742,7 @@ window.SITE_CONTENT = {
    {
     "id": "1_WlMG-4-kM3PxGM8QXloJX9vJbRqyPvX",
     "file": "10-09-26 (939).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "WILL."
@@ -671,6 +750,7 @@ window.SITE_CONTENT = {
    {
     "id": "1CY9va0iqWpU1_99tAsUBGfzLaJK7X9dX",
     "file": "10-09-26 (985).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Worship."
@@ -678,6 +758,7 @@ window.SITE_CONTENT = {
    {
     "id": "1XZx-tvvtGMqHRMdJDCfSF7YbeNvDhzMT",
     "file": "10-09-26 (1071).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "The face of a weary world."
@@ -685,6 +766,7 @@ window.SITE_CONTENT = {
    {
     "id": "1qwDUcUHdfp6PZxlyGSUpf3rX8lRyDpI5",
     "file": "10-09-26 (1105).jpg",
+    "date": "2026-10-09",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "After I took this, I felt compelled to speak. “Not only have I now met the most interesting person in the world, but you’re going to become a myth among men.” That got a big smile out of them. I think I’ll keep that photo."
@@ -692,6 +774,7 @@ window.SITE_CONTENT = {
    {
     "id": "1m4JeRhcf4wKfA7Vbuwdo4GCegTxMiwx5",
     "file": "10-03-26 (6).jpg",
+    "date": "2026-10-03",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Can’t park there, mate."
@@ -699,6 +782,7 @@ window.SITE_CONTENT = {
    {
     "id": "1aYGCsN3sfkhtN1gZ8lvkoVHZjrJg3ZIR",
     "file": "10-03-26 (7).jpg",
+    "date": "2026-10-03",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Forgotten at sea."
@@ -706,6 +790,7 @@ window.SITE_CONTENT = {
    {
     "id": "1BalQqp3eqBlr1schKx_09jgDUWRMrB4K",
     "file": "10-03-26 (8).jpg",
+    "date": "2026-10-03",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "PROPHET’S REVENGE."
@@ -713,6 +798,7 @@ window.SITE_CONTENT = {
    {
     "id": "1wersvGg8uaDEkH38R8_Z8M95uT4QEaIY",
     "file": "10-03-26 (10).jpg",
+    "date": "2026-10-03",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "The beach."
@@ -720,6 +806,7 @@ window.SITE_CONTENT = {
    {
     "id": "1rwHjHaZZvd8aYw3ykhpqcThrxYZzHhVG",
     "file": "10-03-26 (16).jpg",
+    "date": "2026-10-03",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "New Oasis."
@@ -727,6 +814,7 @@ window.SITE_CONTENT = {
    {
     "id": "1byrth5M8duLob_xnciTe9OZvWvizOPSy",
     "file": "09-27-26 (3).jpg",
+    "date": "2026-09-27",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Get a room."
@@ -734,6 +822,7 @@ window.SITE_CONTENT = {
    {
     "id": "1n7G108T6yGo8SGnkCwW7FK6h2-OpkvBq",
     "file": "09-27-26 (32).jpg",
+    "date": "2026-09-27",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Another view of that building."
@@ -741,6 +830,7 @@ window.SITE_CONTENT = {
    {
     "id": "1HKDGgcPmIMMMkP9OrM4_VTrV-xWjApA0",
     "file": "09-27-26 (44).jpg",
+    "date": "2026-09-27",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Falun Gong."
@@ -748,6 +838,7 @@ window.SITE_CONTENT = {
    {
     "id": "1zUOmefU25zzyug30enIHVqas6M-5EzL_",
     "file": "09-27-26 (48).jpg",
+    "date": "2026-09-27",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "The view one gets from below."
@@ -755,6 +846,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Dy6WJUHmCax4q251-Bd88kB7Qb0L9FWX",
     "file": "09-27-26 (58).jpg",
+    "date": "2026-09-27",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
     "description": "Setting sun, frigid shadow."
@@ -762,6 +854,7 @@ window.SITE_CONTENT = {
    {
     "id": "1f-4zB-KGz6u58rEgkuVABnH1cYSeyzjS",
     "file": "09-13-26 (69).jpg",
+    "date": "2026-09-13",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Big fan of this photo op, I intend to shoot there every visit to Universal Studios."
@@ -769,6 +862,7 @@ window.SITE_CONTENT = {
    {
     "id": "1buDg_VOJyymrn77spJjShcm4bC58Dxbk",
     "file": "09-13-26 (218).jpg",
+    "date": "2026-09-13",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Precious."
@@ -776,6 +870,7 @@ window.SITE_CONTENT = {
    {
     "id": "1zPapHRAfWwTaIemjAsdyXEw-xGNTuabK",
     "file": "09-06-26 (46).jpg",
+    "date": "2026-09-06",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Waiting, waiting."
@@ -783,6 +878,7 @@ window.SITE_CONTENT = {
    {
     "id": "1wmb_qe2asa4MYXw_IjXcxDfKL-C5rXEC",
     "file": "09-06-26 (147).jpg",
+    "date": "2026-09-06",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "F5 tornado, you just had to be there, dude."
@@ -790,6 +886,7 @@ window.SITE_CONTENT = {
    {
     "id": "1L1A65xsiLIigPP75sQ-MIrjC3lXMydOP",
     "file": "09-06-26 (142).jpg",
+    "date": "2026-09-06",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Another gorgeous passenger photo, thank you."
@@ -797,6 +894,7 @@ window.SITE_CONTENT = {
    {
     "id": "1gjNd9mNxaD8RmYBXb_uzgfi_66wdKCMg",
     "file": "09-06-26 (111).jpg",
+    "date": "2026-09-06",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Tasteful side-balls."
@@ -804,6 +902,7 @@ window.SITE_CONTENT = {
    {
     "id": "1ZrId_M0eT8EpaeQwj26au35ccYk5iUAm",
     "file": "09-02-26 (33).jpg",
+    "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Parrot. Thank god its owner didn't charge me to take this photo because I haven't carried change since I worked in food service."
@@ -811,6 +910,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Cp-v_XfSYaF7FUxEOg50QWK-oLTnYo8y",
     "file": "09-02-26 (390).jpg",
+    "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Big fan of this lady's side profile."
@@ -818,6 +918,7 @@ window.SITE_CONTENT = {
    {
     "id": "1lyHoMA4wP95fkwJ6ji8lp6z-t-2HjuUS",
     "file": "09-02-26 (343).jpg",
+    "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "What are you looking at?"
@@ -825,6 +926,7 @@ window.SITE_CONTENT = {
    {
     "id": "1XZp-Kb5p06QKpn4jDVU7rA7F9zCN1bu2",
     "file": "09-02-26 (318).jpg",
+    "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "I'm related to Rob Halford of Judas Priest. I like telling the owner of this record store because he always recalls the same story: meeting Rob in Orlando and being asked by him where the nearest gay bar is."
@@ -832,6 +934,7 @@ window.SITE_CONTENT = {
    {
     "id": "1IwwyoDQLzVzk6wXUn1sln7BiJn_zgyay",
     "file": "09-02-26 (244).jpg",
+    "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Sometimes you just need to rest your camera on your knee, turn off your flash, and get shots without anyone noticing."
@@ -839,6 +942,7 @@ window.SITE_CONTENT = {
    {
     "id": "1B1qmOOT_DJ99wABYBIEasbx5nhlHK1X_",
     "file": "09-02-26 (163).jpg",
+    "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Do you know how long it took me to make this lady smile? She hates me!"
@@ -846,6 +950,7 @@ window.SITE_CONTENT = {
    {
     "id": "1GI5H_U8PDjypa2a9pJLtHYyeVqq-9Gmb",
     "file": "09-02-26 (106).jpg",
+    "date": "2026-09-02",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Professional headshots for my hairdresser. I came in to take her photos shortly after shaving my head, I'm sure she felt betrayed."
@@ -853,6 +958,7 @@ window.SITE_CONTENT = {
    {
     "id": "1likmMKN_uQHi_yIMPnEpfPJqfoYtWTxl",
     "file": "08-22-26 (30).jpg",
+    "date": "2026-08-22",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Apparently turning your hazards on in thick rainfall is illegal."
@@ -860,6 +966,7 @@ window.SITE_CONTENT = {
    {
     "id": "1G-8k23eUCxJW2IC2qXRs8NbJfzInzzU5",
     "file": "08-20-26 (70).jpg",
+    "date": "2026-08-20",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Sister in the hospital — again."
@@ -867,6 +974,7 @@ window.SITE_CONTENT = {
    {
     "id": "1zLFUVl6HD-eIAqN7blAp2x5loTQvgpn8",
     "file": "08-20-26 (34).jpg",
+    "date": "2026-08-20",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "How you grade your photos is very important. This was a nice sunny day, too. I'm just hella emo when I drive."
@@ -874,6 +982,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Hm_OXulpRHubwqxuccq1AWyVLIIDCSVE",
     "file": "08-20-26 (17).jpg",
+    "date": "2026-08-20",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "I've always been told I shoot too tight. How about fuck you? Do you even see this fucking bee?"
@@ -881,6 +990,7 @@ window.SITE_CONTENT = {
    {
     "id": "14BSrjF6RJPgu1NyUclTZPBCj-JLGa8_9",
     "file": "08-21-26 (5).jpg",
+    "date": "2026-08-21",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "I got bit by a lot of mosquitoes for this shot, frame it or something."
@@ -888,6 +998,7 @@ window.SITE_CONTENT = {
    {
     "id": "1ogUdJejwQWSx3zh9avC1QP7jK2Fob24R",
     "file": "08-21-26 (3).jpg",
+    "date": "2026-08-21",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Is it betraying the quality of digital to still grade like film?"
@@ -895,6 +1006,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Fcqt2tkEko2XWk-ZkHevz1ys6oAPxt3R",
     "file": "08-21-26 (2).jpg",
+    "date": "2026-08-21",
     "camera": "sony a7c",
     "lens": "sony fe 40mm f/2.5 g",
     "description": "Took a stab at shooting the same spot with digital. My professional peers can't tell the difference."
@@ -902,6 +1014,7 @@ window.SITE_CONTENT = {
    {
     "id": "195kAVA-iWkDRPvf-Q-jfs4ZknmWSTrXd",
     "file": "04-07-26 (4).jpg",
+    "date": "2026-04-07",
     "camera": "canon eos r5 mark ii",
     "lens": "canon rf 24-70mm f/2.8l is usm",
     "description": "Choose a family."
@@ -909,6 +1022,7 @@ window.SITE_CONTENT = {
    {
     "id": "1-QMiEk4m7JWeTrtjU3dUsPwcszlWng0d",
     "file": "04-07-26 (3).jpg",
+    "date": "2026-04-07",
     "camera": "canon eos r5 mark ii",
     "lens": "canon rf 24-70mm f/2.8l is usm",
     "description": "Choose a career."
@@ -916,6 +1030,7 @@ window.SITE_CONTENT = {
    {
     "id": "1p6TxB7L1pSTXYUDpZmWRDp5Xo4_pnZs1",
     "file": "04-07-26 (1).jpg",
+    "date": "2026-04-07",
     "camera": "canon eos r5 mark ii",
     "lens": "canon rf 24-70mm f/2.8l is usm",
     "description": "Choose life."
@@ -923,6 +1038,7 @@ window.SITE_CONTENT = {
    {
     "id": "1lBUPw_qKvIZUohOG-2lh_L2m1NkHeqcp",
     "file": "04-07-26 (2).jpg",
+    "date": "2026-04-07",
     "camera": "canon eos r5 mark ii",
     "lens": "canon rf 24-70mm f/2.8l is usm",
     "description": "Choose a job."
@@ -930,6 +1046,7 @@ window.SITE_CONTENT = {
    {
     "id": "1_dg6ExBBnIjhYzkzHlDNZyzgIXvpKgQ1",
     "file": "07-17-26 (1).jpg",
+    "date": "2026-07-17",
     "camera": "canon eos r5 mark ii",
     "lens": "canon rf 24-70mm f/2.8l is usm",
     "description": "What the fuck r u looking at?"
@@ -937,6 +1054,7 @@ window.SITE_CONTENT = {
    {
     "id": "1_kiD94QeS3r7Y5LEO0SOcKyRyN_ypl5L",
     "file": "09-18-23 (1).jpg",
+    "date": "2023-09-18",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "Two men holding hands."
@@ -944,6 +1062,7 @@ window.SITE_CONTENT = {
    {
     "id": "1lpw0oqXAySt75vhWZ1i9OpHkwjs5-OFA",
     "file": "10-31-23 (1).jpg",
+    "date": "2023-10-31",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "That one guy."
@@ -951,6 +1070,7 @@ window.SITE_CONTENT = {
    {
     "id": "1hGPXxNXOSCgF3QwcsdjkP172rEIRYEX6",
     "file": "10-31-23 (2).jpg",
+    "date": "2023-10-31",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "Checkmate."
@@ -960,6 +1080,7 @@ window.SITE_CONTENT = {
    {
     "id": "16FCd02gM9ADFyeTclBiMQeuJNY0gu9Hc",
     "file": "01-25-24 (2).jpg",
+    "date": "2024-01-25",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "Went on a date with another photographer, we both shot each other in our styles."
@@ -967,6 +1088,7 @@ window.SITE_CONTENT = {
    {
     "id": "1eOp7Q5HcAqD3ONWbJPWSTZ4eWYe7X76O",
     "file": "01-25-24 (1).jpg",
+    "date": "2024-01-25",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "Look here."
@@ -974,6 +1096,7 @@ window.SITE_CONTENT = {
    {
     "id": "1sdoO-iN9lWn0q_DkfzDwv1k1NJLYLUcD",
     "file": "08-29-24 (2).png",
+    "date": "2024-08-29",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
@@ -981,6 +1104,7 @@ window.SITE_CONTENT = {
    {
     "id": "1SsKvhQEABpquUqyEVwHUkeuhuWx_8Euz",
     "file": "08-29-24 (1).png",
+    "date": "2024-08-29",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
@@ -988,6 +1112,7 @@ window.SITE_CONTENT = {
    {
     "id": "11qUdlDGcfwR35p10SsTko1shzSuo1U7I",
     "file": "08-29-24 (3).png",
+    "date": "2024-08-29",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
@@ -995,6 +1120,7 @@ window.SITE_CONTENT = {
    {
     "id": "16zRFhaqbTXLBEPBsS2aBlaBaHA1fespK",
     "file": "08-29-24 (4).png",
+    "date": "2024-08-29",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
@@ -1002,6 +1128,7 @@ window.SITE_CONTENT = {
    {
     "id": "1ixabA9IqJgyRssfIaAMUDRvwgU9QABZS",
     "file": "08-29-24 (5).png",
+    "date": "2024-08-29",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
@@ -1009,6 +1136,7 @@ window.SITE_CONTENT = {
    {
     "id": "1EcI_3X3badCyqf8AYGbC0li5kCmQLNaT",
     "file": "08-29-24 (6).png",
+    "date": "2024-08-29",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "Stills from the music video \"Your Problem Dog\" by Endie, which I shot and edited."
@@ -1016,6 +1144,7 @@ window.SITE_CONTENT = {
    {
     "id": "1Tu6J3ts6kHYrwKrSjaqzaI2sWQTgvk1K",
     "file": "12-31-23 (1).png",
+    "date": "2023-12-31",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "Woman notices camera, woman behind inspects sword."
@@ -1023,6 +1152,7 @@ window.SITE_CONTENT = {
    {
     "id": "1pA4dfMepQ3S2d2NiaTk8rKNjiEpv6C25",
     "file": "12-31-23 (2).jpg",
+    "date": "2023-12-31",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "Cheeky smoke."
@@ -1030,6 +1160,7 @@ window.SITE_CONTENT = {
    {
     "id": "1EIk6AGPrgV8813VfDq-0ZWCfsT4FVEWi",
     "file": "05-10-24 (1).png",
+    "date": "2024-05-10",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "Before it goes to shit."
@@ -1037,6 +1168,7 @@ window.SITE_CONTENT = {
    {
     "id": "1cOAXXBNAsX1zwpzKtme7P9Z5CQ23-yPq",
     "file": "04-05-24 (3).jpg",
+    "date": "2024-04-05",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "I remember this \"venue\" being really cramped, it was in a smoke shop."
@@ -1044,6 +1176,7 @@ window.SITE_CONTENT = {
    {
     "id": "1ys7zGyfsxJVCYFMb6NvNRAVsxrXTxUu_",
     "file": "04-05-24 (1).jpg",
+    "date": "2024-04-05",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "Music event. Lot of clowns involved."
@@ -1051,6 +1184,7 @@ window.SITE_CONTENT = {
    {
     "id": "1iSvWs9K5dYvunmGeYw6LQsHHxQHdQ5Qo",
     "file": "04-05-24 (2).jpg",
+    "date": "2024-04-05",
     "camera": "canon eos r5c",
     "lens": "canon rf 15-35mm f2.8l is usm",
     "description": "A gentleman destroyed his guitar on stage, fans kept souvenirs."
@@ -1058,6 +1192,7 @@ window.SITE_CONTENT = {
    {
     "id": "1D2nRRzLR2W4WdhekqI8RnagOQpubSmvv",
     "file": "11-22-25 (1).png",
+    "date": "2025-11-22",
     "camera": "sony alpha fx3",
     "lens": "sony fe 16-35mm f/2.8 g",
     "description": "Still from a wedding I shot at the Ancient Spanish Monastery in Miami Beach. It was a filming location for Miami Vice and Ace Ventura: Pet Detective."

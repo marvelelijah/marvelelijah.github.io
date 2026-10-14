@@ -83,6 +83,27 @@
       </div>
 
       <div class="panel">
+        <div class="panelhead"><span>~/admin/photos/camera-info</span></div>
+        <p class="dim">Add camera settings to photos that are already on the site. Drop your <b>original</b> files (straight from the camera or Lightroom, with their camera info). Nothing is uploaded: each file is only read to match it by name and copy its settings. Descriptions stay as they are.</p>
+        <label class="drop" id="exifDrop" tabindex="0">
+          <input type="file" id="exifFiles" accept="image/jpeg" multiple hidden>
+          <span class="drop-big">drop original photos here</span>
+          <span class="dim">or click to choose · matched to your photos by file name</span>
+        </label>
+        <div id="exifResult" hidden>
+          <div id="exifSummary" class="row"></div>
+          <div class="row">
+            <label class="check"><input type="checkbox" id="exifReplaceGear" checked> also replace camera and lens with what's in the files</label>
+          </div>
+          <div id="exifList" class="list exif-list"></div>
+          <div class="row actions">
+            <button type="button" class="btn primary" id="exifSave">save camera info</button>
+            <button type="button" class="btn" id="exifCancel">cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
         <div class="panelhead">
           <span>~/admin/photos</span>
           <span class="seg" id="photoCatTabs">
@@ -261,6 +282,7 @@
 <datalist id="dlArtists"></datalist>
 
 <script src="../js/markdown.js"></script>
+<script src="../js/scroller.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>

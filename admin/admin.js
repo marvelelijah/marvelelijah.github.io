@@ -420,9 +420,22 @@ function exifDate(x){
   const m = x && String(x.date).match(/^(\d{4}):(\d{2}):(\d{2})(?: (\d{2}):(\d{2}):(\d{2}))?/);
   return m ? (m[1] + '-' + m[2] + '-' + m[3] + (m[4] ? ' ' + m[4] + ':' + m[5] + ':' + m[6] : '')) : '';
 }
+// photo names start with the date: "06-30-26 …" is month-day-year (June 30, 2026).
+// If the first number can't be a month (e.g. "30-06-26") it's read as day-month-year.
 function dateFromName(name){
-  const m = String(name).match(/^(\d{2})-(\d{2})-(\d{2})/);
-  return m ? ('20' + m[3] + '-' + m[1] + '-' + m[2]) : '';
+  const m = String(name || '').match(/^(\d{1,2})[-.](\d{1,2})[-.](\d{2}|\d{4})(?!\d)/);
+  if(!m) return '';
+  let mo = Number(m[1]), d = Number(m[2]);
+  if(mo > 12 && d <= 12){ const t = mo; mo = d; d = t; }
+  if(mo < 1 || mo > 12 || d < 1 || d > 31) return '';
+  const y = m[3].length === 2 ? '20' + m[3] : m[3];
+  return y + '-' + String(mo).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+}
+// the date from the name, plus the exact time from the camera when it's the same day
+function bestDate(name, exif){
+  const fromName = dateFromName(name), fromCam = exifDate(exif);
+  if(fromName) return (fromCam && fromCam.slice(0, 10) === fromName) ? fromCam : fromName;
+  return fromCam;
 }
 
 /* =====================================================================
@@ -559,6 +572,10 @@ function photoFieldsUI(v){
   const sync = () => { filmOnly.hidden = (node.querySelector('input[name="' + n + 'cat"]:checked') || {}).value !== 'film'; };
   catBoxes.addEventListener('change', sync);
   sync();
+  const nameIn = node.querySelector('#' + n + 'file'), dateIn = node.querySelector('#' + n + 'date');
+  let autoDate = dateIn.value === dateFromName(nameIn.value) || !dateIn.value;
+  dateIn.addEventListener('input', () => { autoDate = !dateIn.value; });
+  nameIn.addEventListener('input', () => { const d = dateFromName(nameIn.value); if(autoDate && d) dateIn.value = d; });
   const time = (v.date || '').slice(10); // keep the exact time from the camera, if there was one
   return {
     node,
@@ -613,7 +630,7 @@ async function addPhotoCard(file){
   const v = {
     cat: fromCamera ? 'digital' : 'film',
     file: file.name,
-    date: (fromCamera && exifDate(exif)) || dateFromName(file.name) || '',
+    date: bestDate(file.name, fromCamera ? exif : null),
   };
   if(fromCamera){
     v.camera = prettyCamera(exif);
@@ -715,7 +732,7 @@ let dialogState = null;
 function openPhotoDialog(cat, id){
   const p = content.photos[cat].find(x => x.id === id);
   if(!p) return;
-  const ui = photoFieldsUI(Object.assign({ cat }, p, { file: p.displayName || p.file }));
+  const ui = photoFieldsUI(Object.assign({ cat }, p, { file: p.displayName || p.file, date: p.date || dateFromName(p.file) }));
   dialogState = { cat, id, ui };
   $('#photoDialogTitle').textContent = 'edit · ' + (p.displayName || p.file);
   const body = $('#photoDialogBody');
@@ -763,6 +780,90 @@ $('#photoDialogDelete').addEventListener('click', async () => {
       return files;
     });
     closeDialog();
+  }catch(e){}
+});
+
+/* =====================================================================
+   camera info from original files (for photos already on the site)
+   ===================================================================== */
+let exifMatches = [];
+const exifDrop = $('#exifDrop'), exifInput = $('#exifFiles');
+exifDrop.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); exifInput.click(); } });
+exifInput.addEventListener('change', () => { readOriginals(exifInput.files); exifInput.value = ''; });
+['dragenter', 'dragover'].forEach(t => exifDrop.addEventListener(t, e => { e.preventDefault(); exifDrop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => exifDrop.addEventListener(t, e => { e.preventDefault(); exifDrop.classList.remove('over'); }));
+exifDrop.addEventListener('drop', e => { if(e.dataTransfer && e.dataTransfer.files) readOriginals(e.dataTransfer.files); });
+$('#exifCancel').addEventListener('click', () => { exifMatches = []; $('#exifResult').hidden = true; });
+
+const baseName = n => String(n || '').toLowerCase().replace(/\.[a-z0-9]+$/i, '').trim();
+
+async function readOriginals(list){
+  if(!content){ log('connect first', 'err'); return; }
+  const files = Array.from(list || []).filter(f => /\.(jpe?g)$/i.test(f.name) || f.type === 'image/jpeg');
+  if(!files.length){ log('drop JPEG originals (the camera info lives in JPEGs)', 'err'); return; }
+  // every photo on the site, by name
+  const byName = new Map();
+  CATS.forEach(cat => content.photos[cat].forEach(p => {
+    [p.file, p.displayName].filter(Boolean).forEach(nm => { if(!byName.has(baseName(nm))) byName.set(baseName(nm), { cat, id: p.id, p }); });
+  }));
+  const line = log('reading ' + files.length + ' files…', 'dim');
+  const matches = [], missing = [], noInfo = [];
+  for(let i = 0; i < files.length; i++){
+    const f = files[i];
+    if(i % 10 === 0) line.lastChild.textContent = 'reading ' + (i + 1) + ' of ' + files.length + '…';
+    const hit = byName.get(baseName(f.name));
+    if(!hit){ missing.push(f.name); continue; }
+    let x = null;
+    try{ x = readExif(await f.slice(0, 512 * 1024).arrayBuffer()); }catch(e){}
+    const scanner = x && SCANNER_HINTS.test([x.make, x.model, x.software].join(' '));
+    if(!x || scanner || (!x.exposure && !x.fnumber && !x.iso && !x.model)){ noInfo.push(f.name); continue; }
+    const exif = {};
+    if(x.exposure) exif.shutter = fmtShutter(x.exposure);
+    if(x.fnumber) exif.f = fmtNum(x.fnumber);
+    if(x.iso) exif.iso = x.iso;
+    if(x.focal) exif.focal = Number(fmtNum(x.focal));
+    matches.push({ cat: hit.cat, id: hit.id, name: hit.p.displayName || hit.p.file, exif,
+      camera: prettyCamera(x), lens: prettyLens(x), date: bestDate(hit.p.file, x), had: !!hit.p.exif });
+  }
+  line.lastChild.textContent = 'read ' + files.length + ' files';
+  exifMatches = matches;
+  $('#exifSummary').innerHTML = '';
+  $('#exifSummary').appendChild(el('span', { text: matches.length + ' matched' + (matches.length ? ' ✓' : '') }));
+  if(noInfo.length) $('#exifSummary').appendChild(el('span', { class: 'dim', text: '· ' + noInfo.length + ' had no camera info' }));
+  if(missing.length) $('#exifSummary').appendChild(el('span', { class: 'dim', text: '· ' + missing.length + " didn't match any photo on the site" }));
+  const lst = $('#exifList');
+  lst.innerHTML = '';
+  matches.forEach(m => lst.appendChild(el('div', { class: 'item' },
+    el('div', { class: 'item-main' },
+      el('div', { class: 'item-title', text: m.name + (m.had ? '' : '  (new info)') }),
+      el('div', { class: 'item-sub new', text: [m.camera, m.lens, m.exif.shutter, m.exif.f && 'f/' + m.exif.f, m.exif.iso && 'iso ' + m.exif.iso, m.exif.focal && m.exif.focal + 'mm'].filter(Boolean).join(' · ') })))));
+  missing.slice(0, 50).forEach(nm => lst.appendChild(el('div', { class: 'item' }, el('div', { class: 'item-main' },
+    el('div', { class: 'item-sub miss', text: nm + ' — no photo with this name on the site' })))));
+  $('#exifSave').textContent = 'save camera info for ' + matches.length + ' photo' + (matches.length === 1 ? '' : 's');
+  $('#exifSave').disabled = !matches.length;
+  $('#exifResult').hidden = false;
+}
+
+$('#exifSave').addEventListener('click', async () => {
+  const items = exifMatches.slice();
+  if(!items.length) return;
+  const gear = $('#exifReplaceGear').checked;
+  try{
+    await commit('admin: add camera info to ' + items.length + ' photos', (c) => {
+      let n = 0;
+      items.forEach(it => {
+        const p = (c.photos[it.cat] || []).find(x => x.id === it.id);
+        if(!p) return;
+        // only camera fields change; descriptions and everything else are left alone
+        if(Object.keys(it.exif).length) p.exif = Object.assign({}, p.exif || {}, it.exif);
+        if(gear && it.camera) p.camera = it.camera;
+        if(gear && it.lens) p.lens = it.lens;
+        if(it.date && (!p.date || p.date.slice(0, 10) === it.date.slice(0, 10))) p.date = it.date;
+        n++;
+      });
+      log('updated ' + n + ' photos', 'dim');
+    });
+    exifMatches = []; $('#exifResult').hidden = true;
   }catch(e){}
 });
 
