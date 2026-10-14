@@ -1453,11 +1453,13 @@ window.SITE_CONTENT = {
     "date": "2023-09-18",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
-    "description": "Two men holding hands.",
     "exif": {
      "shutter": "1/13s",
-     "iso": 800
-    }
+     "f": "4",
+     "iso": 800,
+     "focal": 6.5
+    },
+    "description": "Two men holding hands."
    },
    {
     "id": "1lpw0oqXAySt75vhWZ1i9OpHkwjs5-OFA",
