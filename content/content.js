@@ -571,13 +571,13 @@ window.SITE_CONTENT = {
     "date": "2026-10-09 22:22:42",
     "camera": "sony a7c",
     "lens": "sony fe 24mm f/2.8 g",
-    "description": "Man on right was named Cash, man on left was named Lincoln. True story.",
     "exif": {
      "shutter": "1/160s",
      "f": "2.8",
      "iso": 320,
      "focal": 24
-    }
+    },
+    "description": "Man on right was named Cash, man on left was named Lincoln. True story."
    },
    {
     "id": "1a6T3O3I5AGR4cMEmwEq9spj3i1HG7ggJ",
