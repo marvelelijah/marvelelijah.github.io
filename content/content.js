@@ -1453,13 +1453,17 @@ window.SITE_CONTENT = {
     "date": "2023-09-18",
     "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
-    "description": "Two men holding hands."
+    "description": "Two men holding hands.",
+    "exif": {
+     "shutter": "1/13s",
+     "iso": 800
+    }
    },
    {
     "id": "1lpw0oqXAySt75vhWZ1i9OpHkwjs5-OFA",
     "file": "10-31-23 (1).jpg",
     "date": "2023-10-31",
-    "camera": "canon eos m50m2",
+    "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "That one guy.",
     "exif": {
@@ -1471,7 +1475,7 @@ window.SITE_CONTENT = {
     "id": "1hGPXxNXOSCgF3QwcsdjkP172rEIRYEX6",
     "file": "10-31-23 (2).jpg",
     "date": "2023-10-31",
-    "camera": "canon eos m50m2",
+    "camera": "canon eos m50 mark ii",
     "lens": "meike mk-6.5mm f/2",
     "description": "Checkmate.",
     "exif": {

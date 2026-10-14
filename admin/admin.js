@@ -394,7 +394,8 @@ function prettyCamera(x){
   if(!x || !x.model) return '';
   let make = x.make.toLowerCase().replace(/corporation|co\.,? ?ltd\.?|inc\.?/g, '').trim();
   if(make.includes('sony')) return 'sony ' + (SONY_MODELS[x.model.toUpperCase()] || x.model.toLowerCase());
-  let model = x.model.toLowerCase();
+  // Canon writes "EOS M50m2" for the M50 Mark II, "EOS R6m2" for the R6 Mark II, etc.
+  let model = x.model.toLowerCase().replace(/m([2-5])$/, (m0, n) => ' mark ' + ['', '', 'ii', 'iii', 'iv', 'v'][Number(n)]);
   if(make === 'nikon corporation' || make.startsWith('nikon')) make = 'nikon';
   if(make.startsWith('fujifilm')) make = 'fujifilm';
   if(make.startsWith('olympus') || make.startsWith('om digital')) make = 'om system';
