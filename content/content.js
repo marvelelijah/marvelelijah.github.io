@@ -478,17 +478,6 @@ window.SITE_CONTENT = {
     "description": "This belonged to my first roll of film. Nice shot."
    },
    {
-    "id": "1If-Wnan5Lm52a_Nza6MMZO4swXLhVoXp",
-    "file": "12-20-25 (4).png",
-    "date": "2025-12-20",
-    "displayName": "12-20-25_Portra800 (4).png",
-    "camera": "canon eos 650",
-    "lens": "canon ef 50mm f/1.4",
-    "film": "kodak portra 800",
-    "format": "35mm",
-    "description": "Cows."
-   },
-   {
     "id": "1Lu8PjPiavgmJL8UdiFjA0d7okzPYCNQ_",
     "file": "12-15-25 (1).jpg",
     "date": "2025-12-15",
