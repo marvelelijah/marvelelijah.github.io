@@ -237,6 +237,7 @@
     -webkit-touch-callout:none;
   }
   .lightbox-image.zoomed{ transition:none; }
+  html.hide-photo-info .lightbox-info{ display:none; }
   .lightbox-info{
     flex:none;
     width:240px;
@@ -1319,6 +1320,14 @@
     '09-13-26 (69).jpg': 'Big fan of this photo op, I intend to shoot there every visit to Universal Studios.',
   };
 
+  // "06-30-26_CineStill500T (34).jpg" -> 260630.0034, so photos sort by date, then frame
+  function photoSortKey(name){
+    const m = name.match(/^(\d{2})-(\d{2})-(\d{2})/);
+    if(!m) return 0;
+    const n = name.match(/\((\d+)\)/);
+    return Number(m[3] + m[1] + m[2]) + (n ? Number(n[1]) / 10000 : 0);
+  }
+
   function buildPhotoFiles(entries, mode){
     const files = {};
     entries.forEach(([id, filename], i) => {
@@ -1344,6 +1353,7 @@
       files['p' + String(i).padStart(3, '0') + '.photo'] = {
         type:'photo',
         filename: (filmInfo && filmInfo.displayName) ? filmInfo.displayName : filename,
+        sortKey: photoSortKey(filename),
         camera: camera,
         lens: lens,
         film: film,
@@ -3096,8 +3106,8 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     section.id = 'gallery-section-' + label;
     section.appendChild(el('div', 'gallery-section-title', esc(label + '/')));
     const grid = el('div', 'gallery-grid');
-    // a fresh order every time the gallery opens
-    const list = shuffled(Object.keys(folderNode.files).map(k => folderNode.files[k]));
+    // order follows settings > gallery: a fresh shuffle each time, or by date
+    const list = orderPhotos(Object.keys(folderNode.files).map(k => folderNode.files[k]));
     list.forEach((photo, i) => {
       const thumb = el('button', 'gallery-thumb');
       thumb.type = 'button';
@@ -3120,6 +3130,25 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     return section;
   }
 
+  let photoOrder = 'shuffle';
+  function orderPhotos(list){
+    if(photoOrder === 'newest') return list.slice().sort((a, b) => (b.sortKey || 0) - (a.sortKey || 0));
+    if(photoOrder === 'oldest') return list.slice().sort((a, b) => (a.sortKey || 0) - (b.sortKey || 0));
+    return shuffled(list);
+  }
+  function setPhotoOrder(v, quiet){
+    photoOrder = v;
+    // re-lay an open gallery so the change shows straight away
+    if(!quiet && currentGalleryPath && appShell.classList.contains('gallery-open')) openGallery(currentGalleryPath);
+    if(!quiet) refreshSettings();
+  }
+  let showPhotoInfo = true;
+  function setPhotoInfo(on, quiet){
+    showPhotoInfo = !!on;
+    document.documentElement.classList.toggle('hide-photo-info', !showPhotoInfo);
+    if(!quiet) refreshSettings();
+  }
+
   function shuffled(arr){
     const a = arr.slice();
     for(let i = a.length - 1; i > 0; i--){
@@ -3133,7 +3162,8 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     galleryBody.innerHTML = '';
     const node = resolveDirNode(path);
     // categories appear in a new order each time too
-    const sectionKeys = shuffled(Object.keys(node.files).filter(k => node.files[k].type === 'dir'));
+    const dirKeys = Object.keys(node.files).filter(k => node.files[k].type === 'dir');
+    const sectionKeys = photoOrder === 'shuffle' ? shuffled(dirKeys) : dirKeys;
 
     if(sectionKeys.length > 1){
       const jumpRow = el('div', 'gallery-jump-row');
@@ -3416,7 +3446,15 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
 
   /* ---------- lightbox slideshow ---------- */
   const lightboxPlay = document.getElementById('lightboxPlay');
-  const SLIDE_MS = 4500;
+  const SLIDE_SPEEDS = { slow:7000, normal:4500, fast:2500 };
+  let slideSpeed = 'normal';
+  let SLIDE_MS = SLIDE_SPEEDS.normal;
+  function setSlideSpeed(v, quiet){
+    slideSpeed = SLIDE_SPEEDS[v] ? v : 'normal';
+    SLIDE_MS = SLIDE_SPEEDS[slideSpeed];
+    if(slideTimer) startSlideshow();
+    if(!quiet) refreshSettings();
+  }
   let slideTimer = null;
   let slideBarAnim = null;
   function runSlideBar(){
@@ -3776,6 +3814,27 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     viewWin.appendChild(colRow);
     colB.appendChild(viewWin);
 
+    // window: gallery (order, photo info, slideshow speed)
+    const galWin = el('div', 'settings-win settings-gallery');
+    galWin.appendChild(el('div', 'settings-title', esc('gallery')));
+    const choiceRow = (label, opts, onPick) => {
+      const row = el('div', 'set-row');
+      row.appendChild(el('span', 'set-row-name', esc(label)));
+      const btns = el('div', 'set-btns');
+      const map = opts.map(([val, text]) => {
+        const b = settingsBtn(text, () => onPick(val));
+        btns.appendChild(b);
+        return { val, b };
+      });
+      row.appendChild(btns);
+      galWin.appendChild(row);
+      return map;
+    };
+    const orderMap = choiceRow('photo order', [['shuffle','shuffle'], ['newest','newest'], ['oldest','oldest']], v => setPhotoOrder(v));
+    const infoMap = choiceRow('photo info', [[true,'show'], [false,'hide']], v => setPhotoInfo(v));
+    const speedMap = choiceRow('slideshow', [['slow','slow'], ['normal','normal'], ['fast','fast']], v => setSlideSpeed(v));
+    colB.appendChild(galWin);
+
     // window 3: pop-out physics (pop-outs only exist on the desktop layout)
     let physMap = [], sliders = [];
     if(!isNarrow()){
@@ -3807,7 +3866,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       }, REDUCED_MOTION ? 0 : 380);
     });
 
-    settingsEls = { wrap, btn, chev, drop, fmtMap, physMap, sliders, a11yBtn, tsVal, colMap };
+    settingsEls = { wrap, btn, chev, drop, fmtMap, physMap, sliders, a11yBtn, tsVal, colMap, orderMap, infoMap, speedMap };
     applySettingsOpen();
     refreshSettings();
     return wrap;
@@ -3826,6 +3885,14 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     savePrefs();
     if(!settingsEls) return;
     settingsEls.tsVal.textContent = Math.round(textScale * 100) + '%';
+    const mark = (map, cur) => map.forEach(({ val, b }) => {
+      const on = val === cur;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    mark(settingsEls.orderMap, photoOrder);
+    mark(settingsEls.infoMap, showPhotoInfo);
+    mark(settingsEls.speedMap, slideSpeed);
     settingsEls.colMap.forEach(({ n, b }) => {
       const on = currentCols() === n;
       b.classList.toggle('on', on);
@@ -3881,12 +3948,16 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     if(!prefsReady) return;
     const theme = THEMES.find(t => document.body.classList.contains('theme-' + t)) || null;
     const fx = Object.keys(FX_LINES).filter(f => document.documentElement.classList.contains('fx-' + f));
-    try{ localStorage.setItem(PREFS_KEY, JSON.stringify({ theme, fx, ts: textScale, cols: galleryCols })); }catch(e){}
+    try{ localStorage.setItem(PREFS_KEY, JSON.stringify({ theme, fx, ts: textScale, cols: galleryCols,
+      order: photoOrder, info: showPhotoInfo, speed: slideSpeed })); }catch(e){}
   }
   function restorePrefs(){
     const P = loadPrefs();
     if(P.ts && TS_STEPS.indexOf(P.ts) >= 0) setTextScale(P.ts, true);
     if(P.cols && [1, 2, 3, 4].indexOf(P.cols) >= 0) setCols(P.cols, true);
+    if(['shuffle', 'newest', 'oldest'].indexOf(P.order) >= 0) setPhotoOrder(P.order, true);
+    if(P.info === false) setPhotoInfo(false, true);
+    if(P.speed) setSlideSpeed(P.speed, true);
     if(!simpleMode){
       if(P.theme && THEMES.indexOf(P.theme) >= 0) applyTheme(P.theme, true);
       (P.fx || []).forEach(f => { if(FX_LINES[f]) toggleFx(f, true); });
