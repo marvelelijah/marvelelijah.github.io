@@ -2363,5 +2363,8 @@ window.SITE_CONTENT = {
   },
   "equipment": "CINEMA RIG\n──────────\nCAMERA    Sony Alpha FX3\nFORMAT    full-frame digital\nLENS      Sony FE 16-35mm f/2.8 G\n\n\nDIGITAL PHOTOGRAPHY\n───────────────────\nCAMERA    Sony A7C\nFORMAT    full-frame digital\nLENSES    Sony FE 40mm f/2.5 G, Sony FE 24mm f/2.8 G\n\n\nFILM PHOTOGRAPHY\n────────────────\nCAMERA    Canon EOS 650\nFORMAT    35mm film\nLENS      Canon EF 50mm f/1.4\n\nCAMERA    Canon AE-1 Program\nFORMAT    35mm film\nLENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4",
   "contact": "EMAIL      elijah.m.halford@gmail.com\n\nINSTAGRAM  @elijahhalford\n\nPHOTO IG   @youwontgetwhatyouwant\n\nYOUTUBE    youtube.com/elijahhalford"
+ },
+ "analytics": {
+  "beacon": "d86ea745180543d19b861c43a04df9ab"
  }
 };
