@@ -50,7 +50,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=VT323&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#000000;
@@ -66,7 +66,7 @@
   body{
     background:var(--bg);
     color:var(--fg);
-    font-family:'JetBrains Mono', ui-monospace, monospace;
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
     font-size:calc(15px * var(--ts, 1));
     line-height:1.65;
     -webkit-font-smoothing:antialiased;
@@ -768,7 +768,7 @@
   body.theme-geocity .panelhead, body.theme-geocity .topbar{ text-decoration:underline wavy var(--media); text-underline-offset:6px; }
   body.theme-crt{
     text-shadow:0 0 5px currentColor;
-    font-family:'VT323', 'JetBrains Mono', ui-monospace, monospace;
+    font-family:'VT323', 'IBM Plex Mono', ui-monospace, monospace;
     font-size:19px;
     line-height:1.45;
   }
@@ -855,7 +855,10 @@
   /* ---- blog posts ---- */
   .post{ max-width:68ch; }
   .post-title{ font-size:1.25em; font-weight:normal; color:var(--fg); margin:4px 0 2px; }
-  .post-date{ color:var(--fg-dim); font-size:0.85em; margin-bottom:14px; }
+  .post-date{ color:var(--fg-dim); font-size:0.85em; margin-bottom:14px; display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 14px; }
+  .post-share{ font:inherit; color:var(--dir); background:none; border:1px solid var(--line); padding:1px 8px; cursor:pointer; transition:color 0.2s, border-color 0.2s; }
+  .post-share:hover, .post-share:focus-visible{ color:var(--fg); border-color:var(--fg-dim); }
+  .post-share.is-done{ color:var(--fg); }
   .post-cover{ display:block; width:100%; height:auto; margin:0 0 16px; border:1px solid var(--line); }
   .post-body{ line-height:1.75; }
   .post-body p{ margin:0 0 1em; }
@@ -896,7 +899,7 @@
     color:#1a0033; border-color:#ff3fa4; font-weight:bold;
   }
   .listing .set-btn.look-crt{
-    font-family:'VT323', 'JetBrains Mono', ui-monospace, monospace; font-size:1.2em; line-height:1.05;
+    font-family:'VT323', 'IBM Plex Mono', ui-monospace, monospace; font-size:1.2em; line-height:1.05;
     background:#020b04; color:#5dff8f; border-color:#2d9a55; text-shadow:0 0 5px #5dff8f;
   }
   .listing .set-btn.look-darkroom{
@@ -1100,6 +1103,7 @@
   // All editable content (photos, time well spent links, music, blog posts) lives in
   // content/content.js, which the admin page (/admin) reads and writes.
   const C = window.SITE_CONTENT || {};
+  const PAGES = Object.assign({ about: {}, equipment: '' }, C.pages || {});
   const CP = C.photos || {};
   const SNOOP_COMMENTS = [' well, this is awkward. ', ' fuuuuucccckkkkk. '];
   function insertSnoopComment(parent, beforeNode){
@@ -1257,13 +1261,24 @@
     });
     return files;
   }
+  // words a reader actually reads: markdown marks, pictures and link addresses don't count
+  function postWords(md){
+    const text = String(md || '')
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+      .replace(/[#>*`_~-]+/g, ' ');
+    return (text.match(/[\p{L}\p{N}][\p{L}\p{N}'’.-]*/gu) || []).length;
+  }
+
   function buildPostFiles(list){
     const files = {};
     (list || []).filter(p => p && p.title && !p.draft)
       .slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
       .forEach(p => {
-        files[uniqueKey(files, p.slug, '.post')] = { type:'post',
-          title: p.title, date: p.date || '', body: p.body || '', coverId: p.coverId || '' };
+        const words = postWords(p.body);
+        files[uniqueKey(files, p.slug, '.post')] = { type:'post', slug: p.slug,
+          title: p.title, date: p.date || '', body: p.body || '', coverId: p.coverId || '',
+          words, minutes: Math.max(1, Math.round(words / 230)) };
       });
     return files;
   }
@@ -1304,24 +1319,9 @@
   const FS = {
     'about.txt': { type:'about',
       gif: ABOUT_GIF_DATA_URI,
-      header:
-`NAME      Elijah Halford
-ROLE      Filmmaker / Editor
-BASED     Orlando, Florida
-WORKING   since 2022`,
-      body:
-`American born vision. Work that spans the sunshine state but
-will reach each corner of the globe soon enough.
-
-I capture energy, memories in time that can be played again
-and again. Gone are the days where you can't remember the
-color of your tie when you graduated, that awesome concert
-you played in or the spontaneous trip to waffle house after
-getting married to the love of your life. Hire me and my
-camera, you'll never forget again.
-
-FORMATS     digital, 35mm
-AVAILABLE   events, documentary, editorial` },
+      // edited in /admin → about.txt
+      header: PAGES.about.header || '',
+      body: PAGES.about.body || '' },
 
     'contact.txt': { type:'text', content:
 `EMAIL      elijah.m.halford@gmail.com
@@ -1333,30 +1333,7 @@ PHOTO IG   @youwontgetwhatyouwant
 YOUTUBE    youtube.com/elijahhalford` },
 
     'work': { type:'dir', files:{
-      'equipment.txt': { type:'text', content:
-`CINEMA RIG
-──────────
-CAMERA    Sony Alpha FX3
-FORMAT    full-frame digital
-LENS      Sony FE 16-35mm f/2.8 G
-
-
-DIGITAL PHOTOGRAPHY
-───────────────────
-CAMERA    Sony A7C
-FORMAT    full-frame digital
-LENSES    Sony FE 40mm f/2.5 G, Sony FE 24mm f/2.8 G
-
-
-FILM PHOTOGRAPHY
-────────────────
-CAMERA    Canon EOS 650
-FORMAT    35mm film
-LENS      Canon EF 50mm f/1.4
-
-CAMERA    Canon AE-1 Program
-FORMAT    35mm film
-LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
+      'equipment.txt': { type:'text', content: PAGES.equipment || '' }, // edited in /admin → equipment.txt
       'photography': { type:'dir', files:{
         'film': { type:'dir', files: buildPhotoFiles(CP.film) },
         'digital': { type:'dir', files: buildPhotoFiles(CP.digital) },
@@ -1365,9 +1342,9 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       'videography': { type:'dir', files: buildVideoFiles(VIDEOS) },
     }},
 
-    'time-well-spent': { type:'dir', files: buildLinkFiles(C.links) },
     'blog': { type:'dir', files: buildPostFiles(C.blog) },
     'music': { type:'dir', files: buildAlbumFiles(C.music) },
+    'time-well-spent': { type:'dir', files: buildLinkFiles(C.links) },
   };
 
   let cwd = '';
@@ -2305,11 +2282,45 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     return months[Number(m[2]) - 1] + ' ' + Number(m[3]) + ', ' + m[1];
   }
 
+  // every published post has its own page at /blog/<slug>/ (written by /admin) that
+  // carries the post's title and cover for link previews, then opens it here
+  const SITE_URL = 'https://elijahhalford.com';
+  function postUrl(node){ return SITE_URL + '/blog/' + node.slug + '/'; }
+  async function copyText(t){
+    try{ await navigator.clipboard.writeText(t); return true; }catch(e){}
+    const ta = document.createElement('textarea');
+    ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0;left:-9999px';
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try{ ok = document.execCommand('copy'); }catch(e){}
+    ta.remove(); return ok;
+  }
+  async function sharePost(node, btn){
+    const url = postUrl(node);
+    if(navigator.share && matchMedia('(pointer: coarse)').matches){
+      try{ await navigator.share({ title: node.title, url }); return; }
+      catch(e){ if(e && e.name === 'AbortError') return; }
+    }
+    const ok = await copyText(url);
+    btn.textContent = ok ? 'link copied ✓' : url;
+    btn.classList.add('is-done');
+    clearTimeout(btn._t);
+    btn._t = setTimeout(() => { btn.textContent = 'share ↗'; btn.classList.remove('is-done'); }, ok ? 2200 : 8000);
+  }
+
   function printPostFile(node, originCmd){
     const body = printPanel(node.title, true, originCmd);
     const art = el('article', 'post');
     art.appendChild(el('h1', 'post-title', esc(node.title)));
-    if(node.date) art.appendChild(el('div', 'post-date', esc(postDateLabel(node.date))));
+    const meta = el('div', 'post-date');
+    meta.appendChild(document.createTextNode([postDateLabel(node.date), node.words.toLocaleString('en-US') + ' words', node.minutes + ' min read'].filter(Boolean).join(' · ')));
+    if(node.slug){
+      const share = el('button', 'post-share', 'share ↗');
+      share.type = 'button';
+      share.setAttribute('aria-label', 'share a link to this post');
+      share.addEventListener('click', () => sharePost(node, share));
+      meta.appendChild(share);
+    }
+    art.appendChild(meta);
     if(node.coverId){
       const img = document.createElement('img');
       img.className = 'post-cover';
@@ -2419,7 +2430,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     box.appendChild(rowButton('about.txt', 'cat about.txt', '', 'text'));
     box.appendChild(rowButton('contact.txt', 'cat contact.txt', '', 'text'));
     box.appendChild(rowButton('work/', 'ls work', 'tag-dir', 'dir · 3 items'));
-    ['time-well-spent', 'blog', 'music'].forEach(d => {
+    ['blog', 'music', 'time-well-spent'].forEach(d => {
       const n = Object.keys(FS[d].files).length;
       box.appendChild(rowButton(d + '/', 'ls ' + d, 'tag-dir', 'dir · ' + n + ' item' + (n === 1 ? '' : 's')));
     });
@@ -2456,7 +2467,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
         thumbEl = makeRowThumb(f.title, f.cover);
       } else if(f.type === 'post'){
         name = f.title;
-        kind = postDateLabel(f.date) || 'post';
+        kind = [postDateLabel(f.date), f.minutes + ' min read'].filter(Boolean).join(' · ');
         cmd = 'cat ' + pathStr + '/' + key;
         tagCls = '';
       } else if(f.type === 'link'){
@@ -3701,6 +3712,16 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     printRootListing();
     focusInput();
     runBootFlicker();
+    openLinkedPost();
+  }
+
+  function openLinkedPost(){
+    let slug = null;
+    try{ slug = new URLSearchParams(location.search).get('post'); }catch(e){}
+    if(!slug) return;
+    const posts = FS.blog.files;
+    const key = Object.keys(posts).find(k => posts[k].slug === slug);
+    setTimeout(() => runCommand(key ? 'cat blog/' + key : 'ls blog'), 350);
   }
 
   const onLayoutChange = () => updatePrompt();

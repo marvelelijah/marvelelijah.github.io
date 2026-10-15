@@ -129,6 +129,9 @@ function parseContent(text){
   ['film', 'digital', 'stills'].forEach(k => { c.photos[k] = c.photos[k] || []; });
   c.links = c.links || []; c.music = c.music || []; c.blog = c.blog || []; c.videos = c.videos || [];
   c.files = c.files || {};   // files attached to blog posts, by name in files/
+  c.pages = c.pages || {};
+  c.pages.about = c.pages.about || { header: '', body: '' };
+  if(typeof c.pages.equipment !== 'string') c.pages.equipment = '';
   return c;
 }
 function serializeContent(c){ return CONTENT_HEAD + JSON.stringify(c, null, 1) + ';\n'; }
@@ -502,7 +505,7 @@ $('#disconnectBtn').addEventListener('click', () => {
 });
 
 window.addEventListener('beforeunload', e => {
-  if(photoQueue.length || postDirty() || busyCount > 0){ e.preventDefault(); e.returnValue = ''; }
+  if(photoQueue.length || postDirty() || pagesDirty() || busyCount > 0){ e.preventDefault(); e.returnValue = ''; }
 });
 
 /* =====================================================================
@@ -522,11 +525,13 @@ function renderAll(){
   renderLinks();
   renderPosts();
   renderAlbums();
+  renderPages();
 }
 
 /* placeholder; the section code below fills these in */
 let photoQueue = [];
 let postDirty = () => false;
+let pagesDirty = () => false;
 const FILM_STOCKS = ['kodak portra 160', 'kodak portra 400', 'kodak portra 800', 'kodak gold 200', 'kodak ultramax 400',
   'kodak ektar 100', 'kodak vision3 500t', 'kodak vision3 250d', 'kodak tri-x 400', 'cinestill 50d', 'cinestill 400d',
   'cinestill 800t', 'cinestill 500t', 'fujifilm 400', 'fujifilm superia 400', 'ilford hp5 plus 400', 'ilford delta 100',
@@ -1015,8 +1020,10 @@ function renderVideos(){
     img.src = v.thumbId ? thumbUrl(v.thumbId, 640) : ytThumb(v.id);
     list.appendChild(el('div', { class: 'item' }, img,
       el('div', { class: 'item-main' },
-        el('div', { class: 'item-title' }, v.title, v.pinned ? el('span', { class: 'badge', text: 'demo reel' }) : null),
-        el('div', { class: 'item-sub', text: [label[v.category] || v.category, v.date].filter(Boolean).join(' · ') })),
+        el('div', { class: 'item-title' }, v.title,
+          v.category || !v.pinned ? el('span', { class: 'badge sec', text: label[v.category] || v.category || 'no section' }) : null,
+          v.pinned ? el('span', { class: 'badge', text: 'demo reel' }) : null),
+        el('div', { class: 'item-sub', text: v.date || '' })),
       el('div', { class: 'item-actions' },
         el('button', { type: 'button', text: 'open', onclick: () => window.open('https://www.youtube.com/watch?v=' + v.id, '_blank', 'noopener') }),
         el('button', { type: 'button', text: 'edit', onclick: () => { loadVideo(v); videoForm.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }),
@@ -1191,6 +1198,57 @@ $('#postCoverFile').addEventListener('change', e => {
 });
 $('#postCoverRemove').addEventListener('click', () => { post.cover.file = null; post.cover.img = null; post.cover.remove = true; showCover(); renderPreview(); });
 
+/* words a reader actually reads (same count as the site) */
+function postWords(md){
+  const text = String(md || '')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[#>*`_~-]+/g, ' ');
+  return (text.match(/[\p{L}\p{N}][\p{L}\p{N}'’.-]*/gu) || []).length;
+}
+function showPostStats(){
+  const w = postWords(postBody.value);
+  $('#postStats').textContent = w ? '· ' + w.toLocaleString('en-US') + ' word' + (w === 1 ? '' : 's') + ' · ' + Math.max(1, Math.round(w / 230)) + ' min read' : '';
+}
+
+/* Each published post gets a small page at blog/<slug>/index.html. It's what the share
+   button links to: link previews read its title, excerpt and cover, then it opens the
+   post on the site. */
+const SITE_URL = 'https://elijahhalford.com';
+const SITE_OG_IMAGE = SITE_URL + '/img/og-02-01-26.jpg';
+const postPagePath = slug => 'blog/' + slug + '/index.html';
+function postPageHtml(p, m){
+  const h = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const plain = String(p.body || '').replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/[#>*`_~]+/g, '').replace(/\s+/g, ' ').trim();
+  const desc = plain.length > 180 ? plain.slice(0, 177).replace(/\s+\S*$/, '') + '…' : plain;
+  let img = SITE_OG_IMAGE;
+  const e = p.coverId && m[p.coverId];
+  if(e){ const w = e.w.filter(x => x <= 1600).pop() || e.w[0]; img = SITE_URL + '/img/p/' + p.coverId + '-' + w + '.' + (e.x || 'webp'); }
+  const url = SITE_URL + '/blog/' + p.slug + '/', open = '/?post=' + encodeURIComponent(p.slug);
+  return '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n' +
+    '<!-- written by /admin: the share page for one blog post; it opens the post on the site -->\n' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+    '<title>' + h(p.title) + ' — Elijah Halford</title>\n' +
+    '<meta name="description" content="' + h(desc) + '">\n' +
+    '<link rel="canonical" href="' + url + '">\n' +
+    '<meta property="og:type" content="article">\n' +
+    '<meta property="og:site_name" content="elijah halford">\n' +
+    '<meta property="og:url" content="' + url + '">\n' +
+    '<meta property="og:title" content="' + h(p.title) + '">\n' +
+    '<meta property="og:description" content="' + h(desc) + '">\n' +
+    '<meta property="og:image" content="' + img + '">\n' +
+    (p.date ? '<meta property="article:published_time" content="' + h(p.date) + '">\n' : '') +
+    '<meta name="twitter:card" content="summary_large_image">\n' +
+    '<meta name="twitter:title" content="' + h(p.title) + '">\n' +
+    '<meta name="twitter:description" content="' + h(desc) + '">\n' +
+    '<meta name="twitter:image" content="' + img + '">\n' +
+    '<meta http-equiv="refresh" content="0; url=' + open + '">\n' +
+    '<script>location.replace(' + JSON.stringify(open) + ');</script>\n' +
+    '<style>body{background:#000;color:#D8D8D2;font:15px/1.6 "IBM Plex Mono",ui-monospace,monospace;padding:40px}a{color:#8FA88A}</style>\n' +
+    '</head>\n<body>\n<p>opening <a href="' + open + '">' + h(p.title) + '</a>…</p>\n</body>\n</html>\n';
+}
+
 function renderPreview(){
   let html = '<h2 style="color:var(--fg);margin-top:0">' + ($('#postTitle').value || 'untitled').replace(/[<>&]/g, '') + '</h2>';
   const c = post.cover;
@@ -1198,6 +1256,7 @@ function renderPreview(){
   else if(c.id && !c.remove) html += '<img class="post-img" src="' + thumbUrl(c.id, 960) + '" alt="">';
   html += window.renderMarkdown(postBody.value, { imgBase: '../' });
   postPreview.innerHTML = html;
+  showPostStats();
   // pictures not on the website yet: show the local copy
   postPreview.querySelectorAll('img.post-img').forEach(img => {
     const m = (img.getAttribute('src') || '').match(/img\/p\/([\w-]+)-\d+\.\w+$/);
@@ -1378,6 +1437,9 @@ postForm.addEventListener('submit', async e => {
         refsIn(old.body).forEach(id => { if(!used.has(id) && !others.has(id) && m[id]){ files.push(...imageFilesFor(id, m)); delete m[id]; } });
         files.push(...unusedFiles(c, [...fileRefsIn(old.body)].filter(n => !usedFiles.has(n)), idx));
       }
+      // the post's own page (what share links point to): only while it's published
+      if(!entry.draft){ entry.page = true; files.push({ path: postPagePath(entry.slug), blob: new Blob([postPageHtml(entry, m)], { type: 'text/html' }) }); }
+      else if(old && old.page) files.push({ path: postPagePath(entry.slug), delete: true });
       if(idx >= 0) c.blog[idx] = entry; else c.blog.unshift(entry);
       return files;
     });
@@ -1419,6 +1481,7 @@ function renderPosts(){
               const files = [];
               mine.forEach(id => { if(!others.has(id) && m[id]){ files.push(...imageFilesFor(id, m)); delete m[id]; } });
               files.push(...unusedFiles(c, [...fileRefsIn(target.body)], -1));
+              if(target.page) files.push({ path: postPagePath(target.slug), delete: true });
               return files;
             });
             if(post && post.slug === p.slug) loadPost(null);
@@ -1427,6 +1490,70 @@ function renderPosts(){
   });
 }
 loadPost(null);
+
+/* =====================================================================
+   about.txt + equipment.txt
+   ===================================================================== */
+const PAGES = {
+  about: { fields: ['#aboutHeader', '#aboutBody'], label: 'about.txt',
+    get: c => [c.pages.about.header || '', c.pages.about.body || ''],
+    set: (c, v) => { c.pages.about = { header: v[0], body: v[1] }; } },
+  equipment: { fields: ['#equipmentText'], label: 'equipment.txt',
+    get: c => [c.pages.equipment || ''],
+    set: (c, v) => { c.pages.equipment = v[0]; } },
+};
+const pageSaved = {};   // what's on the site, per page
+// tidy what's typed: no spaces at line ends, no blank lines at the very end
+const tidy = t => String(t).replace(/\r\n?/g, '\n').replace(/[ \t]+$/gm, '').replace(/\n+$/, '');
+const pageNow = name => PAGES[name].fields.map(f => $(f).value);
+const pageDirty = name => pageSaved[name] !== undefined && JSON.stringify(pageNow(name).map(tidy)) !== JSON.stringify(pageSaved[name].map(tidy));
+pagesDirty = () => Object.keys(PAGES).some(pageDirty);
+
+function previewPage(name){
+  const box = $('#' + name + 'Preview');
+  box.innerHTML = '';
+  const v = pageNow(name);
+  if(name === 'about'){
+    box.appendChild(el('img', { class: 'pv-gif', src: '../img/site/about.gif', alt: '' }));
+    box.appendChild(el('pre', { text: v[0] }));
+    const pre = el('pre');
+    const m = v[1].match(/\btie\b/);
+    if(m){
+      pre.append(v[1].slice(0, m.index), el('span', { class: 'tie', text: m[0], title: 'the hidden colour button' }), v[1].slice(m.index + m[0].length));
+    } else pre.textContent = v[1];
+    box.appendChild(pre);
+  } else box.appendChild(el('pre', { text: v[0] }));
+  $('#' + name + 'State').textContent = pageDirty(name) ? 'unsaved changes' : '';
+}
+function loadPage(name){
+  const v = PAGES[name].get(content);
+  pageSaved[name] = v;
+  PAGES[name].fields.forEach((f, i) => { $(f).value = v[i]; });
+  previewPage(name);
+}
+function renderPages(){
+  // never overwrite something being typed; otherwise show what's on the site
+  Object.keys(PAGES).forEach(name => { if(!pageDirty(name)) loadPage(name); else previewPage(name); });
+}
+Object.keys(PAGES).forEach(name => {
+  const pg = PAGES[name];
+  pg.fields.forEach(f => $(f).addEventListener('input', () => previewPage(name)));
+  $('#' + name + 'Revert').addEventListener('click', () => {
+    if(pageDirty(name) && !confirm('Undo your changes to ' + pg.label + '?')) return;
+    loadPage(name);
+  });
+  $('#' + name + 'Save').addEventListener('click', async () => {
+    const v = pageNow(name).map(tidy);
+    if(!v.join('').trim()){ log(pg.label + " can't be empty", 'err'); return; }
+    const btn = $('#' + name + 'Save');
+    btn.classList.add('is-busy');
+    try{
+      await commit('admin: edit ' + pg.label, c => { pg.set(c, v); });
+      loadPage(name);
+    }catch(e){}
+    finally{ btn.classList.remove('is-busy'); }
+  });
+});
 
 /* =====================================================================
    music: only asks for title, artist and cover; looks the rest up

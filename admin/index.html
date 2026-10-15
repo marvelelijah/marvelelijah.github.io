@@ -8,7 +8,7 @@
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <script>document.write('<link rel="stylesheet" href="admin.css?v=' + Math.floor(Date.now() / 60000) + '">');</script>
 </head>
 <body>
@@ -24,9 +24,11 @@
   <nav class="tabs" id="tabs" role="tablist">
     <button type="button" role="tab" data-tab="photos">photos</button>
     <button type="button" role="tab" data-tab="videos">videography</button>
-    <button type="button" role="tab" data-tab="links">time well spent</button>
     <button type="button" role="tab" data-tab="blog">blog</button>
     <button type="button" role="tab" data-tab="music">music</button>
+    <button type="button" role="tab" data-tab="links">time well spent</button>
+    <button type="button" role="tab" data-tab="about">about.txt</button>
+    <button type="button" role="tab" data-tab="equipment">equipment.txt</button>
     <button type="button" role="tab" data-tab="connect">connect</button>
   </nav>
 
@@ -233,7 +235,7 @@
             </div>
           </div>
           <div class="field">
-            <span class="label">post</span>
+            <span class="label">post <span class="dim" id="postStats"></span></span>
             <div class="toolbar" id="mdToolbar">
               <button type="button" id="postUndo" title="undo (Ctrl/⌘ Z)" aria-label="undo" disabled>↶</button>
               <button type="button" id="postRedo" title="redo (Ctrl/⌘ Shift Z)" aria-label="redo" disabled>↷</button>
@@ -267,6 +269,33 @@
     </section>
 
     <!-- ================= music ================= -->
+    <section class="view" data-view="about" hidden>
+      <div class="panel">
+        <div class="panelhead"><span>~/about.txt</span><span class="dim" id="aboutState"></span></div>
+        <p class="dim">Typed exactly as it shows on the site: spaces line the columns up, blank lines make gaps. The word <b>tie</b> in the text is the little hidden button that recolours the site, so keep one if you like it.</p>
+        <div class="field"><label for="aboutHeader">details · next to the picture</label><textarea id="aboutHeader" class="mono-edit" rows="5" wrap="off" spellcheck="false"></textarea></div>
+        <div class="field"><label for="aboutBody">text</label><textarea id="aboutBody" class="mono-edit" rows="16" wrap="off"></textarea></div>
+        <div class="field"><span class="label">preview</span><div class="page-preview" id="aboutPreview"></div></div>
+        <div class="row actions">
+          <button type="button" class="btn primary" id="aboutSave">save about.txt</button>
+          <button type="button" class="btn" id="aboutRevert">undo changes</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="equipment" hidden>
+      <div class="panel">
+        <div class="panelhead"><span>~/work/equipment.txt</span><span class="dim" id="equipmentState"></span></div>
+        <p class="dim">Typed exactly as it shows on the site: spaces line the columns up, blank lines make gaps.</p>
+        <div class="field"><label for="equipmentText">equipment</label><textarea id="equipmentText" class="mono-edit" rows="26" wrap="off" spellcheck="false"></textarea></div>
+        <div class="field"><span class="label">preview</span><div class="page-preview narrow" id="equipmentPreview"></div></div>
+        <div class="row actions">
+          <button type="button" class="btn primary" id="equipmentSave">save equipment.txt</button>
+          <button type="button" class="btn" id="equipmentRevert">undo changes</button>
+        </div>
+      </div>
+    </section>
+
     <section class="view" data-view="music" hidden>
       <div class="panel">
         <div class="panelhead"><span id="albumFormTitle">~/admin/music/new</span></div>

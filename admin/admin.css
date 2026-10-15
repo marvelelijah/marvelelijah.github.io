@@ -12,7 +12,7 @@
 html{ background:var(--bg); }
 body{
   background:var(--bg); color:var(--fg);
-  font-family:'JetBrains Mono', ui-monospace, monospace;
+  font-family:'IBM Plex Mono', ui-monospace, monospace;
   font-size:14px; line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
@@ -219,3 +219,13 @@ select{ appearance:none; background-image:linear-gradient(45deg, transparent 50%
   .cover-drop{ width:100%; height:auto; aspect-ratio:1/1; max-width:320px; }
   input, select, textarea{ font-size:16px; }
 }
+
+/* about.txt / equipment.txt editors */
+textarea.mono-edit{ white-space:pre; overflow-x:auto; tab-size:4; line-height:1.6; }
+.page-preview{ border:1px solid var(--line); padding:16px 18px; max-width:680px; overflow:hidden; }
+.page-preview.narrow{ max-width:470px; }
+.page-preview pre{ font:inherit; white-space:pre-wrap; margin:0; }
+.page-preview pre + pre{ margin-top:1.65em; }
+.page-preview .pv-gif{ float:right; width:120px; margin:0 0 10px 14px; image-rendering:pixelated; }
+.page-preview .tie{ color:var(--media); border-bottom:1px dotted currentColor; }
+.badge.sec{ border-color:var(--dir); color:var(--dir); }
