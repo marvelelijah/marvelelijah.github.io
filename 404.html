@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>not found — elijah halford</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#000; --fg:#D8D8D2; --fg-dim:#7A7A73; --dir:#8FA88A; --err:#C97B52; --line:#262622; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html, body{ height:100%; }
+  body{ background:var(--bg); color:var(--fg); font:15px/1.65 'IBM Plex Mono', ui-monospace, monospace; -webkit-font-smoothing:antialiased; }
+  main{ max-width:840px; margin:0 auto; padding:18px 20px; }
+  .top{ display:flex; justify-content:space-between; color:var(--fg-dim); padding:6px 0 14px; border-bottom:1px solid var(--line); }
+  .line{ margin-top:18px; word-break:break-all; }
+  .prompt{ color:var(--dir); }
+  .err{ color:var(--err); }
+  .dim{ color:var(--fg-dim); }
+  a{ color:var(--dir); text-underline-offset:3px; }
+  a:hover, a:focus-visible{ color:var(--fg); }
+  .cursor{ display:inline-block; width:0.6em; height:1.1em; vertical-align:-0.15em; background:var(--fg); animation:blink 1.1s steps(1) infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+  @media (prefers-reduced-motion: reduce){ .cursor{ animation:none; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><span>elijah@halford:tty01</span><span>video &amp; photo</span></div>
+  <p class="line"><span class="prompt">visitor@elijahhalford:~$</span> cd <span id="path">this-page</span></p>
+  <p class="line err">no such file or directory: <span id="path2">this-page</span></p>
+  <p class="line dim">it may have moved, or never existed.</p>
+  <p class="line"><a href="/">cd ~</a> &nbsp;<span class="dim">— back to the main menu</span></p>
+  <p class="line"><span class="prompt">visitor@elijahhalford:~$</span> <span class="cursor" aria-hidden="true"></span></p>
+</main>
+<script>
+  var p = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, '') || 'this-page';
+  document.getElementById('path').textContent = p;
+  document.getElementById('path2').textContent = p;
+</script>
+</body>
+</html>

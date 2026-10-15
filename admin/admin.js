@@ -132,6 +132,8 @@ function parseContent(text){
   c.pages = c.pages || {};
   c.pages.about = c.pages.about || { header: '', body: '' };
   if(typeof c.pages.equipment !== 'string') c.pages.equipment = '';
+  if(typeof c.pages.contact !== 'string') c.pages.contact = '';
+  c.analytics = c.analytics || {};   // { beacon: Cloudflare Web Analytics token, worker: stats Worker URL }
   return c;
 }
 function serializeContent(c){ return CONTENT_HEAD + JSON.stringify(c, null, 1) + ';\n'; }
@@ -162,6 +164,7 @@ async function loadData(){
   content = parseContent(ct);
   manifest = parseManifest(mt);
   renderAll();
+  refreshUndo();
 }
 
 /* One save = one commit. `build(content, manifest)` edits fresh copies of the data
@@ -180,6 +183,9 @@ function commit(message, build){
         const [ct, mt] = await Promise.all([readText(CONTENT_PATH, base), readText(MANIFEST_PATH, base)]);
         const c = parseContent(ct), m = parseManifest(mt);
         const extra = (await build(c, m)) || [];
+        // keep every share page in step with what this save changed
+        const taken = new Set(extra.map(f => f.path));
+        sharePageChanges(parseContent(ct), parseManifest(mt), c, m).forEach(f => { if(!taken.has(f.path)) extra.push(f); });
         const tree = [];
         for(const f of extra){
           if(f.delete){ tree.push({ path: f.path, mode: '100644', type: 'blob', sha: null }); continue; }
@@ -204,6 +210,8 @@ function commit(message, build){
           throw e;
         }
         content = c; manifest = m; headSha = newCommit.sha;
+        lastSave = { sha: newCommit.sha, message, parent: base };
+        $('#undoSave').disabled = false; $('#undoSave').title = 'undo: ' + message.replace(UNDO_PREFIX, '');
         log('saved ✓ ' + message + '  (' + newCommit.sha.slice(0, 7) + ')', 'ok');
         watchDeploy(newCommit.sha);
         renderAll();
@@ -220,6 +228,40 @@ function commit(message, build){
   saving = p.catch(() => {});
   return p;
 }
+
+/* Undo the last save: a new commit that puts every file back the way it was before
+   the most recent change, as long as that change was made here in the admin. */
+const UNDO_PREFIX = /^admin: /;
+let lastSave = null;   // { sha, message } of the newest commit, when the admin made it
+async function refreshUndo(){
+  const b = $('#undoSave');
+  try{
+    const head = await gh(repoPath() + '/git/commits/' + headSha);
+    lastSave = UNDO_PREFIX.test(head.message) && head.parents.length ? { sha: head.sha, message: head.message, parent: head.parents[0].sha } : null;
+  }catch(e){ lastSave = null; }
+  b.disabled = !lastSave;
+  b.title = lastSave ? 'undo: ' + lastSave.message.replace(UNDO_PREFIX, '').split('\n')[0] : 'the last change to the site was not made here, so it can only be undone on GitHub';
+}
+$('#undoSave').addEventListener('click', () => {
+  if(!lastSave) return;
+  const what = lastSave.message.replace(UNDO_PREFIX, '').split('\n')[0];
+  if(!confirm('Undo the last save?\n\n' + what + '\n\nEverything goes back to how it was just before it.')) return;
+  const run = async () => {
+    setBusy(true);
+    try{
+      const ref = await gh(repoPath() + '/git/ref/heads/' + encodeURIComponent(cfg.branch));
+      if(ref.object.sha !== lastSave.sha) throw new Error('the site changed since — reload the admin and try again');
+      const before = await gh(repoPath() + '/git/commits/' + lastSave.parent);
+      const nc = await gh(repoPath() + '/git/commits', { method: 'POST', body: { message: (what.startsWith('undo ') ? 'admin: redo ' + what.slice(5).replace(/^“|”$/g, '') : 'admin: undo “' + what + '”'), tree: before.tree.sha, parents: [lastSave.sha] } });
+      await gh(repoPath() + '/git/refs/heads/' + encodeURIComponent(cfg.branch), { method: 'PATCH', body: { sha: nc.sha, force: false } });
+      log('undone ✓ ' + what + '  (' + nc.sha.slice(0, 7) + ')', 'ok');
+      watchDeploy(nc.sha);
+      await loadData();
+    }catch(e){ log('not undone: ' + e.message, 'err'); }
+    finally{ setBusy(false); }
+  };
+  saving = saving.then(run, run);
+});
 
 /* tell the owner when GitHub Pages has published the commit */
 async function watchDeploy(sha){
@@ -457,6 +499,7 @@ function showTab(name){
   if(!connected && name !== 'connect') name = 'connect';
   $$('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false'));
   $$('.view').forEach(v => { v.hidden = v.dataset.view !== name; });
+  if(name === 'stats') loadStats();
   try{ localStorage.setItem('eh-admin-tab', name); }catch(e){}
 }
 $$('#tabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
@@ -527,6 +570,7 @@ function renderAll(){
   renderPosts();
   renderAlbums();
   renderPages();
+  renderStatsSetup();
 }
 
 /* placeholder; the section code below fills these in */
@@ -1213,44 +1257,105 @@ function showPostStats(){
   $('#postStats').textContent = w ? '· ' + w.toLocaleString('en-US') + ' word' + (w === 1 ? '' : 's') + ' · ' + Math.max(1, Math.round(w / 230)) + ' min read' : '';
 }
 
-/* Each published post gets a small page at blog/<slug>/index.html. It's what the share
-   button links to: link previews read its title, excerpt and cover, then it opens the
-   post on the site. */
+/* ---- share pages: start ----
+   Every published post, every photo and every video has a tiny page of its own:
+   blog/<slug>/, photo/<id>/, video/<id>/. Share links point there, so link previews
+   (iMessage, Instagram, …) show the right title, text and picture; the page then
+   opens the item on the site. They're kept in step automatically by commit(). */
 const SITE_URL = 'https://elijahhalford.com';
 const SITE_OG_IMAGE = SITE_URL + '/img/og-02-01-26.jpg';
 const postPagePath = slug => 'blog/' + slug + '/index.html';
-function postPageHtml(p, m){
-  const h = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  const plain = String(p.body || '').replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+const photoPagePath = id => 'photo/' + id + '/index.html';
+const videoPagePath = id => 'video/' + id + '/index.html';
+function plainText(md){
+  return String(md || '').replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/[#>*`_~]+/g, '').replace(/\s+/g, ' ').trim();
-  const desc = plain.length > 180 ? plain.slice(0, 177).replace(/\s+\S*$/, '') + '…' : plain;
-  let img = SITE_OG_IMAGE;
-  const e = p.coverId && m[p.coverId];
-  if(e){ const w = e.w.filter(x => x <= 1600).pop() || e.w[0]; img = SITE_URL + '/img/p/' + p.coverId + '-' + w + '.' + (e.x || 'webp'); }
-  const url = SITE_URL + '/blog/' + p.slug + '/', open = '/?post=' + encodeURIComponent(p.slug);
+}
+function clip(t, n){ t = String(t || ''); return t.length > n ? t.slice(0, n - 3).replace(/\s+\S*$/, '') + '…' : t; }
+function imageUrl(id, m, want){
+  const e = id && m[id];
+  if(!e) return '';
+  const w = e.w.filter(x => x <= want).pop() || e.w[0];
+  return SITE_URL + '/img/p/' + id + '-' + w + '.' + (e.x || 'webp');
+}
+function sharePageHtml(o){
+  const h = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const url = SITE_URL + '/' + o.path, desc = clip(o.desc, 180);
   return '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n' +
-    '<!-- written by /admin: the share page for one blog post; it opens the post on the site -->\n' +
+    '<!-- written by /admin: a share page; it opens this ' + o.kind + ' on the site -->\n' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
-    '<title>' + h(p.title) + ' — Elijah Halford</title>\n' +
+    '<title>' + h(o.title) + ' — Elijah Halford</title>\n' +
     '<meta name="description" content="' + h(desc) + '">\n' +
     '<link rel="canonical" href="' + url + '">\n' +
-    '<meta property="og:type" content="article">\n' +
+    '<meta property="og:type" content="' + o.ogType + '">\n' +
     '<meta property="og:site_name" content="elijah halford">\n' +
     '<meta property="og:url" content="' + url + '">\n' +
-    '<meta property="og:title" content="' + h(p.title) + '">\n' +
+    '<meta property="og:title" content="' + h(o.title) + '">\n' +
     '<meta property="og:description" content="' + h(desc) + '">\n' +
-    '<meta property="og:image" content="' + img + '">\n' +
-    (p.date ? '<meta property="article:published_time" content="' + h(p.date) + '">\n' : '') +
-    (p.tag ? '<meta property="article:tag" content="' + h(p.tag) + '">\n' : '') +
+    '<meta property="og:image" content="' + h(o.image || SITE_OG_IMAGE) + '">\n' +
+    (o.extra || '') +
     '<meta name="twitter:card" content="summary_large_image">\n' +
-    '<meta name="twitter:title" content="' + h(p.title) + '">\n' +
+    '<meta name="twitter:title" content="' + h(o.title) + '">\n' +
     '<meta name="twitter:description" content="' + h(desc) + '">\n' +
-    '<meta name="twitter:image" content="' + img + '">\n' +
-    '<meta http-equiv="refresh" content="0; url=' + open + '">\n' +
-    '<script>location.replace(' + JSON.stringify(open) + ');</script>\n' +
+    '<meta name="twitter:image" content="' + h(o.image || SITE_OG_IMAGE) + '">\n' +
+    '<meta http-equiv="refresh" content="0; url=' + o.open + '">\n' +
+    '<script>location.replace(' + JSON.stringify(o.open) + ');</script>\n' +
     '<style>body{background:#000;color:#D8D8D2;font:15px/1.6 "IBM Plex Mono",ui-monospace,monospace;padding:40px}a{color:#8FA88A}</style>\n' +
-    '</head>\n<body>\n<p>opening <a href="' + open + '">' + h(p.title) + '</a>…</p>\n</body>\n</html>\n';
+    '</head>\n<body>\n<p>opening <a href="' + o.open + '">' + h(o.title) + '</a>…</p>\n</body>\n</html>\n';
 }
+function postPageHtml(p, m){
+  const h = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return sharePageHtml({ kind: 'post', path: 'blog/' + p.slug + '/', ogType: 'article', title: p.title, desc: plainText(p.body),
+    image: imageUrl(p.coverId, m, 1600), open: '/?post=' + encodeURIComponent(p.slug),
+    extra: (p.date ? '<meta property="article:published_time" content="' + h(p.date) + '">\n' : '') +
+           (p.tag ? '<meta property="article:tag" content="' + h(p.tag) + '">\n' : '') });
+}
+function photoPageHtml(p, cat, m){
+  const name = String(p.displayName || p.file || 'photo').replace(/\.[^.]+$/, '');
+  const gear = [p.film ? p.film + (p.format ? ' ' + p.format : '') : '', p.camera, p.lens].filter(Boolean).join(' · ');
+  return sharePageHtml({ kind: 'photo', path: 'photo/' + p.id + '/', ogType: 'website', title: name,
+    desc: p.description || (cat === 'film' ? 'film photograph' : cat === 'stills' ? 'film still' : 'photograph') + ' by Elijah Halford' + (gear ? ' — ' + gear : ''),
+    image: imageUrl(p.id, m, 1600) || 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(p.id) + '&sz=w1600',
+    open: '/?photo=' + encodeURIComponent(p.id) });
+}
+function videoPageHtml(v, m){
+  const kind = { music: 'music video', events: 'event film', weddings: 'wedding film' }[v.category] || 'film';
+  return sharePageHtml({ kind: 'video', path: 'video/' + v.id + '/', ogType: 'video.other', title: v.title,
+    desc: v.description || (v.pinned ? 'demo reel' : kind) + ' by Elijah Halford' + (v.date ? ' · ' + v.date : ''),
+    image: imageUrl(v.thumbId, m, 1280) || 'https://img.youtube.com/vi/' + v.id + '/hqdefault.jpg',
+    open: '/?video=' + encodeURIComponent(v.id) });
+}
+/* feed.xml: an RSS feed of the blog, for feed readers */
+function feedXml(c){
+  const x = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const posts = c.blog.filter(p => p.slug && !p.draft).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const when = d => { const t = Date.parse(String(d || '').slice(0, 10) + 'T12:00:00Z'); return isNaN(t) ? '' : new Date(t).toUTCString(); };
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n' +
+    '<title>elijah halford — blog</title>\n<link>' + SITE_URL + '/</link>\n' +
+    '<description>Writing by Elijah Halford, filmmaker and photographer in Orlando, Florida.</description>\n' +
+    '<language>en</language>\n<atom:link href="' + SITE_URL + '/feed.xml" rel="self" type="application/rss+xml"/>\n' +
+    (posts[0] ? '<lastBuildDate>' + when(posts[0].date) + '</lastBuildDate>\n' : '') +
+    posts.map(p => { const url = SITE_URL + '/blog/' + p.slug + '/'; return '<item>\n<title>' + x(p.title) + '</title>\n<link>' + url + '</link>\n<guid isPermaLink="true">' + url + '</guid>\n' +
+      (when(p.date) ? '<pubDate>' + when(p.date) + '</pubDate>\n' : '') + (p.tag ? '<category>' + x(p.tag) + '</category>\n' : '') +
+      '<description>' + x(clip(plainText(p.body), 400)) + '</description>\n</item>\n'; }).join('') +
+    '</channel>\n</rss>\n';
+}
+function sharePages(c, m){
+  const out = new Map();
+  out.set('feed.xml', feedXml(c));
+  c.blog.forEach(p => { if(p.slug && !p.draft) out.set(postPagePath(p.slug), postPageHtml(p, m)); });
+  ['film', 'digital', 'stills'].forEach(k => (c.photos[k] || []).forEach(p => { if(p.id) out.set(photoPagePath(p.id), photoPageHtml(p, k, m)); }));
+  (c.videos || []).forEach(v => { if(v.id) out.set(videoPagePath(v.id), videoPageHtml(v, m)); });
+  return out;
+}
+/* what to write or delete so the share pages match the content after a save */
+function sharePageChanges(c0, m0, c, m){
+  const before = sharePages(c0, m0), after = sharePages(c, m), files = [];
+  after.forEach((html, path) => { if(before.get(path) !== html) files.push({ path, blob: new Blob([html], { type: 'text/html' }) }); });
+  before.forEach((html, path) => { if(!after.has(path)) files.push({ path, delete: true }); });
+  return files;
+}
+/* ---- share pages: end ---- */
 
 function renderPreview(){
   let html = '<h2 style="color:var(--fg);margin-top:0">' + ($('#postTitle').value || 'untitled').replace(/[<>&]/g, '') + '</h2>';
@@ -1442,9 +1547,6 @@ postForm.addEventListener('submit', async e => {
         refsIn(old.body).forEach(id => { if(!used.has(id) && !others.has(id) && m[id]){ files.push(...imageFilesFor(id, m)); delete m[id]; } });
         files.push(...unusedFiles(c, [...fileRefsIn(old.body)].filter(n => !usedFiles.has(n)), idx));
       }
-      // the post's own page (what share links point to): only while it's published
-      if(!entry.draft){ entry.page = true; files.push({ path: postPagePath(entry.slug), blob: new Blob([postPageHtml(entry, m)], { type: 'text/html' }) }); }
-      else if(old && old.page) files.push({ path: postPagePath(entry.slug), delete: true });
       if(idx >= 0) c.blog[idx] = entry; else c.blog.unshift(entry);
       return files;
     });
@@ -1486,7 +1588,6 @@ function renderPosts(){
               const files = [];
               mine.forEach(id => { if(!others.has(id) && m[id]){ files.push(...imageFilesFor(id, m)); delete m[id]; } });
               files.push(...unusedFiles(c, [...fileRefsIn(target.body)], -1));
-              if(target.page) files.push({ path: postPagePath(target.slug), delete: true });
               return files;
             });
             if(post && post.slug === p.slug) loadPost(null);
@@ -1503,6 +1604,9 @@ const PAGES = {
   about: { fields: ['#aboutHeader', '#aboutBody'], label: 'about.txt',
     get: c => [c.pages.about.header || '', c.pages.about.body || ''],
     set: (c, v) => { c.pages.about = { header: v[0], body: v[1] }; } },
+  contact: { fields: ['#contactText'], label: 'contact.txt',
+    get: c => [c.pages.contact || ''],
+    set: (c, v) => { c.pages.contact = v[0]; } },
   equipment: { fields: ['#equipmentText'], label: 'equipment.txt',
     get: c => [c.pages.equipment || ''],
     set: (c, v) => { c.pages.equipment = v[0]; } },
@@ -1526,6 +1630,17 @@ function previewPage(name){
     if(m){
       pre.append(v[1].slice(0, m.index), el('span', { class: 'tie', text: m[0], title: 'the hidden colour button' }), v[1].slice(m.index + m[0].length));
     } else pre.textContent = v[1];
+    box.appendChild(pre);
+  } else if(name === 'contact'){
+    // the same links the site makes: emails, @handles (Instagram), youtube.com/…
+    const pre = el('pre'), re = /([\w.+-]+@[\w-]+\.[\w.-]+)|(^|\s)(@[\w.]+)|(youtube\.com\/\S+)/gm;
+    let last = 0, m;
+    while((m = re.exec(v[0]))){
+      const t = m[1] || m[3] || m[4], at = m[1] || m[4] ? m.index : m.index + m[2].length;
+      pre.append(v[0].slice(last, at), el('span', { class: 'tie', text: t }));
+      last = at + t.length;
+    }
+    pre.append(v[0].slice(last));
     box.appendChild(pre);
   } else box.appendChild(el('pre', { text: v[0] }));
   $('#' + name + 'State').textContent = pageDirty(name) ? 'unsaved changes' : '';
@@ -1559,6 +1674,128 @@ Object.keys(PAGES).forEach(name => {
     finally{ btn.classList.remove('is-busy'); }
   });
 });
+
+/* =====================================================================
+   stats: Cloudflare Web Analytics, read through the stats Worker
+   ===================================================================== */
+let statsDays = 7, statsReq = 0;
+function renderStatsSetup(){
+  const a = content.analytics || {};
+  [['#statsBeacon', a.beacon], ['#statsWorker', a.worker]].forEach(([id, v]) => { if(document.activeElement !== $(id)) $(id).value = v || ''; });
+  $('#statsSetupState').textContent = a.beacon && a.worker ? 'set up ✓' : a.beacon ? 'counting visits · Worker not added yet' : 'not set up yet';
+  if(!$('[data-view="stats"]').hidden) loadStats();
+}
+$$('#statsRange button').forEach(b => b.addEventListener('click', () => {
+  statsDays = +b.dataset.days;
+  $$('#statsRange button').forEach(x => x.classList.toggle('on', x === b));
+  loadStats();
+}));
+$('#statsBeaconSave').addEventListener('click', async () => {
+  const t = $('#statsBeacon').value.trim().replace(/^.*"token"\s*:\s*"([^"]+)".*$/s, '$1');
+  if(t && !/^[0-9a-f]{32}$/i.test(t)){ log("that doesn't look like a Web Analytics token (32 letters and numbers)", 'err'); return; }
+  try{ await commit(t ? 'admin: turn on visitor stats' : 'admin: turn off visitor stats', c => { if(t) c.analytics.beacon = t; else delete c.analytics.beacon; }); }catch(e){}
+});
+$('#statsWorkerSave').addEventListener('click', async () => {
+  const u = $('#statsWorker').value.trim().replace(/\/+$/, '');
+  if(u && !/^https:\/\/[\w.-]+(\/[\w./-]*)?$/i.test(u)){ log('the Worker address should look like https://name.yourname.workers.dev', 'err'); return; }
+  try{ await commit('admin: set stats Worker address', c => { if(u) c.analytics.worker = u; else delete c.analytics.worker; }); }catch(e){}
+});
+
+const MON = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+const dayLabel = d => { const m = String(d).match(/^\d{4}-(\d{2})-(\d{2})/); return m ? MON[+m[1] - 1] + ' ' + (+m[2]) : d; };
+const fmtN = n => Number(n || 0).toLocaleString('en-US');
+async function loadStats(){
+  const body = $('#statsBody');
+  const a = (content && content.analytics) || {};
+  if(!a.worker){
+    body.innerHTML = '';
+    body.appendChild(el('p', { class: 'dim', text: a.beacon ? 'The site is counting visits. Add the stats Worker below to see the numbers here.' : 'Nothing to show yet: follow the two steps below.' }));
+    return;
+  }
+  const mine = ++statsReq;
+  body.innerHTML = '';
+  body.appendChild(el('p', { class: 'dim', text: 'loading the last ' + statsDays + ' days…' }));
+  let d;
+  try{
+    const r = await fetch(a.worker + '/?days=' + statsDays, { headers: { Authorization: 'Bearer ' + token } });
+    d = await r.json().catch(() => ({}));
+    if(!r.ok) throw new Error(d.error || ('the Worker said ' + r.status));
+  }catch(e){
+    if(mine !== statsReq) return;
+    body.innerHTML = '';
+    body.appendChild(el('p', { class: 'err', text: "couldn't load stats: " + e.message }));
+    return;
+  }
+  if(mine !== statsReq) return;
+  renderStats(body, d);
+}
+function renderStats(body, d){
+  body.innerHTML = '';
+  const t = d.total || {};
+  body.appendChild(el('div', { class: 'stat-tiles' },
+    el('div', { class: 'stat-tile' }, el('div', { class: 'n', text: fmtN(t.visits) }), el('div', { class: 'l', text: 'visits' })),
+    el('div', { class: 'stat-tile' }, el('div', { class: 'n', text: fmtN(t.views) }), el('div', { class: 'l', text: 'page views' })),
+    el('div', { class: 'stat-tile' }, el('div', { class: 'n', text: t.visits ? (t.views / t.visits).toFixed(1) : '–' }), el('div', { class: 'l', text: 'views per visit' }))));
+  if(!t.views){ body.appendChild(el('p', { class: 'dim', text: 'No visits recorded in this range yet. Cloudflare can take a few minutes to show new ones.' })); return; }
+
+  // one bar per day, days without visits included
+  const byDate = new Map((d.byDay || []).map(r => [String(r.date).slice(0, 10), r]));
+  const days = [];
+  for(let ms = Date.parse(String(d.since).slice(0, 10) + 'T00:00:00Z'), end = Date.parse(String(d.until).slice(0, 10) + 'T00:00:00Z'); ms <= end; ms += 86400000){
+    const key = new Date(ms).toISOString().slice(0, 10);
+    const r = byDate.get(key) || {};
+    days.push({ date: key, views: r.views || 0, visits: r.visits || 0 });
+  }
+  // drawn at the panel's real width, so text isn't stretched; thin bars, 2px apart
+  const W = Math.max(280, Math.round(body.clientWidth || 600)), H = 150, top = 16, bottom = 20, max = Math.max(1, ...days.map(x => x.views));
+  const slot = W / days.length, bw = Math.max(1, Math.min(28, slot - 2));
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs) => { const n = document.createElementNS(svgNS, tag); for(const k in attrs) n.setAttribute(k, attrs[k]); return n; };
+  const svg = mk('svg', { class: 'stat-chart', viewBox: '0 0 ' + W + ' ' + H, width: W, height: H, role: 'img',
+    'aria-label': 'page views per day: ' + days.map(x => dayLabel(x.date) + ' ' + x.views).join(', ') });
+  const tip = el('div', { class: 'stat-tip', hidden: true });
+  days.forEach((x, i) => {
+    const h = x.views ? Math.max(2, (H - top - bottom) * x.views / max) : 0;
+    const g = mk('g', { class: 'day', tabindex: '0' });
+    g.appendChild(mk('rect', { x: i * slot, y: top, width: slot, height: H - top - bottom, fill: 'transparent' }));   // easy hover target
+    if(h) g.appendChild(mk('rect', { class: 'bar', x: i * slot + (slot - bw) / 2, y: H - bottom - h, width: bw, height: h, rx: Math.min(2, bw / 2) }));
+    const show = e => {
+      tip.textContent = dayLabel(x.date) + ' · ' + fmtN(x.views) + ' views · ' + fmtN(x.visits) + ' visits';
+      tip.hidden = false;
+      const r = g.getBoundingClientRect();
+      tip.style.left = Math.min(window.innerWidth - 220, Math.max(8, r.left + r.width / 2 - 90)) + 'px';
+      tip.style.top = (r.top - 4 + (H - bottom - h) / H * r.height - 30) + 'px';
+    };
+    g.addEventListener('mouseenter', show); g.addEventListener('focus', show);
+    g.addEventListener('mouseleave', () => { tip.hidden = true; }); g.addEventListener('blur', () => { tip.hidden = true; });
+    svg.appendChild(g);
+  });
+  svg.appendChild(mk('line', { class: 'base', x1: 0, x2: W, y1: H - bottom + 0.5, y2: H - bottom + 0.5 }));
+  const lbl = (x, anchor, text) => { const n = mk('text', { x, y: H - 4, 'text-anchor': anchor }); n.textContent = text; svg.appendChild(n); };
+  lbl(0, 'start', dayLabel(days[0].date)); lbl(W, 'end', dayLabel(days[days.length - 1].date));
+  const mx = mk('text', { x: 0, y: 10 }); mx.textContent = 'most in a day: ' + fmtN(max) + ' views'; svg.appendChild(mx);
+  body.appendChild(el('div', {}, svg, tip));
+
+  const list = (title, rows, key, nice) => {
+    const box = el('div', { class: 'stat-list' }, el('h3', { text: title }));
+    const top = Math.max(1, ...rows.map(r => r.views));
+    if(!rows.length) box.appendChild(el('div', { class: 'dim', text: 'nothing yet' }));
+    rows.forEach(r => {
+      const track = el('div', { class: 'track' }, el('i'));
+      track.firstChild.style.width = (100 * r.views / top).toFixed(1) + '%';
+      box.appendChild(el('div', { class: 'stat-row' }, el('span', { class: 'k', text: nice(r[key]), title: nice(r[key]) }), el('span', { class: 'v', text: fmtN(r.views) }), track));
+    });
+    return box;
+  };
+  const path = p => !p || p === '/' ? 'the site (main page)' : p.replace(/^\/(blog|photo|video)\//, '$1/').replace(/\/$/, '');
+  body.appendChild(el('div', { class: 'stat-lists' },
+    list('where visitors came from', d.referrers || [], 'host', h => h || 'direct (typed in, or an app)'),
+    list('pages', d.pages || [], 'path', path),
+    list('countries', d.countries || [], 'country', c => c || 'unknown'),
+    list('devices', d.devices || [], 'device', x => x || 'unknown'),
+    list('browsers', d.browsers || [], 'browser', x => x || 'unknown')));
+  body.appendChild(el('p', { class: 'dim', text: 'Counts are page views. The site is one page, so most views show as the main page.' }));
+}
 
 /* =====================================================================
    music: only asks for title, artist and cover; looks the rest up

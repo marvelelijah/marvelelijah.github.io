@@ -22,13 +22,15 @@
   </header>
 
   <nav class="tabs" id="tabs" role="tablist">
-    <button type="button" role="tab" data-tab="photos">photos</button>
+    <button type="button" role="tab" data-tab="about">about.txt</button>
+    <button type="button" role="tab" data-tab="contact">contact.txt</button>
+    <button type="button" role="tab" data-tab="equipment">equipment.txt</button>
     <button type="button" role="tab" data-tab="videos">videography</button>
+    <button type="button" role="tab" data-tab="photos">photography</button>
     <button type="button" role="tab" data-tab="blog">blog</button>
     <button type="button" role="tab" data-tab="music">music</button>
     <button type="button" role="tab" data-tab="links">time well spent</button>
-    <button type="button" role="tab" data-tab="about">about.txt</button>
-    <button type="button" role="tab" data-tab="equipment">equipment.txt</button>
+    <button type="button" role="tab" data-tab="stats">stats</button>
     <button type="button" role="tab" data-tab="connect">connect</button>
   </nav>
 
@@ -171,7 +173,7 @@
         </form>
       </div>
       <div class="panel">
-        <div class="panelhead"><span>~/work/videography</span><span class="dim" id="videoCount"></span></div>
+        <div class="panelhead"><span>~/videography</span><span class="dim" id="videoCount"></span></div>
         <div id="videoList" class="list"></div>
       </div>
     </section>
@@ -284,9 +286,50 @@
       </div>
     </section>
 
+    <section class="view" data-view="stats" hidden>
+      <div class="panel">
+        <div class="panelhead">
+          <span>~/stats</span>
+          <span class="seg" id="statsRange">
+            <button type="button" data-days="7" class="on">7 days</button>
+            <button type="button" data-days="30">30 days</button>
+            <button type="button" data-days="90">90 days</button>
+          </span>
+        </div>
+        <div id="statsBody" class="stats-body"><p class="dim">loading…</p></div>
+      </div>
+      <div class="panel">
+        <div class="panelhead"><span>~/stats/setup</span><span class="dim" id="statsSetupState"></span></div>
+        <p class="dim">Visitor numbers come from Cloudflare Web Analytics: free, no cookies, no banner needed. Two pieces, both done once. The full click-by-click is in the README.</p>
+        <div class="field">
+          <label for="statsBeacon">1 · Web Analytics token · starts counting visits on the site</label>
+          <div class="inline"><input id="statsBeacon" placeholder="32 letters and numbers from Cloudflare's snippet" spellcheck="false" autocomplete="off"><button type="button" class="btn" id="statsBeaconSave">save to site</button></div>
+          <span class="dim">Cloudflare → Analytics &amp; Logs → Web Analytics → add elijahhalford.com → copy the token from <code>data-cf-beacon='{"token": "…"}'</code>. It's public anyway (every visitor's browser sees it).</span>
+        </div>
+        <div class="field">
+          <label for="statsWorker">2 · stats Worker address · lets this page read the numbers</label>
+          <div class="inline"><input id="statsWorker" placeholder="https://elijahhalford-stats.yourname.workers.dev" spellcheck="false" autocomplete="off"><button type="button" class="btn" id="statsWorkerSave">save</button></div>
+          <span class="dim">Paste <code>tools/stats-worker.js</code> into a new Cloudflare Worker and add its three settings. Only someone with your GitHub access key can read the stats through it.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="contact" hidden>
+      <div class="panel">
+        <div class="panelhead"><span>~/contact.txt</span><span class="dim" id="contactState"></span></div>
+        <p class="dim">Typed exactly as it shows on the site. Email addresses, <b>@handles</b> (Instagram) and <b>youtube.com/…</b> become links by themselves, and the contact form sends to the first email address.</p>
+        <div class="field"><label for="contactText">contact</label><textarea id="contactText" class="mono-edit" rows="12" wrap="off" spellcheck="false"></textarea></div>
+        <div class="field"><span class="label">preview</span><div class="page-preview narrow" id="contactPreview"></div></div>
+        <div class="row actions">
+          <button type="button" class="btn primary" id="contactSave">save contact.txt</button>
+          <button type="button" class="btn" id="contactRevert">undo changes</button>
+        </div>
+      </div>
+    </section>
+
     <section class="view" data-view="equipment" hidden>
       <div class="panel">
-        <div class="panelhead"><span>~/work/equipment.txt</span><span class="dim" id="equipmentState"></span></div>
+        <div class="panelhead"><span>~/equipment.txt</span><span class="dim" id="equipmentState"></span></div>
         <p class="dim">Typed exactly as it shows on the site: spaces line the columns up, blank lines make gaps.</p>
         <div class="field"><label for="equipmentText">equipment</label><textarea id="equipmentText" class="mono-edit" rows="26" wrap="off" spellcheck="false"></textarea></div>
         <div class="field"><span class="label">preview</span><div class="page-preview narrow" id="equipmentPreview"></div></div>
@@ -350,7 +393,7 @@
   </main>
 
   <section class="log" aria-label="activity">
-    <div class="log-head"><span>activity</span><button type="button" id="logClear" class="linkbtn">clear</button></div>
+    <div class="log-head"><span>activity</span><span class="log-actions"><button type="button" id="undoSave" class="linkbtn" title="put the site back to how it was before the last save" disabled>↶ undo last save</button><button type="button" id="logClear" class="linkbtn">clear</button></span></div>
     <div id="log" class="log-body" aria-live="polite"></div>
   </section>
 </div>

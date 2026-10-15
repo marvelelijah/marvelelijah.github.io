@@ -25,6 +25,7 @@
 <meta name="twitter:description" content="Elijah Halford is a filmmaker and photographer based in Orlando, Florida — music videos, events, weddings, and 35mm film and digital photography.">
 <meta name="twitter:image" content="https://elijahhalford.com/img/og-02-01-26.jpg">
 <link rel="preload" as="image" href="img/site/logo.gif">
+<link rel="alternate" type="application/rss+xml" title="elijah halford — blog" href="/feed.xml">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="img/site/favicon-32.png?v=2">
 <link rel="icon" type="image/png" sizes="48x48" href="img/site/favicon-48.png?v=2">
@@ -865,6 +866,10 @@
   .post-share{ font:inherit; color:var(--dir); background:none; border:1px solid var(--line); padding:1px 8px; cursor:pointer; transition:color 0.2s, border-color 0.2s; }
   .post-share:hover, .post-share:focus-visible{ color:var(--fg); border-color:var(--fg-dim); }
   .post-share.is-done{ color:var(--fg); }
+  .lightbox-share{ margin-top:14px; }
+  .video-meta .post-share{ font-size:0.8em; margin-top:6px; }
+  .video-card.is-linked{ outline:1px solid var(--dir); outline-offset:3px; animation:thumbIn 0.35s ease forwards, linkedPulse 1.2s ease 0.4s 3; }
+  @keyframes linkedPulse{ 50%{ outline-color:transparent; } }
   .post-cover{ display:block; width:100%; height:auto; margin:0 0 16px; border:1px solid var(--line); }
   .post-body{ line-height:1.75; }
   .post-body p{ margin:0 0 1em; }
@@ -1036,7 +1041,7 @@
 <div class="app-shell" id="appShell">
 <div class="video-gallery-pane" id="videoGalleryPane" aria-hidden="true">
   <div class="galleryhead">
-    <span class="panelname" id="videoGalleryTitle">~/work/videography</span>
+    <span class="panelname" id="videoGalleryTitle">~/videography</span>
     <button class="closebtn" id="videoGalleryClose" type="button" aria-label="close videography">×</button>
   </div>
   <div class="gallerybody" id="videoGalleryBody"></div>
@@ -1059,7 +1064,7 @@
 
 <div class="gallery-pane" id="galleryPane" aria-hidden="true">
   <div class="galleryhead">
-    <span class="panelname" id="galleryTitle">~/work/photography</span>
+    <span class="panelname" id="galleryTitle">~/photography</span>
     <button class="closebtn" id="galleryClose" type="button" aria-label="close photography">×</button>
   </div>
   <div class="gallerybody" id="galleryBody"></div>
@@ -1089,6 +1094,7 @@
       <div class="lightbox-artist" id="lightboxArtist"></div>
       <div class="lightbox-medium" id="lightboxMedium"></div>
       <div class="lightbox-desc" id="lightboxDesc"></div>
+      <button class="post-share lightbox-share" id="lightboxShare" type="button" aria-label="share a link to this photo">share ↗</button>
     </div>
   </div>
   <button class="lightbox-arrow lightbox-next" id="lightboxNext" type="button" aria-label="next photo">›</button>
@@ -1109,7 +1115,7 @@
   // All editable content (photos, time well spent links, music, blog posts) lives in
   // content/content.js, which the admin page (/admin) reads and writes.
   const C = window.SITE_CONTENT || {};
-  const PAGES = Object.assign({ about: {}, equipment: '' }, C.pages || {});
+  const PAGES = Object.assign({ about: {}, equipment: '', contact: '' }, C.pages || {});
   const CP = C.photos || {};
   const SNOOP_COMMENTS = [' well, this is awkward. ', ' fuuuuucccckkkkk. '];
   function insertSnoopComment(parent, beforeNode){
@@ -1329,23 +1335,14 @@
       header: PAGES.about.header || '',
       body: PAGES.about.body || '' },
 
-    'contact.txt': { type:'text', content:
-`EMAIL      elijah.m.halford@gmail.com
+    'contact.txt': { type:'text', content: PAGES.contact || '' }, // edited in /admin → contact.txt
 
-INSTAGRAM  @elijahhalford
-
-PHOTO IG   @youwontgetwhatyouwant
-
-YOUTUBE    youtube.com/elijahhalford` },
-
-    'work': { type:'dir', files:{
-      'equipment.txt': { type:'text', content: PAGES.equipment || '' }, // edited in /admin → equipment.txt
-      'photography': { type:'dir', files:{
-        'film': { type:'dir', files: buildPhotoFiles(CP.film) },
-        'digital': { type:'dir', files: buildPhotoFiles(CP.digital) },
-        'stills': { type:'dir', files: buildPhotoFiles(CP.stills) },
-      }},
-      'videography': { type:'dir', files: buildVideoFiles(VIDEOS) },
+    'equipment.txt': { type:'text', content: PAGES.equipment || '' }, // edited in /admin → equipment.txt
+    'videography': { type:'dir', files: buildVideoFiles(VIDEOS) },
+    'photography': { type:'dir', files:{
+      'film': { type:'dir', files: buildPhotoFiles(CP.film) },
+      'digital': { type:'dir', files: buildPhotoFiles(CP.digital) },
+      'stills': { type:'dir', files: buildPhotoFiles(CP.stills) },
     }},
 
     'blog': { type:'dir', files: buildPostFiles(C.blog) },
@@ -1993,8 +1990,19 @@ YOUTUBE    youtube.com/elijahhalford` },
     ensureFloatLayer().appendChild(w.el);
     w.el.style.zIndex = ++floatZ;
     const W = window.innerWidth, H = window.innerHeight;
-    w.x = Math.random() * Math.max(0, W - w.el.offsetWidth);
-    w.y = Math.random() * Math.max(0, H - w.el.offsetHeight);
+    // open away from the pointer (the click that opened it): of a couple dozen random
+    // spots, take the one farthest from the cursor, nudged towards free space
+    const ww0 = w.el.offsetWidth, hh0 = w.el.offsetHeight;
+    let best = null, bestScore = -1;
+    for(let i = 0; i < 24; i++){
+      const x = Math.random() * Math.max(0, W - ww0), y = Math.random() * Math.max(0, H - hh0);
+      const cx = x + ww0 / 2, cy = y + hh0 / 2;
+      let room = Infinity;
+      floatWins.forEach(o => { if(o !== w && o.mode !== 'new') room = Math.min(room, Math.hypot(cx - (o.x + o.el.offsetWidth / 2), cy - (o.y + o.el.offsetHeight / 2))); });
+      const score = Math.hypot(cx - mouseX, cy - mouseY) + (room === Infinity ? 0 : 0.3 * room);
+      if(score > bestScore){ bestScore = score; best = [x, y]; }
+    }
+    w.x = best[0]; w.y = best[1];
     placeAt(w);
     const ang = Math.random() * Math.PI * 2;
     w.vx = Math.cos(ang) * w.cruise;
@@ -2082,10 +2090,11 @@ YOUTUBE    youtube.com/elijahhalford` },
     bar.addEventListener('pointercancel', release);
   }
 
-  // how the pop-outs move: 'drift' (default), 'gravity', 'antigravity', 'magnet'
+  // how the pop-outs move: 'drift' (default), 'gravity', 'antigravity', 'magnet', 'antimagnet'
   let floatPhysics = 'drift';
   let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
   window.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+  window.addEventListener('pointerdown', (e) => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true, capture: true });
   const G_DEFAULT = 1400, BOUNCE_DEFAULT = 0.5;
   let G = G_DEFAULT;           // gravity strength, px / s^2 (settings slider)
   let BOUNCE = BOUNCE_DEFAULT; // how much speed survives a bounce (settings slider)
@@ -2137,6 +2146,17 @@ YOUTUBE    youtube.com/elijahhalford` },
         w.vy += dy / d * 900 / m * dt;
         w.vx *= Math.exp(-1.2 * dt); w.vy *= Math.exp(-1.2 * dt);
         damp = 0.7;
+      } else if(floatPhysics === 'antimagnet'){
+        // pushed away from the cursor: hard up close, fading out with distance
+        const dx = (w.x + ww / 2) - mouseX, dy = (w.y + hh / 2) - mouseY;
+        const d = Math.hypot(dx, dy) || 1;
+        const reach = 260 + Math.max(ww, hh) / 2;
+        const push = Math.min(1, Math.pow(reach / Math.max(d, 40), 2));
+        const m = winMass(ww, hh);
+        w.vx += dx / d * 2400 * push / m * dt;
+        w.vy += dy / d * 2400 * push / m * dt;
+        w.vx *= Math.exp(-1.6 * dt); w.vy *= Math.exp(-1.6 * dt);
+        damp = 0.6;
       }
       w.x += w.vx * w.speedF * dt;
       w.y += w.vy * w.speedF * dt;
@@ -2351,10 +2371,10 @@ YOUTUBE    youtube.com/elijahhalford` },
     let ok = false; try{ ok = document.execCommand('copy'); }catch(e){}
     ta.remove(); return ok;
   }
-  async function sharePost(node, btn){
-    const url = postUrl(node);
+  function sharePost(node, btn){ return shareLink(postUrl(node), node.title, btn); }
+  async function shareLink(url, title, btn){
     if(navigator.share && matchMedia('(pointer: coarse)').matches){
-      try{ await navigator.share({ title: node.title, url }); return; }
+      try{ await navigator.share({ title, url }); return; }
       catch(e){ if(e && e.name === 'AbortError') return; }
     }
     const ok = await copyText(url);
@@ -2466,7 +2486,14 @@ YOUTUBE    youtube.com/elijahhalford` },
     const nameSpan = el('span', tagCls, esc(name));
     btn.appendChild(nameSpan);
     btn.appendChild(el('span', 'kind', kindText));
-    btn.addEventListener('click', () => runCommand(cmd));
+    btn.addEventListener('click', () => {
+      // a directory that's already open closes again (the photo/video galleries already toggle)
+      if(/^ls /.test(cmd) && currentPanel && currentPanelCmd === cmd){
+        const x = currentPanel.querySelector('.panelhead .closebtn');
+        if(x){ x.click(); return; }
+      }
+      runCommand(cmd);
+    });
     wrap.appendChild(btn);
     return wrap;
   }
@@ -2487,8 +2514,8 @@ YOUTUBE    youtube.com/elijahhalford` },
     const box = el('div', 'listing');
     box.appendChild(rowButton('about.txt', 'cat about.txt', '', 'text'));
     box.appendChild(rowButton('contact.txt', 'cat contact.txt', '', 'text'));
-    box.appendChild(rowButton('work/', 'ls work', 'tag-dir', 'dir · 3 items'));
-    ['blog', 'music', 'time-well-spent'].forEach(d => {
+    box.appendChild(rowButton('equipment.txt', 'cat equipment.txt', '', 'text'));
+    ['videography', 'photography', 'blog', 'music', 'time-well-spent'].forEach(d => {
       const n = Object.keys(FS[d].files).length;
       box.appendChild(rowButton(d + '/', 'ls ' + d, 'tag-dir', 'dir · ' + n + ' item' + (n === 1 ? '' : 's')));
     });
@@ -2551,14 +2578,14 @@ YOUTUBE    youtube.com/elijahhalford` },
     promptLabel.textContent = promptText();
   }
 
-  const GALLERY_DIRS = ['work/photography'];
+  const GALLERY_DIRS = ['photography'];
   let currentGalleryPath = null;
 
   function doLs(arg){
     if(arg === '~' || arg === '/'){ printRootListing(); return; }
     const path = resolveArgPath(arg);
     if(path === ''){ printRootListing(); return; }
-    if(path === 'work/videography'){
+    if(path === 'videography'){
       if(appShell.classList.contains('video-gallery-open') && currentVideoGalleryPath === path){
         closeVideoGallery();
       } else {
@@ -2635,7 +2662,7 @@ YOUTUBE    youtube.com/elijahhalford` },
   }
 
   function getAllSitePhotos(){
-    const node = resolveDirNode('work/photography');
+    const node = resolveDirNode('photography');
     if(!node) return [];
     let all = [];
     Object.keys(node.files).forEach(k => {
@@ -2796,6 +2823,7 @@ YOUTUBE    youtube.com/elijahhalford` },
     const wrap = el('div', 'video-list');
     list.forEach((video, i) => {
       const card = el('div', 'video-card');
+      card.dataset.vid = video.videoId;
       card.style.animationDelay = (i * 0.05).toFixed(2) + 's';
       const thumb = el('button', 'video-thumb');
       thumb.type = 'button';
@@ -2829,6 +2857,11 @@ YOUTUBE    youtube.com/elijahhalford` },
       if(descBits.length){
         meta.appendChild(el('div', 'video-desc', esc(descBits.join(' — '))));
       }
+      const share = el('button', 'post-share', 'share ↗');
+      share.type = 'button';
+      share.setAttribute('aria-label', 'share a link to ' + video.title);
+      share.addEventListener('click', () => shareLink(SITE_URL + '/video/' + video.videoId + '/', video.title, share));
+      meta.appendChild(share);
       card.appendChild(meta);
       wrap.appendChild(card);
     });
@@ -2965,6 +2998,11 @@ YOUTUBE    youtube.com/elijahhalford` },
         .forEach((elm, i) => scrambleInto(elm, i * 0.1, 0.5));
     }
   }
+
+  document.getElementById('lightboxShare').addEventListener('click', e => {
+    const photo = currentPhotoList[currentPhotoIndex];
+    if(photo && photo.id) shareLink(SITE_URL + '/photo/' + photo.id + '/', photo.filename, e.currentTarget);
+  });
 
   function openLightbox(list, index){
     currentPhotoList = list;
@@ -3108,17 +3146,6 @@ YOUTUBE    youtube.com/elijahhalford` },
     let path = resolveArgPath(trimmed);
     let node = resolveNode(path);
 
-    if(!node && !trimmed.includes('/')){
-      for(const d of ['work']){
-        const dirNode = resolveDirNode(d);
-        if(dirNode && dirNode.files[trimmed]){
-          node = dirNode.files[trimmed];
-          path = d + '/' + trimmed;
-          break;
-        }
-      }
-    }
-
     if(node && node.type === 'album'){
       printAlbumFile(node, 'cat ' + path);
     } else if(node && node.type === 'post'){
@@ -3131,7 +3158,7 @@ YOUTUBE    youtube.com/elijahhalford` },
       printAboutFile(node, 'cat ' + path);
     } else if(path === 'contact.txt' && node){
       printContactFile(node, 'cat ' + path);
-    } else if(path === 'work/equipment.txt' && node && usePopouts()){
+    } else if(path === 'equipment.txt' && node && usePopouts()){
       toggleFloatGroup('equipment', () => [{ key:'equipment', title:'equipment.txt', width:470, content: el('pre', '', esc(node.content)) }]);
     } else if(node && node.type !== 'dir'){
       const name = splitPath(path).pop();
@@ -3153,13 +3180,13 @@ YOUTUBE    youtube.com/elijahhalford` },
 
   /* ---------- crt: busy terminal output streaming down both margins ---------- */
   const CRT_LINES = [
-    () => 'mount ~/work/photography ... ' + rint(40, 140) + ' files ok',
+    () => 'mount ~/photography ... ' + rint(40, 140) + ' files ok',
     () => 'decodeText(node, 0.05, ' + Math.random().toFixed(2) + ')',
     () => 'float.tick dt=' + (0.014 + Math.random() * 0.004).toFixed(4) + ' vx=' + rint(-40, 40) + ' vy=' + rint(-40, 40),
     () => 'GET thumbnail?id=' + hex(10) + '… 200 ' + rint(18, 240) + 'kb',
     () => 'scramble[' + rint(0, 64) + "] '" + junk(6) + "' -> settle",
     () => 'cd ~/' + pick(['music', 'time-well-spent', 'blog']),
-    () => 'ls -la ~/work | wc -l    ' + rint(3, 9),
+    () => 'ls -la ~ | wc -l    ' + rint(6, 12),
     () => '0x' + hex(4) + ':  ' + [0,0,0,0,0,0,0,0].map(() => hex(2)).join(' '),
     () => "panel.push('" + pick(['about.txt', 'contact.txt', 'equipment.txt', 'help']) + "')",
     () => 'render frame ' + rint(1000, 99999) + '   ' + rint(58, 61) + 'fps',
@@ -3296,6 +3323,7 @@ YOUTUBE    youtube.com/elijahhalford` },
     gravity: 'gravity on. the pop-out windows will fall.',
     antigravity: 'gravity reversed. up is the new down.',
     magnet: 'the pop-out windows are drawn to your cursor now.',
+    antimagnet: 'the pop-out windows run from your cursor now.',
     drift: 'zero g. everything drifts again.',
     still: 'the pop-out windows stay where you put them.',
   };
@@ -3303,7 +3331,7 @@ YOUTUBE    youtube.com/elijahhalford` },
     floatPhysics = mode;
     floatWins.forEach(w => { if(mode !== 'drift'){ w.ignoreHover = false; } });
     let line = PHYSICS_LINES[mode];
-    if(!floatWins.length && mode !== 'drift') line += " (open about, contact or work/equipment.txt to see it)";
+    if(!floatWins.length && mode !== 'drift') line += " (open about, contact or equipment.txt to see it)";
     if(!quiet) printLine(line, 'dim');
     if(floatWins.length) startFloatLoop();
     refreshSettings();
@@ -3334,6 +3362,7 @@ YOUTUBE    youtube.com/elijahhalford` },
     { label:'gravity',     mode:'gravity' },
     { label:'antigravity', mode:'antigravity' },
     { label:'magnet',      mode:'magnet' },
+    { label:'antimagnet',  mode:'antimagnet' },
   ];
   let settingsOpen = false;
   let settingsEls = null;
@@ -3470,7 +3499,7 @@ YOUTUBE    youtube.com/elijahhalford` },
         settingsSlider('bounce', 0, 0.95, 0.01, () => BOUNCE, v => { BOUNCE = v; }, v => Math.round(v * 100) + '%', BOUNCE_DEFAULT),
       ];
       sliders.forEach(sl => physWin.appendChild(sl.row));
-      physWin.appendChild(el('div', 'set-note', esc('open about.txt, contact.txt or work/equipment.txt to see the pop-outs.')));
+      physWin.appendChild(el('div', 'set-note', esc('open about.txt, contact.txt or equipment.txt to see the pop-outs.')));
       colA.appendChild(physWin);
     }
     wrap.appendChild(drop);
@@ -3633,7 +3662,6 @@ YOUTUBE    youtube.com/elijahhalford` },
       case 'pwd': printLine(cwd ? '~/' + cwd : '~'); break;
       case 'contact': doCat('contact.txt'); break;
       case 'about': doCat('about.txt'); break;
-      case 'work': doLs('work'); break;
       case 'blog': case 'music': doLs(cmd); break;
       case 'geocity': case 'geocities': applyTheme('geocity'); break;
       // TEMP-KEATON-MOM: keaton + mom only work until TEMP_CMDS_UNTIL; a scheduled cleanup then removes them
@@ -3653,7 +3681,8 @@ YOUTUBE    youtube.com/elijahhalford` },
       case 'darkroom': applyTheme('darkroom'); break;
       case 'negative': case 'inverted': case 'invert': toggleFx('negative'); break;
       case 'grain': toggleFx('grain'); break;
-      case 'gravity': case 'antigravity': case 'magnet': case 'zerog': setPhysics(cmd === 'zerog' ? 'drift' : cmd); break;
+      case 'gravity': case 'antigravity': case 'magnet': case 'antimagnet': case 'zerog': setPhysics(cmd === 'zerog' ? 'drift' : cmd); break;
+      case 'repel': setPhysics('antimagnet'); break;
       case 'reset': case 'normal': resetLooks(); break;
       default:
         printLine("command not found: " + cmd + ". try ls, cat, cd or settings.", 'err');
@@ -3787,13 +3816,39 @@ YOUTUBE    youtube.com/elijahhalford` },
     openLinkedPost();
   }
 
+  /* shared links: /?post=<slug>, /?photo=<id>, /?video=<id> (the share pages send people here) */
   function openLinkedPost(){
-    let slug = null;
-    try{ slug = new URLSearchParams(location.search).get('post'); }catch(e){}
-    if(!slug) return;
-    const posts = FS.blog.files;
-    const key = Object.keys(posts).find(k => posts[k].slug === slug);
-    setTimeout(() => runCommand(key ? 'cat blog/' + key : 'ls blog'), 350);
+    let q = null;
+    try{ q = new URLSearchParams(location.search); }catch(e){ return; }
+    const slug = q.get('post'), photoId = q.get('photo'), videoId = q.get('video');
+    if(slug){
+      const posts = FS.blog.files;
+      const key = Object.keys(posts).find(k => posts[k].slug === slug);
+      setTimeout(() => runCommand(key ? 'cat blog/' + key : 'ls blog'), 350);
+    } else if(photoId){
+      const cats = FS.photography.files;
+      let list = null, idx = -1;
+      Object.keys(cats).forEach(k => {
+        if(list) return;
+        const all = orderPhotos(Object.values(cats[k].files));
+        const i = all.findIndex(p => p.id === photoId);
+        if(i >= 0){ list = all; idx = i; }
+      });
+      setTimeout(() => {
+        runCommand('ls photography');
+        if(list) setTimeout(() => openLightbox(list, idx), 500);
+      }, 350);
+    } else if(videoId){
+      setTimeout(() => {
+        runCommand('ls videography');
+        setTimeout(() => {
+          const card = document.querySelector('.video-card[data-vid="' + CSS.escape(videoId) + '"]');
+          if(!card) return;
+          card.scrollIntoView({ behavior: REDUCED_MOTION ? 'auto' : 'smooth', block: 'center' });
+          card.classList.add('is-linked');
+        }, 600);
+      }, 350);
+    }
   }
 
   const onLayoutChange = () => updatePrompt();
@@ -3825,5 +3880,19 @@ YOUTUBE    youtube.com/elijahhalford` },
 })();
 </script>
 
+<script>
+/* Cloudflare Web Analytics (no cookies): only once a token is saved in /admin → stats,
+   and only on the real site, so previews and tests aren't counted */
+(function(){
+  var a = (window.SITE_CONTENT || {}).analytics || {};
+  if(!/^[0-9a-f]{32}$/i.test(a.beacon || '')) return;
+  if(!/(^|\.)elijahhalford\.com$|^marvelelijah\.github\.io$/.test(location.hostname)) return;
+  var s = document.createElement('script');
+  s.defer = true;
+  s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', JSON.stringify({ token: a.beacon }));
+  document.body.appendChild(s);
+})();
+</script>
 </body>
 </html>
