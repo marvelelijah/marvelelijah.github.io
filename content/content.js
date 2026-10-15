@@ -2174,6 +2174,17 @@ window.SITE_CONTENT = {
    "releaseType": "album",
    "coverId": "1VBli4wEz7tyBK1E8xIo5W42vaJGgAJHr",
    "spotify": "https://open.spotify.com/album/0GCias0JdnsKULYomiZKIU"
+  },
+  {
+   "slug": "c-lucy-bedroque",
+   "title": "C",
+   "artist": "Lucy Bedroque",
+   "year": 2026,
+   "category": "cloud rap / digicore / experimental hip hop",
+   "releaseType": "album",
+   "released": "18 September 2026",
+   "cover": "https://coverartarchive.org/release-group/e0c4c147-23ca-47f2-b46b-38865bd8b672/front-500",
+   "mbid": "e0c4c147-23ca-47f2-b46b-38865bd8b672"
   }
  ],
  "blog": [
