@@ -21,17 +21,15 @@
     </span>
   </header>
 
-  <nav class="tabs" id="tabs" role="tablist">
-    <button type="button" role="tab" data-tab="about">about.txt</button>
-    <button type="button" role="tab" data-tab="contact">contact.txt</button>
-    <button type="button" role="tab" data-tab="equipment">equipment.txt</button>
-    <button type="button" role="tab" data-tab="videos">videography</button>
-    <button type="button" role="tab" data-tab="photos">photography</button>
-    <button type="button" role="tab" data-tab="blog">blog</button>
-    <button type="button" role="tab" data-tab="music">music</button>
-    <button type="button" role="tab" data-tab="links">time well spent</button>
-    <button type="button" role="tab" data-tab="stats">stats</button>
-    <button type="button" role="tab" data-tab="connect">connect</button>
+  <nav class="tabs" id="tabs" aria-label="sections">
+    <div class="tab-groups" role="tablist">
+      <button type="button" role="tab" data-group="home">home</button>
+      <button type="button" role="tab" data-group="information">information</button>
+      <button type="button" role="tab" data-group="media">media</button>
+      <button type="button" role="tab" data-group="journal">journal</button>
+      <button type="button" role="tab" data-group="connect">connect</button>
+    </div>
+    <div class="subtabs" id="subtabs" role="tablist" hidden></div>
   </nav>
 
   <main id="main">
@@ -68,6 +66,21 @@
           <button type="button" class="btn" id="disconnectBtn">forget key</button>
         </div>
         <p class="dim small">The key is kept only in this browser. Anyone who can use this browser while it's remembered can edit your site, so don't tick "remember" on a shared computer.</p>
+      </div>
+      <div class="panel">
+        <div class="panelhead"><span>~/admin/connect/stats</span><span class="dim" id="statsSetupState"></span></div>
+        <p class="dim">Visitor numbers come from Cloudflare Web Analytics: free, no cookies, no banner needed. Two pieces, both done once. The full click-by-click is in the README.</p>
+        <div class="field">
+          <label for="statsBeacon">1 · Web Analytics token · starts counting visits on the site</label>
+          <div class="inline"><input id="statsBeacon" placeholder="32 letters and numbers from Cloudflare's snippet" spellcheck="false" autocomplete="off"><button type="button" class="btn" id="statsBeaconSave">save to site</button></div>
+          <span class="dim">Cloudflare → Analytics &amp; Logs → Web Analytics → add elijahhalford.com → copy the token from <code>data-cf-beacon='{"token": "…"}'</code>. It's public anyway (every visitor's browser sees it).</span>
+        </div>
+        <div class="field">
+          <label for="statsWorker">2 · stats Worker address · lets this page read the numbers</label>
+          <div class="inline"><input id="statsWorker" placeholder="https://elijahhalford-stats.yourname.workers.dev" spellcheck="false" autocomplete="off"><button type="button" class="btn" id="statsWorkerSave">save</button></div>
+          <div class="inline"><button type="button" class="btn" id="statsCopyWorker">copy the Worker code</button><span class="dim" id="statsCopyState"></span></div>
+          <span class="dim">Paste it over everything in a new Cloudflare Worker's code editor, deploy, and add its three settings. Only someone with your GitHub access key can read the stats through it.</span>
+        </div>
       </div>
     </section>
 
@@ -274,19 +287,19 @@
     <!-- ================= music ================= -->
     <section class="view" data-view="about" hidden>
       <div class="panel">
-        <div class="panelhead"><span>~/about.txt</span><span class="dim" id="aboutState"></span></div>
+        <div class="panelhead"><span>~/about</span><span class="dim" id="aboutState"></span></div>
         <p class="dim">Typed exactly as it shows on the site: spaces line the columns up, blank lines make gaps. The word <b>tie</b> in the text is the little hidden button that recolours the site, so keep one if you like it.</p>
         <div class="field"><label for="aboutHeader">details · next to the picture</label><textarea id="aboutHeader" class="mono-edit" rows="5" wrap="off" spellcheck="false"></textarea></div>
         <div class="field"><label for="aboutBody">text</label><textarea id="aboutBody" class="mono-edit" rows="16" wrap="off"></textarea></div>
         <div class="field"><span class="label">preview</span><div class="page-preview" id="aboutPreview"></div></div>
         <div class="row actions">
-          <button type="button" class="btn primary" id="aboutSave">save about.txt</button>
+          <button type="button" class="btn primary" id="aboutSave">save about</button>
           <button type="button" class="btn" id="aboutRevert">undo changes</button>
         </div>
       </div>
     </section>
 
-    <section class="view" data-view="stats" hidden>
+    <section class="view" data-view="home" hidden>
       <div class="panel">
         <div class="panelhead">
           <span>~/stats</span>
@@ -298,31 +311,24 @@
         </div>
         <div id="statsBody" class="stats-body"><p class="dim">loading…</p></div>
       </div>
+      <section class="log panel" aria-label="activity">
+        <div class="log-head"><span>~/activity</span><span class="log-actions"><button type="button" id="undoSave" class="linkbtn" title="put the site back to how it was before the last save" disabled>↶ undo last save</button><button type="button" id="logClear" class="linkbtn">clear</button></span></div>
+        <div id="log" class="log-body" aria-live="polite"></div>
+      </section>
       <div class="panel">
-        <div class="panelhead"><span>~/stats/setup</span><span class="dim" id="statsSetupState"></span></div>
-        <p class="dim">Visitor numbers come from Cloudflare Web Analytics: free, no cookies, no banner needed. Two pieces, both done once. The full click-by-click is in the README.</p>
-        <div class="field">
-          <label for="statsBeacon">1 · Web Analytics token · starts counting visits on the site</label>
-          <div class="inline"><input id="statsBeacon" placeholder="32 letters and numbers from Cloudflare's snippet" spellcheck="false" autocomplete="off"><button type="button" class="btn" id="statsBeaconSave">save to site</button></div>
-          <span class="dim">Cloudflare → Analytics &amp; Logs → Web Analytics → add elijahhalford.com → copy the token from <code>data-cf-beacon='{"token": "…"}'</code>. It's public anyway (every visitor's browser sees it).</span>
-        </div>
-        <div class="field">
-          <label for="statsWorker">2 · stats Worker address · lets this page read the numbers</label>
-          <div class="inline"><input id="statsWorker" placeholder="https://elijahhalford-stats.yourname.workers.dev" spellcheck="false" autocomplete="off"><button type="button" class="btn" id="statsWorkerSave">save</button></div>
-          <div class="inline"><button type="button" class="btn" id="statsCopyWorker">copy the Worker code</button><span class="dim" id="statsCopyState"></span></div>
-          <span class="dim">Paste it over everything in a new Cloudflare Worker's code editor, deploy, and add its three settings. Only someone with your GitHub access key can read the stats through it.</span>
-        </div>
+        <div class="panelhead"><span>~/recent-changes</span><span class="dim">the website's latest saves</span></div>
+        <div id="recentChanges" class="list recent"></div>
       </div>
     </section>
 
     <section class="view" data-view="contact" hidden>
       <div class="panel">
-        <div class="panelhead"><span>~/contact.txt</span><span class="dim" id="contactState"></span></div>
+        <div class="panelhead"><span>~/contact</span><span class="dim" id="contactState"></span></div>
         <p class="dim">Typed exactly as it shows on the site. Email addresses, <b>@handles</b> (Instagram) and <b>youtube.com/…</b> become links by themselves, and the contact form sends to the first email address.</p>
         <div class="field"><label for="contactText">contact</label><textarea id="contactText" class="mono-edit" rows="12" wrap="off" spellcheck="false"></textarea></div>
         <div class="field"><span class="label">preview</span><div class="page-preview narrow" id="contactPreview"></div></div>
         <div class="row actions">
-          <button type="button" class="btn primary" id="contactSave">save contact.txt</button>
+          <button type="button" class="btn primary" id="contactSave">save contact</button>
           <button type="button" class="btn" id="contactRevert">undo changes</button>
         </div>
       </div>
@@ -330,12 +336,12 @@
 
     <section class="view" data-view="equipment" hidden>
       <div class="panel">
-        <div class="panelhead"><span>~/equipment.txt</span><span class="dim" id="equipmentState"></span></div>
+        <div class="panelhead"><span>~/equipment</span><span class="dim" id="equipmentState"></span></div>
         <p class="dim">Typed exactly as it shows on the site: spaces line the columns up, blank lines make gaps.</p>
         <div class="field"><label for="equipmentText">equipment</label><textarea id="equipmentText" class="mono-edit" rows="26" wrap="off" spellcheck="false"></textarea></div>
         <div class="field"><span class="label">preview</span><div class="page-preview narrow" id="equipmentPreview"></div></div>
         <div class="row actions">
-          <button type="button" class="btn primary" id="equipmentSave">save equipment.txt</button>
+          <button type="button" class="btn primary" id="equipmentSave">save equipment</button>
           <button type="button" class="btn" id="equipmentRevert">undo changes</button>
         </div>
       </div>
@@ -392,11 +398,8 @@
     </section>
 
   </main>
+  <button type="button" class="log-latest" id="logLatest" hidden title="open home to see all activity"></button>
 
-  <section class="log" aria-label="activity">
-    <div class="log-head"><span>activity</span><span class="log-actions"><button type="button" id="undoSave" class="linkbtn" title="put the site back to how it was before the last save" disabled>↶ undo last save</button><button type="button" id="logClear" class="linkbtn">clear</button></span></div>
-    <div id="log" class="log-body" aria-live="polite"></div>
-  </section>
 </div>
 
 <!-- photo edit dialog -->

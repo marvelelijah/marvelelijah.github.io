@@ -53,7 +53,19 @@ function log(msg, kind){
   const line = el('div', { class: 'log-line ' + (kind || '') }, el('span', { class: 't', text: t }), msg);
   logEl.appendChild(line);
   logEl.scrollTop = logEl.scrollHeight;
+  mirrorLog(line);
+  // lines are updated later (e.g. "publishing…" → "live ✓"): keep the strip in step
+  new MutationObserver(() => { if(logEl.lastElementChild === line) mirrorLog(line); }).observe(line, { childList: true, characterData: true, subtree: true, attributes: true });
   return line;
+}
+function mirrorLog(line){
+  const strip = document.getElementById('logLatest');
+  if(!strip) return;
+  strip.textContent = line.textContent.replace(/^\d\d:\d\d:\d\d/, '').trim() + '   · activity ↗';
+  strip.className = 'log-latest ' + line.className.replace('log-line', '').trim();
+  // shown on every tab except home, where the full activity list already is
+  const home = document.querySelector('[data-view="home"]');
+  strip.hidden = !home || !home.hidden;
 }
 $('#logClear').addEventListener('click', () => { logEl.innerHTML = ''; });
 
@@ -165,6 +177,7 @@ async function loadData(){
   manifest = parseManifest(mt);
   renderAll();
   refreshUndo();
+  loadRecent();
 }
 
 /* One save = one commit. `build(content, manifest)` edits fresh copies of the data
@@ -215,6 +228,7 @@ function commit(message, build){
         log('saved ✓ ' + message + '  (' + newCommit.sha.slice(0, 7) + ')', 'ok');
         watchDeploy(newCommit.sha);
         renderAll();
+        loadRecent();
         return newCommit.sha;
       }
     }catch(e){
@@ -495,14 +509,71 @@ function updateConn(){
   s.className = 'conn ' + (connected ? 'on' : 'off');
   s.textContent = connected ? 'connected · ' + cfg.repo : 'not connected';
 }
+/* five sections across the top; information, media and journal each have a row of sub-tabs */
+const GROUPS = {
+  home: ['home'],
+  information: ['about', 'contact', 'equipment'],
+  media: ['videos', 'photos'],
+  journal: ['blog', 'music', 'links'],
+  connect: ['connect'],
+};
+const VIEW_LABEL = { about: 'about', contact: 'contact', equipment: 'equipment', videos: 'videography', photos: 'photography', blog: 'blog', music: 'music', links: 'time well spent' };
+const groupOf = view => Object.keys(GROUPS).find(g => GROUPS[g].includes(view)) || 'home';
+let lastInGroup = {};
+try{ lastInGroup = JSON.parse(localStorage.getItem('eh-admin-sub') || '{}') || {}; }catch(e){}
 function showTab(name){
+  if(name === 'stats') name = 'home';
+  if(!GROUPS[groupOf(name)].includes(name)) name = 'home';
   if(!connected && name !== 'connect') name = 'connect';
-  $$('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === name ? 'true' : 'false'));
+  const group = groupOf(name);
+  $$('#tabs .tab-groups button').forEach(b => b.setAttribute('aria-selected', b.dataset.group === group ? 'true' : 'false'));
+  const sub = $('#subtabs');
+  sub.innerHTML = '';
+  sub.hidden = GROUPS[group].length < 2;
+  if(!sub.hidden) GROUPS[group].forEach(v => sub.appendChild(el('button', { type: 'button', role: 'tab', 'data-tab': v,
+    'aria-selected': v === name ? 'true' : 'false', text: VIEW_LABEL[v] || v, onclick: () => showTab(v) })));
   $$('.view').forEach(v => { v.hidden = v.dataset.view !== name; });
-  if(name === 'stats') loadStats();
-  try{ localStorage.setItem('eh-admin-tab', name); }catch(e){}
+  $('#logLatest').hidden = name === 'home' || !$('#logLatest').textContent;
+  if(name === 'home'){ loadStats(); loadRecent(); }
+  lastInGroup[group] = name;
+  try{ localStorage.setItem('eh-admin-tab', name); localStorage.setItem('eh-admin-sub', JSON.stringify(lastInGroup)); }catch(e){}
 }
-$$('#tabs button').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+$$('#tabs .tab-groups button').forEach(b => b.addEventListener('click', () => {
+  const g = b.dataset.group;
+  showTab(GROUPS[g].includes(lastInGroup[g]) ? lastInGroup[g] : GROUPS[g][0]);
+}));
+$('#logLatest').addEventListener('click', () => showTab('home'));
+
+/* home: the website's latest saves, straight from GitHub */
+let recentReq = 0;
+async function loadRecent(){
+  const box = $('#recentChanges');
+  if(!connected || !box) return;
+  const mine = ++recentReq;
+  let list;
+  try{ list = await gh(repoPath() + '/commits?sha=' + encodeURIComponent(cfg.branch) + '&per_page=12'); }
+  catch(e){ if(mine === recentReq){ box.innerHTML = ''; box.appendChild(el('div', { class: 'dim', text: "couldn't load recent changes: " + e.message })); } return; }
+  if(mine !== recentReq) return;
+  box.innerHTML = '';
+  const ago = iso => {
+    const s = (Date.now() - Date.parse(iso)) / 1000;
+    if(!(s >= 0)) return '';
+    if(s < 90) return 'just now';
+    if(s < 3600) return Math.round(s / 60) + ' min ago';
+    if(s < 86400) return Math.round(s / 3600) + ' h ago';
+    const d = Math.round(s / 86400); return d === 1 ? 'yesterday' : d + ' days ago';
+  };
+  (list || []).forEach(c => {
+    const msg = String((c.commit && c.commit.message) || '').split('\n')[0];
+    const mineSave = /^admin: /.test(msg);
+    const when = c.commit && (c.commit.committer || c.commit.author) || {};
+    box.appendChild(el('div', { class: 'item' },
+      el('div', { class: 'item-main' },
+        el('div', { class: 'item-title', text: mineSave ? msg.replace(/^admin: /, '') : msg }),
+        el('div', { class: 'item-sub', text: [ago(when.date), mineSave ? 'saved here' : 'changed on GitHub', String(c.sha || '').slice(0, 7)].filter(Boolean).join(' · ') }))));
+  });
+  if(!list || !list.length) box.appendChild(el('div', { class: 'dim', text: 'no changes yet' }));
+}
 
 $('#cfgOwner').value = cfg.owner; $('#cfgRepo').value = cfg.repo; $('#cfgBranch').value = cfg.branch;
 if(token) $('#tokenInput').value = token;
@@ -524,9 +595,7 @@ async function connect(){
     connected = true;
     updateConn();
     log('connected to ' + cfg.owner + '/' + cfg.repo + ' ✓', 'ok');
-    let last = 'photos';
-    try{ last = localStorage.getItem('eh-admin-tab') || 'photos'; }catch(e){}
-    showTab(last === 'connect' ? 'photos' : last);
+    showTab('home');
   }catch(e){
     connected = false;
     updateConn();
@@ -1598,16 +1667,16 @@ function renderPosts(){
 loadPost(null);
 
 /* =====================================================================
-   about.txt + equipment.txt
+   information: about, contact, equipment
    ===================================================================== */
 const PAGES = {
-  about: { fields: ['#aboutHeader', '#aboutBody'], label: 'about.txt',
+  about: { fields: ['#aboutHeader', '#aboutBody'], label: 'about',
     get: c => [c.pages.about.header || '', c.pages.about.body || ''],
     set: (c, v) => { c.pages.about = { header: v[0], body: v[1] }; } },
-  contact: { fields: ['#contactText'], label: 'contact.txt',
+  contact: { fields: ['#contactText'], label: 'contact',
     get: c => [c.pages.contact || ''],
     set: (c, v) => { c.pages.contact = v[0]; } },
-  equipment: { fields: ['#equipmentText'], label: 'equipment.txt',
+  equipment: { fields: ['#equipmentText'], label: 'equipment',
     get: c => [c.pages.equipment || ''],
     set: (c, v) => { c.pages.equipment = v[0]; } },
 };
@@ -1683,7 +1752,7 @@ function renderStatsSetup(){
   const a = content.analytics || {};
   [['#statsBeacon', a.beacon], ['#statsWorker', a.worker]].forEach(([id, v]) => { if(document.activeElement !== $(id)) $(id).value = v || ''; });
   $('#statsSetupState').textContent = a.beacon && a.worker ? 'set up ✓' : a.beacon ? 'counting visits · Worker not added yet' : 'not set up yet';
-  if(!$('[data-view="stats"]').hidden) loadStats();
+  if(!$('[data-view="home"]').hidden) loadStats();
 }
 $$('#statsRange button').forEach(b => b.addEventListener('click', () => {
   statsDays = +b.dataset.days;
@@ -1717,7 +1786,7 @@ async function loadStats(){
   const a = (content && content.analytics) || {};
   if(!a.worker){
     body.innerHTML = '';
-    body.appendChild(el('p', { class: 'dim', text: a.beacon ? 'The site is counting visits. Add the stats Worker below to see the numbers here.' : 'Nothing to show yet: follow the two steps below.' }));
+    body.appendChild(el('p', { class: 'dim', text: a.beacon ? 'The site is counting visits. Add the stats Worker in connect to see the numbers here.' : 'No stats yet: set them up in connect → stats.' }));
     return;
   }
   const mine = ++statsReq;

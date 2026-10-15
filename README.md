@@ -7,20 +7,22 @@ Terminal-style portfolio, hosted on GitHub Pages.
 Go to **elijahhalford.com/admin** and connect with a GitHub fine-grained access key
 (only this repository · Contents: read & write · optionally Actions: read).
 
-- **photos** – drop JPEG/PNG files; they're resized for the web in your browser, camera
-  settings are read from the file, film scans get film stock + format boxes. The
-  **camera info** tab copies settings from originals onto photos already on the site.
-- **time well spent** – add/edit/delete links (YouTube/Vimeo titles fill in automatically).
-- **videography** – paste a YouTube link, pick a section, optionally add a thumbnail.
-- **blog** – write posts with a live preview, pictures, attached files (PDFs, documents,
-  audio… up to 25 MB each, stored in `files/`) and an optional cover; drafts stay hidden.
-  Ctrl/⌘ Z undoes, Ctrl/⌘ Shift Z or Ctrl Y redoes, Ctrl/⌘ B / I for bold / italic.
-- **about.txt / contact.txt / equipment.txt** – edit the text of those files, with a live preview.
-- **stats** – visitor numbers from Cloudflare Web Analytics (set-up below).
-- **↶ undo last save** (in the activity bar) – puts every file back the way it was before
-  the most recent admin save. Press it again to redo.
-- **music** – type the album and artist, add cover art; year, release date, type, genre and
-  length are looked up on MusicBrainz.
+The admin has five sections:
+
+- **home** – visitor stats (last 7 / 30 / 90 days), this session's activity with
+  **↶ undo last save** (puts every file back the way it was before the most recent admin
+  save; press again to redo), and the website's recent changes. Away from home, the latest
+  activity line shows in a strip along the bottom (click it to come back).
+- **information** → **about · contact · equipment** – edit those texts with a live preview.
+- **media** → **videography** (paste a YouTube link, pick a section, optional thumbnail) ·
+  **photography** (drop JPEG/PNG files; resized in your browser, camera settings read from the
+  file, film scans get film stock + format; the **camera info** tab copies settings from
+  originals onto photos already on the site).
+- **journal** → **blog** (live preview, pictures, attached files up to 25 MB each in `files/`,
+  tags, cover, drafts; Ctrl/⌘ Z undo, Ctrl/⌘ Shift Z or Ctrl Y redo, Ctrl/⌘ B / I) ·
+  **music** (type album + artist, add cover art; the rest is looked up on MusicBrainz) ·
+  **time well spent** (links; YouTube/Vimeo titles fill in automatically).
+- **connect** – your GitHub access key, and the visitor-stats set-up (below).
 
 Every save is a single commit; GitHub Pages republishes the site a minute or two later.
 Each save also keeps the share pages (`blog/<slug>/`, `photo/<id>/`, `video/<id>/`) and the
@@ -57,7 +59,7 @@ The Web Analytics token and the site tag look alike but are **not** the same thi
 
 1. **Start counting visits.** Cloudflare dashboard → *Analytics & Logs → Web Analytics → Add a site* →
    `elijahhalford.com` → choose the JavaScript snippet. Copy the **Web Analytics token** out of the
-   snippet → /admin → stats → step 1 → *save to site*.
+   snippet → /admin → connect → stats → step 1 → *save to site*.
 2. **Make an API token.** Profile icon → *My Profile → API Tokens → Create Token* → *Create Custom Token*
    (*Get started*). Name: anything (e.g. `elijahhalford stats`; it's only a label). Permissions: one row,
    **Account · Account Analytics · Read**. Account Resources: your account. → *Continue to summary* →
@@ -65,7 +67,7 @@ The Web Analytics token and the site tag look alike but are **not** the same thi
    Don't use the *Global API Key* on the same page. It won't work.
 3. **Create the Worker.** *Workers & Pages → Create → Worker* → name `elijahhalford-stats` → *Deploy* →
    *Edit code* → select everything in the editor and paste the **contents** of `tools/stats-worker.js`
-   (/admin → stats → *copy the Worker code* puts them on your clipboard). Don't paste the *file name*:
+   (/admin → connect → *copy the Worker code* puts them on your clipboard). Don't paste the *file name*:
    that gives `ReferenceError: tools is not defined`. → *Deploy*.
 4. **Give the Worker its settings.** Worker → *Settings → Variables and Secrets* → add:
    - `CF_API_TOKEN` · type **Secret** · value = the API token from step 2 (no spaces or quotes;
@@ -76,13 +78,13 @@ The Web Analytics token and the site tag look alike but are **not** the same thi
    → *Deploy*. Keep the `workers.dev` address **enabled and public**, and don't put Cloudflare Access
    (a login) in front of it, or the admin can't reach it. It's still private: it only answers your GitHub key.
 5. **Connect the admin.** Copy the Worker's address (`https://elijahhalford-stats.marvelelijah.workers.dev`)
-   → /admin → stats → step 2 → *save*. Reload the stats tab.
+   → /admin → connect → stats → step 2 → *save*. Reload the stats tab.
 
 ### If something's off
 
 | You see | It means | Fix |
 |---|---|---|
-| Opening the Worker's address shows `{"error":"no access key sent"}` | **Working.** Browsers don't send your key; only the admin does | Nothing. Check stats in /admin |
+| Opening the Worker's address shows `{"error":"no access key sent"}` | **Working.** Browsers don't send your key; only the admin does | Nothing. Check stats on /admin → home |
 | `{"error":"the Worker is missing CF_API_TOKEN, CF_ACCOUNT_ID or CF_SITE_TAG"}` | A setting is missing or misspelled | Check the three names exactly, *Deploy* again |
 | The Worker's address shows "Hello World!" | The code wasn't saved | Paste the code again (step 3), *Deploy* |
 | `Uncaught ReferenceError: tools is not defined` when deploying | The file *name* was pasted, not its contents | Step 3 |
