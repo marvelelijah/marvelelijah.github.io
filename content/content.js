@@ -2365,6 +2365,7 @@ window.SITE_CONTENT = {
   "contact": "EMAIL      elijah.m.halford@gmail.com\n\nINSTAGRAM  @elijahhalford\n\nPHOTO IG   @youwontgetwhatyouwant\n\nYOUTUBE    youtube.com/elijahhalford"
  },
  "analytics": {
-  "beacon": "d86ea745180543d19b861c43a04df9ab"
+  "beacon": "d86ea745180543d19b861c43a04df9ab",
+  "worker": "https://elijahhalford-stats.marvelelijah.workers.dev"
  }
 };
