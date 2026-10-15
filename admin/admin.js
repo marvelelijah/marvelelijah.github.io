@@ -1695,6 +1695,14 @@ $('#statsBeaconSave').addEventListener('click', async () => {
   if(t && !/^[0-9a-f]{32}$/i.test(t)){ log("that doesn't look like a Web Analytics token (32 letters and numbers)", 'err'); return; }
   try{ await commit(t ? 'admin: turn on visitor stats' : 'admin: turn off visitor stats', c => { if(t) c.analytics.beacon = t; else delete c.analytics.beacon; }); }catch(e){}
 });
+$('#statsCopyWorker').addEventListener('click', async () => {
+  const st = $('#statsCopyState');
+  try{
+    const code = await readText('tools/stats-worker.js');
+    await navigator.clipboard.writeText(code);
+    st.textContent = 'copied ✓ (' + code.split('\n').length + ' lines) — now paste it into the Worker';
+  }catch(e){ st.textContent = "couldn't copy: " + e.message; }
+});
 $('#statsWorkerSave').addEventListener('click', async () => {
   const u = $('#statsWorker').value.trim().replace(/\/+$/, '');
   if(u && !/^https:\/\/[\w.-]+(\/[\w./-]*)?$/i.test(u)){ log('the Worker address should look like https://name.yourname.workers.dev', 'err'); return; }

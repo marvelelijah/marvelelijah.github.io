@@ -309,7 +309,8 @@
         <div class="field">
           <label for="statsWorker">2 · stats Worker address · lets this page read the numbers</label>
           <div class="inline"><input id="statsWorker" placeholder="https://elijahhalford-stats.yourname.workers.dev" spellcheck="false" autocomplete="off"><button type="button" class="btn" id="statsWorkerSave">save</button></div>
-          <span class="dim">Paste <code>tools/stats-worker.js</code> into a new Cloudflare Worker and add its three settings. Only someone with your GitHub access key can read the stats through it.</span>
+          <div class="inline"><button type="button" class="btn" id="statsCopyWorker">copy the Worker code</button><span class="dim" id="statsCopyState"></span></div>
+          <span class="dim">Paste it over everything in a new Cloudflare Worker's code editor, deploy, and add its three settings. Only someone with your GitHub access key can read the stats through it.</span>
         </div>
       </div>
     </section>

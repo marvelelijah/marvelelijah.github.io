@@ -38,7 +38,8 @@ blog feed (`feed.xml`) in step with the content.
    - Note your **Account ID** (account home page, right-hand column) and the site's **site tag**
      (Web Analytics → the site → *Manage site*; it's also the `siteTag` in that page's address).
    - *Workers & Pages → Create → Worker* → name it `elijahhalford-stats` → *Deploy* → *Edit code* →
-     replace everything with `tools/stats-worker.js` → *Deploy*.
+     select everything in the editor and paste the **contents** of `tools/stats-worker.js` over it
+     (/admin → stats → *copy the Worker code* puts it on your clipboard) → *Deploy*.
    - Worker → *Settings → Variables and Secrets*: add `CF_API_TOKEN` (type **Secret**),
      `CF_ACCOUNT_ID` and `CF_SITE_TAG` (type Text) → *Deploy*.
    - Copy the Worker's address (`https://elijahhalford-stats.<you>.workers.dev`) into /admin → stats →
