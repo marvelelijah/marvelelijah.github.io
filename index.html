@@ -1505,8 +1505,34 @@ YOUTUBE    youtube.com/elijahhalford` },
     if(document.querySelector('.lightbox.open, .lightbox.is-open')) return;
     const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? output.clientHeight : 1;
     if(panelScrollWatch){ panelScrollWatch.stop(); panelScrollWatch = null; }
-    output.scrollTop += e.deltaY * unit;
+    sideScrollBy(e.deltaY * unit);
   }, { passive: true });
+
+  /* Ease side scrolls the way the browser eases wheel scrolling in the middle:
+     each notch moves a target, and the list glides to it (fast start, soft stop).
+     Trackpads already send many tiny, smooth steps, so those go straight through. */
+  const side = { pos: 0, target: 0, raf: 0, last: 0 };
+  function sideScrollBy(dy){
+    const max = output.scrollHeight - output.clientHeight;
+    const gliding = !!side.raf;
+    if(!gliding) side.pos = side.target = output.scrollTop;
+    if(Math.abs(dy) < 40 && !gliding){            // trackpad: follow the fingers 1:1
+      output.scrollTop = Math.max(0, Math.min(max, output.scrollTop + dy));
+      return;
+    }
+    side.target = Math.max(0, Math.min(max, side.target + dy));
+    if(!gliding){ side.last = performance.now(); side.raf = requestAnimationFrame(sideStep); }
+  }
+  function sideStep(now){
+    const dt = Math.min(64, now - side.last); side.last = now;
+    const diff = side.target - side.pos;
+    if(Math.abs(diff) < 0.5){ output.scrollTop = side.pos = side.target; side.raf = 0; return; }
+    side.pos += diff * (1 - Math.exp(-dt / 55));   // settles in about a fifth of a second
+    output.scrollTop = side.pos;
+    side.raf = requestAnimationFrame(sideStep);
+  }
+  // scrolling in the middle (or anything else moving the list) takes over from a glide
+  output.addEventListener('wheel', () => { if(side.raf){ cancelAnimationFrame(side.raf); side.raf = 0; } }, { passive: true });
   let trimTimer = null;
   function scrollToPanel(panel){
     if(panelScrollWatch){ panelScrollWatch.stop(); panelScrollWatch = null; }
