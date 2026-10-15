@@ -37,7 +37,7 @@ e.g. a new Cloudflare account, or the Worker or its API token was deleted.
 
 ```
 visitor's browser ──(counts the visit)──▶ Cloudflare Web Analytics
-/admin → stats ──(your GitHub key)──▶ stats Worker ──(Cloudflare API token)──▶ Cloudflare Web Analytics
+/admin → home ──(your GitHub key)──▶ stats Worker ──(Cloudflare API token)──▶ Cloudflare Web Analytics
 ```
 
 Cloudflare doesn't let a web page read the stats directly, so a small free Cloudflare
@@ -48,7 +48,7 @@ when the request carries a GitHub key that can edit this repository, so only you
 
 | What | Looks like | Where it comes from | Where it goes |
 |---|---|---|---|
-| **Web Analytics token** | 32 letters/numbers | Web Analytics → the site → the JS snippet, inside `data-cf-beacon='{"token": "…"}'` | /admin → stats → **step 1** |
+| **Web Analytics token** | 32 letters/numbers | Web Analytics → the site → the JS snippet, inside `data-cf-beacon='{"token": "…"}'` | /admin → connect → stats → **step 1** |
 | **API token** | ~40 characters, shown **only once** | My Profile → API Tokens → Create Token (below) | Worker setting `CF_API_TOKEN` (type **Secret**) |
 | **Account ID** | 32 letters/numbers | The string right after `dash.cloudflare.com/` in the address bar, or Workers & Pages → right-hand column | Worker setting `CF_ACCOUNT_ID` (type Text) |
 | **Site tag** | 32 letters/numbers | Web Analytics → click the site → the address bar shows `siteTag~in=<this>`. Copy **only** up to the `&`, not `&excludeBots=Yes` | Worker setting `CF_SITE_TAG` (type Text) |
@@ -78,7 +78,7 @@ The Web Analytics token and the site tag look alike but are **not** the same thi
    → *Deploy*. Keep the `workers.dev` address **enabled and public**, and don't put Cloudflare Access
    (a login) in front of it, or the admin can't reach it. It's still private: it only answers your GitHub key.
 5. **Connect the admin.** Copy the Worker's address (`https://elijahhalford-stats.marvelelijah.workers.dev`)
-   → /admin → connect → stats → step 2 → *save*. Reload the stats tab.
+   → /admin → connect → stats → step 2 → *save*. Then open /admin → home.
 
 ### If something's off
 
@@ -106,6 +106,6 @@ token is ever rolled or deleted, only step 2 and the `CF_API_TOKEN` setting need
 - `blog/<slug>/`, `photo/<id>/`, `video/<id>/` – share pages (link previews), written by /admin
 - `feed.xml` – the blog's RSS feed, written by /admin
 - `404.html` – the "no such file or directory" page
-- `tools/stats-worker.js` – the Cloudflare Worker behind /admin → stats
+- `tools/stats-worker.js` – the Cloudflare Worker behind the stats on /admin → home
 - `admin/` – the admin page
 - `tools/optimize_images.py` – batch-convert a folder of originals (for bulk imports)
