@@ -520,6 +520,7 @@ function renderAll(){
   fillDatalist('dlLinkAuthors', uniqSorted(content.links.map(l => l.author)));
   fillDatalist('dlLinkCats', uniqSorted(content.links.map(l => l.category)));
   fillDatalist('dlArtists', uniqSorted(content.music.map(a => a.artist)));
+  fillDatalist('dlPostTags', uniqSorted(['blog', 'short story'].concat(content.blog.map(p => p.tag))));
   renderPhotoGrid();
   renderVideos();
   renderLinks();
@@ -1165,7 +1166,7 @@ function newPostState(p){
     pending: new Map(),                 // pictures added in this edit, not saved yet
     pendingFiles: new Map(),            // attached files added in this edit, not saved yet
     cover: { id: p ? p.coverId || '' : '', file: null, img: null, remove: false },
-    original: p ? JSON.stringify([p.title, p.date, p.body, !!p.draft, p.coverId || '']) : JSON.stringify(['', todayISO(), '', false, '']),
+    original: p ? JSON.stringify([p.title, p.date, p.body, !!p.draft, p.coverId || '', p.tag || '']) : JSON.stringify(['', todayISO(), '', false, '', '']),
   };
 }
 function loadPost(p){
@@ -1173,6 +1174,7 @@ function loadPost(p){
   $('#postTitle').value = p ? p.title : '';
   $('#postDate').value = p ? (p.date || todayISO()) : todayISO();
   $('#postDraft').checked = !!(p && p.draft);
+  $('#postTag').value = p ? p.tag || '' : '';
   postBody.value = p ? p.body || '' : '';
   $('#postFormTitle').textContent = p ? '~/admin/blog/edit' : '~/admin/blog/new';
   $('#postSave').textContent = p ? 'save changes' : 'publish post';
@@ -1181,7 +1183,7 @@ function loadPost(p){
   histReset();
 }
 postDirty = () => post && (post.pending.size > 0 || post.pendingFiles.size > 0 || post.cover.file || post.cover.remove ||
-  JSON.stringify([$('#postTitle').value, $('#postDate').value, postBody.value, $('#postDraft').checked, post.cover.id]) !== post.original);
+  JSON.stringify([$('#postTitle').value, $('#postDate').value, postBody.value, $('#postDraft').checked, post.cover.id, $('#postTag').value.trim()]) !== post.original);
 
 function showCover(){
   const c = post.cover;
@@ -1239,6 +1241,7 @@ function postPageHtml(p, m){
     '<meta property="og:description" content="' + h(desc) + '">\n' +
     '<meta property="og:image" content="' + img + '">\n' +
     (p.date ? '<meta property="article:published_time" content="' + h(p.date) + '">\n' : '') +
+    (p.tag ? '<meta property="article:tag" content="' + h(p.tag) + '">\n' : '') +
     '<meta name="twitter:card" content="summary_large_image">\n' +
     '<meta name="twitter:title" content="' + h(p.title) + '">\n' +
     '<meta name="twitter:description" content="' + h(desc) + '">\n' +
@@ -1424,6 +1427,8 @@ postForm.addEventListener('submit', async e => {
       if(st.slug && idx < 0) throw new Error('that post was removed somewhere else');
       const old = idx >= 0 ? c.blog[idx] : null;
       const entry = { slug: st.slug || uniqueSlug(slugify(title), new Set(c.blog.map(p => p.slug))), title, date, body };
+      const tag = $('#postTag').value.trim().replace(/\s+/g, ' ');
+      if(tag) entry.tag = tag;
       if($('#postDraft').checked) entry.draft = true;
       let coverId = old ? old.coverId || '' : '';
       if(st.cover.img){ m[st.cover.img.id] = st.cover.img.entry; files.push(...st.cover.img.files); coverId = st.cover.img.id; }
@@ -1460,7 +1465,7 @@ function renderPosts(){
   posts.forEach(p => {
     list.appendChild(el('div', { class: 'item' },
       el('div', { class: 'item-main' },
-        el('div', { class: 'item-title' }, p.title, p.draft ? el('span', { class: 'badge', text: 'draft' }) : null),
+        el('div', { class: 'item-title' }, p.title, p.tag ? el('span', { class: 'badge sec', text: p.tag }) : null, p.draft ? el('span', { class: 'badge', text: 'draft' }) : null),
         el('div', { class: 'item-sub', text: p.date + ' · ' + (p.body || '').replace(/\s+/g, ' ').slice(0, 80) })),
       el('div', { class: 'item-actions' },
         el('button', { type: 'button', text: 'edit', onclick: () => {

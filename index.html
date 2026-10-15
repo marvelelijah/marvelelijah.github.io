@@ -758,6 +758,11 @@
 
   /* ---- redecorate: colour themes ---- */
   body{ transition:background-color 0.6s ease, color 0.6s ease; }
+  /* TEMP-KEATON-MOM — keaton: a photo stretched over the whole window, behind everything, until refresh */
+  body.bg-keaton::before{
+    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:url('img/site/keaton.jpg') center / 100% 100% no-repeat;
+  }
   body.theme-geocity{
     font-family:"Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive;
     background-image:
@@ -856,6 +861,7 @@
   .post{ max-width:68ch; }
   .post-title{ font-size:1.25em; font-weight:normal; color:var(--fg); margin:4px 0 2px; }
   .post-date{ color:var(--fg-dim); font-size:0.85em; margin-bottom:14px; display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 14px; }
+  .post-tag{ color:var(--dir); border:1px solid var(--dir); padding:0 7px; }
   .post-share{ font:inherit; color:var(--dir); background:none; border:1px solid var(--line); padding:1px 8px; cursor:pointer; transition:color 0.2s, border-color 0.2s; }
   .post-share:hover, .post-share:focus-visible{ color:var(--fg); border-color:var(--fg-dim); }
   .post-share.is-done{ color:var(--fg); }
@@ -1277,7 +1283,7 @@
       .forEach(p => {
         const words = postWords(p.body);
         files[uniqueKey(files, p.slug, '.post')] = { type:'post', slug: p.slug,
-          title: p.title, date: p.date || '', body: p.body || '', coverId: p.coverId || '',
+          title: p.title, date: p.date || '', body: p.body || '', coverId: p.coverId || '', tag: p.tag || '',
           words, minutes: Math.max(1, Math.round(words / 230)) };
       });
     return files;
@@ -1476,6 +1482,31 @@ YOUTUBE    youtube.com/elijahhalford` },
     output.scrollTo({ top: Math.max(0, top), behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
   }
   let panelScrollWatch = null;
+  // TEMP-KEATON-MOM: the keaton and mom commands stop working at this moment (Oct 22 2026, noon New York)
+  const TEMP_CMDS_UNTIL = Date.parse('2026-10-22T16:00:00Z');
+
+  /* The list scrolls inside the centre column, so a wheel or trackpad over the empty
+     black sides would do nothing. Pass those scrolls on to the column, unless the
+     pointer is over something that scrolls by itself (gallery, photo, pop-out window). */
+  function scrollsItself(node, dy){
+    for(let n = node; n && n !== document.body && n !== document.documentElement; n = n.parentElement){
+      if(n === output) return true;
+      const oy = getComputedStyle(n).overflowY;
+      if((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight + 1){
+        if(dy < 0 ? n.scrollTop > 0 : n.scrollTop + n.clientHeight < n.scrollHeight - 1) return true;
+      }
+    }
+    return false;
+  }
+  document.addEventListener('wheel', e => {
+    if(e.ctrlKey || !output || output.scrollHeight <= output.clientHeight) return;
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if(scrollsItself(e.target, e.deltaY)) return;
+    if(document.querySelector('.lightbox.open, .lightbox.is-open')) return;
+    const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? output.clientHeight : 1;
+    if(panelScrollWatch){ panelScrollWatch.stop(); panelScrollWatch = null; }
+    output.scrollTop += e.deltaY * unit;
+  }, { passive: true });
   let trimTimer = null;
   function scrollToPanel(panel){
     if(panelScrollWatch){ panelScrollWatch.stop(); panelScrollWatch = null; }
@@ -2312,6 +2343,7 @@ YOUTUBE    youtube.com/elijahhalford` },
     const art = el('article', 'post');
     art.appendChild(el('h1', 'post-title', esc(node.title)));
     const meta = el('div', 'post-date');
+    if(node.tag) meta.appendChild(el('span', 'post-tag', esc(node.tag)));
     meta.appendChild(document.createTextNode([postDateLabel(node.date), node.words.toLocaleString('en-US') + ' words', node.minutes + ' min read'].filter(Boolean).join(' · ')));
     if(node.slug){
       const share = el('button', 'post-share', 'share ↗');
@@ -2467,7 +2499,7 @@ YOUTUBE    youtube.com/elijahhalford` },
         thumbEl = makeRowThumb(f.title, f.cover);
       } else if(f.type === 'post'){
         name = f.title;
-        kind = [postDateLabel(f.date), f.minutes + ' min read'].filter(Boolean).join(' · ');
+        kind = [f.tag, postDateLabel(f.date), f.minutes + ' min read'].filter(Boolean).join(' · ');
         cmd = 'cat ' + pathStr + '/' + key;
         tagCls = '';
       } else if(f.type === 'link'){
@@ -3256,6 +3288,7 @@ YOUTUBE    youtube.com/elijahhalford` },
     THEMES.forEach(t => document.body.classList.remove('theme-' + t));
     Object.keys(FX_LINES).forEach(f => document.documentElement.classList.remove('fx-' + f));
     restoreVars();
+    document.body.classList.remove('bg-keaton'); // TEMP-KEATON-MOM
     floatPhysics = 'drift';
     G = G_DEFAULT; BOUNCE = BOUNCE_DEFAULT;
     if(!quiet) printLine('back to normal.', 'dim');
@@ -3577,6 +3610,19 @@ YOUTUBE    youtube.com/elijahhalford` },
       case 'work': doLs('work'); break;
       case 'blog': case 'music': doLs(cmd); break;
       case 'geocity': case 'geocities': applyTheme('geocity'); break;
+      // TEMP-KEATON-MOM: keaton + mom only work until TEMP_CMDS_UNTIL; a scheduled cleanup then removes them
+      case 'keaton': {
+        if(Date.now() >= TEMP_CMDS_UNTIL){ printLine("command not found: " + cmd + ". try ls, cat, cd or settings.", 'err'); break; }
+        const on = !document.body.classList.contains('bg-keaton');
+        document.body.classList.toggle('bg-keaton', on);
+        printLine(on ? 'keaton.' : 'keaton has left the building.', 'dim');
+        break;
+      }
+      case 'mom':
+        if(Date.now() >= TEMP_CMDS_UNTIL){ printLine("command not found: " + cmd + ". try ls, cat, cd or settings.", 'err'); break; }
+        printLine('calling mom…', 'dim');
+        setTimeout(() => { location.href = 'https://graciemayphotography.com'; }, 700);
+        break;
       case 'crt': applyTheme('crt'); break;
       case 'darkroom': applyTheme('darkroom'); break;
       case 'negative': case 'inverted': case 'invert': toggleFx('negative'); break;
