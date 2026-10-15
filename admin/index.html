@@ -70,7 +70,14 @@
     <!-- ================= photos ================= -->
     <section class="view" data-view="photos" hidden>
       <div class="panel">
-        <div class="panelhead"><span>~/admin/photos/new</span></div>
+        <div class="panelhead">
+          <span id="photoToolPath">~/admin/photos/new</span>
+          <span class="seg" id="photoToolTabs" role="tablist">
+            <button type="button" data-tool="new" class="on" role="tab" aria-selected="true">new</button>
+            <button type="button" data-tool="camera-info" role="tab" aria-selected="false">camera info</button>
+          </span>
+        </div>
+        <div data-toolpane="new">
         <label class="drop" id="photoDrop" tabindex="0">
           <input type="file" id="photoFiles" accept="image/jpeg,image/png,image/webp" multiple hidden>
           <span class="drop-big">drop photos here</span>
@@ -81,10 +88,9 @@
           <button type="button" class="btn primary" id="publishPhotos">publish</button>
           <button type="button" class="btn" id="clearPhotos">clear</button>
         </div>
-      </div>
+        </div>
 
-      <div class="panel">
-        <div class="panelhead"><span>~/admin/photos/camera-info</span></div>
+        <div data-toolpane="camera-info" hidden>
         <p class="dim">Add camera settings to photos that are already on the site. Drop your <b>original</b> files (straight from the camera or Lightroom, with their camera info). Nothing is uploaded: each file is only read to match it by name and copy its settings. Descriptions stay as they are.</p>
         <label class="drop" id="exifDrop" tabindex="0">
           <input type="file" id="exifFiles" accept="image/jpeg" multiple hidden>
@@ -101,6 +107,7 @@
             <button type="button" class="btn primary" id="exifSave">save camera info</button>
             <button type="button" class="btn" id="exifCancel">cancel</button>
           </div>
+        </div>
         </div>
       </div>
 
@@ -198,7 +205,7 @@
         </form>
       </div>
       <div class="panel">
-        <div class="panelhead"><span>~/journal/time-well-spent</span><span class="dim" id="linkCount"></span></div>
+        <div class="panelhead"><span>~/time-well-spent</span><span class="dim" id="linkCount"></span></div>
         <div id="linkList" class="list"></div>
       </div>
     </section>
@@ -228,6 +235,9 @@
           <div class="field">
             <span class="label">post</span>
             <div class="toolbar" id="mdToolbar">
+              <button type="button" id="postUndo" title="undo (Ctrl/⌘ Z)" aria-label="undo" disabled>↶</button>
+              <button type="button" id="postRedo" title="redo (Ctrl/⌘ Shift Z)" aria-label="redo" disabled>↷</button>
+              <span class="tb-sep" aria-hidden="true"></span>
               <button type="button" data-md="h" title="heading">H</button>
               <button type="button" data-md="b" title="bold"><b>B</b></button>
               <button type="button" data-md="i" title="italic"><i>I</i></button>
@@ -236,6 +246,8 @@
               <button type="button" data-md="list" title="list">• list</button>
               <label class="tb-img" for="postImageFile" title="insert a picture">+ picture</label>
               <input type="file" id="postImageFile" accept="image/jpeg,image/png,image/webp" hidden>
+              <label class="tb-img" for="postAttachFile" title="attach a file (pdf, document, audio…) up to 25 MB">+ file</label>
+              <input type="file" id="postAttachFile" hidden>
             </div>
             <div class="editor">
               <textarea id="postBody" rows="16" placeholder="Write here. Leave a blank line between paragraphs.&#10;&#10;# a heading&#10;**bold**, *italic*, [a link](https://…)"></textarea>
@@ -249,7 +261,7 @@
         </form>
       </div>
       <div class="panel">
-        <div class="panelhead"><span>~/journal/blog</span><span class="dim" id="postCount"></span></div>
+        <div class="panelhead"><span>~/blog</span><span class="dim" id="postCount"></span></div>
         <div id="postList" class="list"></div>
       </div>
     </section>
@@ -300,7 +312,7 @@
         </form>
       </div>
       <div class="panel">
-        <div class="panelhead"><span>~/journal/music</span><span class="dim" id="albumCount"></span></div>
+        <div class="panelhead"><span>~/music</span><span class="dim" id="albumCount"></span></div>
         <div id="albumList" class="list"></div>
       </div>
     </section>

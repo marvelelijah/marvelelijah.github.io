@@ -1,6 +1,6 @@
 /* Tiny, safe markdown for blog posts. Shared by the site and /admin (live preview).
    Supports: # / ## / ### headings, paragraphs, line breaks, > quotes, - lists,
-   **bold**, *italic*, `code`, [links](https://…), ![images](img/…), --- rules.
+   **bold**, *italic*, `code`, [links](https://…), ![images](img/…), [files](files/…), --- rules.
    Everything is HTML-escaped first, so a post can never inject markup or script. */
 (function(){
   function esc(s){
@@ -10,7 +10,7 @@
   function safeUrl(u){
     u = String(u || '').trim();
     if(/^https?:\/\//i.test(u) || /^mailto:/i.test(u)) return u;
-    if(/^(\.\.\/)?(img|content)\/[\w\-./]+$/.test(u)) return u.replace(/^\.\.\//, '');
+    if(/^(\.\.\/)?(img|content|files)\/[\w\-./]+$/.test(u) && !/\.\./.test(u.replace(/^\.\.\//, ''))) return u.replace(/^\.\.\//, '');
     return '';
   }
   function inline(t, opts){
@@ -23,8 +23,9 @@
     t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, text, href) => {
       const u = safeUrl(href.replace(/&amp;/g, '&'));
       if(!u) return text;
-      const ext = /^https?:/i.test(u);
-      return '<a href="' + esc(ext ? u : opts.imgBase + u) + '"' + (ext ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + text + '</a>';
+      const ext = /^https?:/i.test(u), file = /^files\//.test(u);
+      return '<a href="' + esc(ext ? u : opts.imgBase + u) + '"' + (file ? ' class="post-file"' : '') +
+        (ext || file ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + text + '</a>';
     });
     t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     t = t.replace(/(^|[^*])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>');

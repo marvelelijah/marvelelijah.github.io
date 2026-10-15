@@ -156,12 +156,17 @@ select{ appearance:none; background-image:linear-gradient(45deg, transparent 50%
 .toolbar{ display:flex; flex-wrap:wrap; gap:4px; margin-bottom:6px; }
 .toolbar button, .toolbar .tb-img{ padding:3px 10px; border:1px solid var(--line); color:var(--fg-dim); cursor:pointer; }
 .toolbar button:hover, .toolbar .tb-img:hover{ color:var(--fg); border-color:var(--fg-dim); }
+.toolbar button:disabled{ opacity:0.35; cursor:default; }
+.toolbar button:disabled:hover{ color:var(--fg-dim); border-color:var(--line); }
+.toolbar .tb-sep{ width:1px; align-self:stretch; background:var(--line); margin:0 2px; }
 .editor{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 .preview{ border:1px solid var(--line); padding:10px 14px; min-height:300px; max-height:640px; overflow:auto; }
 .post-body{ line-height:1.75; }
 .post-body p{ margin:0 0 1em; }
 .post-body h2, .post-body h3, .post-body h4{ font-weight:normal; color:var(--dir); margin:1.2em 0 0.5em; }
 .post-body a{ color:var(--fg); text-decoration:underline; }
+.post-body a.post-file{ color:var(--media); }
+.post-body a.post-file::before{ content:'\2193\00a0'; display:inline-block; }
 .post-body blockquote{ margin:0 0 1em; padding-left:12px; border-left:2px solid var(--line); color:var(--fg-dim); }
 .post-body ul{ margin:0 0 1em; padding-left:1.4em; }
 .post-body hr{ border:none; border-top:1px solid var(--line); margin:1.4em 0; }

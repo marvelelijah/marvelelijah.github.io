@@ -128,6 +128,7 @@ function parseContent(text){
   c.photos = c.photos || {};
   ['film', 'digital', 'stills'].forEach(k => { c.photos[k] = c.photos[k] || []; });
   c.links = c.links || []; c.music = c.music || []; c.blog = c.blog || []; c.videos = c.videos || [];
+  c.files = c.files || {};   // files attached to blog posts, by name in files/
   return c;
 }
 function serializeContent(c){ return CONTENT_HEAD + JSON.stringify(c, null, 1) + ';\n'; }
@@ -613,6 +614,14 @@ photoInput.addEventListener('change', () => { addPhotoFiles(photoInput.files); p
 ['dragenter', 'dragover'].forEach(t => photoDrop.addEventListener(t, e => { e.preventDefault(); photoDrop.classList.add('over'); }));
 ['dragleave', 'drop'].forEach(t => photoDrop.addEventListener(t, e => { e.preventDefault(); photoDrop.classList.remove('over'); }));
 photoDrop.addEventListener('drop', e => { if(e.dataTransfer && e.dataTransfer.files) addPhotoFiles(e.dataTransfer.files); });
+
+/* the photo tools share one window: new photos | camera info */
+function showPhotoTool(name){
+  $$('#photoToolTabs button').forEach(b => { const on = b.dataset.tool === name; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  $$('[data-toolpane]').forEach(p => { p.hidden = p.dataset.toolpane !== name; });
+  $('#photoToolPath').textContent = '~/admin/photos/' + name;
+}
+$$('#photoToolTabs button').forEach(b => b.addEventListener('click', () => showPhotoTool(b.dataset.tool)));
 
 function isImageFile(f){ return /^image\/(jpeg|png|webp)$/.test(f.type) || /\.(jpe?g|png|webp)$/i.test(f.name); }
 function addPhotoFiles(list){
@@ -1128,11 +1137,26 @@ const postForm = $('#postForm'), postBody = $('#postBody'), postPreview = $('#po
 let post = null; // editor state
 const IMG_REF = /img\/p\/([\w-]+)-\d+\.\w+/g;
 function refsIn(text){ const s = new Set(); let m; IMG_REF.lastIndex = 0; while((m = IMG_REF.exec(text || ''))) s.add(m[1]); return s; }
+/* attached files: kept in files/ in the repo, linked from the post as [name](files/…) */
+const FILE_LIMIT = 25 * 1024 * 1024;
+const FILE_OK = /\.(pdf|txt|md|csv|rtf|docx?|xlsx?|pptx?|odt|ods|odp|pages|key|numbers|epub|zip|mp3|wav|m4a|aiff?|flac)$/i;
+const FILE_REF = /files\/([\w.-]+)/g;
+function fileRefsIn(text){ const s = new Set(); let m; FILE_REF.lastIndex = 0; while((m = FILE_REF.exec(text || ''))) s.add(m[1]); return s; }
+function fmtSize(n){ return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+/* files no other post links to, so they can go when this post stops using them */
+function unusedFiles(c, names, skipIdx){
+  const others = new Set();
+  c.blog.forEach((p, i) => { if(i !== skipIdx) fileRefsIn(p.body).forEach(x => others.add(x)); });
+  const out = [];
+  names.forEach(n => { if(!others.has(n) && c.files[n]){ out.push({ path: 'files/' + n, delete: true }); delete c.files[n]; } });
+  return out;
+}
 
 function newPostState(p){
   return {
     slug: p ? p.slug : null,
     pending: new Map(),                 // pictures added in this edit, not saved yet
+    pendingFiles: new Map(),            // attached files added in this edit, not saved yet
     cover: { id: p ? p.coverId || '' : '', file: null, img: null, remove: false },
     original: p ? JSON.stringify([p.title, p.date, p.body, !!p.draft, p.coverId || '']) : JSON.stringify(['', todayISO(), '', false, '']),
   };
@@ -1147,8 +1171,9 @@ function loadPost(p){
   $('#postSave').textContent = p ? 'save changes' : 'publish post';
   showCover();
   renderPreview();
+  histReset();
 }
-postDirty = () => post && (post.pending.size > 0 || post.cover.file || post.cover.remove ||
+postDirty = () => post && (post.pending.size > 0 || post.pendingFiles.size > 0 || post.cover.file || post.cover.remove ||
   JSON.stringify([$('#postTitle').value, $('#postDate').value, postBody.value, $('#postDraft').checked, post.cover.id]) !== post.original);
 
 function showCover(){
@@ -1181,33 +1206,99 @@ function renderPreview(){
     if(p) img.src = p.previewUrl;
     else if(localPreviews[m[1]]) img.src = localPreviews[m[1]];
   });
+  // attached files not uploaded yet open from this computer
+  postPreview.querySelectorAll('a.post-file').forEach(a => {
+    const m = (a.getAttribute('href') || '').match(/files\/([\w.-]+)$/);
+    const f = m && post.pendingFiles.get(m[1]);
+    if(f){ f.url = f.url || URL.createObjectURL(f.blob); a.href = f.url; }
+  });
 }
 let previewTimer = null;
 [postBody, $('#postTitle')].forEach(x => x.addEventListener('input', () => { clearTimeout(previewTimer); previewTimer = setTimeout(renderPreview, 120); }));
 
+/* undo / redo: our own history, so toolbar edits, pictures and files undo too.
+   Typing is grouped into steps by short pauses, new lines and pastes. */
+const hist = { stack: [], i: 0, timer: null, started: 0 };
+const snap = () => ({ v: postBody.value, s: postBody.selectionStart, e: postBody.selectionEnd });
+function histButtons(){
+  $('#postUndo').disabled = !(hist.i > 0 || hist.timer);
+  $('#postRedo').disabled = !(hist.i < hist.stack.length - 1);
+}
+function histReset(){ clearTimeout(hist.timer); hist.timer = null; hist.stack = [snap()]; hist.i = 0; histButtons(); }
+function histPush(){
+  clearTimeout(hist.timer); hist.timer = null;
+  const cur = hist.stack[hist.i];
+  if(cur && cur.v === postBody.value){ cur.s = postBody.selectionStart; cur.e = postBody.selectionEnd; histButtons(); return; }
+  hist.stack = hist.stack.slice(0, hist.i + 1);
+  hist.stack.push(snap());
+  if(hist.stack.length > 300) hist.stack.shift();
+  hist.i = hist.stack.length - 1;
+  histButtons();
+}
+function histApply(step){
+  if(hist.timer) histPush();
+  const j = hist.i + step;
+  if(j < 0 || j >= hist.stack.length) return;
+  hist.i = j;
+  const st = hist.stack[j];
+  postBody.value = st.v;
+  postBody.focus();
+  postBody.setSelectionRange(st.s, st.e);
+  renderPreview();
+  histButtons();
+}
+const undo = () => histApply(-1), redo = () => histApply(1);
+postBody.addEventListener('input', e => {
+  const t = e.inputType || '';
+  if(!hist.timer) hist.started = Date.now();
+  if(/^(insertFromPaste|insertFromDrop|deleteByCut|insertLineBreak|insertParagraph)$/.test(t) || Date.now() - hist.started > 2000) histPush();
+  else { clearTimeout(hist.timer); hist.timer = setTimeout(histPush, 700); histButtons(); }
+});
+// the browser's own undo (Edit menu, shake to undo) goes through the same history
+postBody.addEventListener('beforeinput', e => {
+  if(e.inputType === 'historyUndo'){ e.preventDefault(); undo(); }
+  else if(e.inputType === 'historyRedo'){ e.preventDefault(); redo(); }
+});
+postBody.addEventListener('keydown', e => {
+  if(!(e.metaKey || e.ctrlKey) || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if(k === 'z' && !e.shiftKey){ e.preventDefault(); undo(); }
+  else if((k === 'z' && e.shiftKey) || (k === 'y' && !e.shiftKey)){ e.preventDefault(); redo(); }
+  else if(k === 'b' && !e.shiftKey){ e.preventDefault(); wrapSel('**', '**', 'bold text'); }
+  else if(k === 'i' && !e.shiftKey){ e.preventDefault(); wrapSel('*', '*', 'italic text'); }
+});
+$('#postUndo').addEventListener('click', undo);
+$('#postRedo').addEventListener('click', redo);
+
 /* toolbar */
 function wrapSel(before, after, placeholder){
+  histPush();
   const s = postBody.selectionStart, e = postBody.selectionEnd, v = postBody.value;
   const sel = v.slice(s, e) || placeholder || '';
   postBody.value = v.slice(0, s) + before + sel + after + v.slice(e);
   postBody.focus();
   postBody.setSelectionRange(s + before.length, s + before.length + sel.length);
   renderPreview();
+  histPush();
 }
 function linePrefix(prefix){
+  histPush();
   const s = postBody.selectionStart, v = postBody.value;
   const ls = v.lastIndexOf('\n', s - 1) + 1;
   postBody.value = v.slice(0, ls) + prefix + v.slice(ls);
   postBody.focus();
   postBody.setSelectionRange(s + prefix.length, s + prefix.length);
   renderPreview();
+  histPush();
 }
 function insertAtCursor(text){
+  histPush();
   const s = postBody.selectionStart, v = postBody.value;
   postBody.value = v.slice(0, s) + text + v.slice(postBody.selectionEnd);
   postBody.focus();
   postBody.setSelectionRange(s + text.length, s + text.length);
   renderPreview();
+  histPush();
 }
 $$('#mdToolbar button').forEach(b => b.addEventListener('click', () => {
   const k = b.dataset.md;
@@ -1234,6 +1325,19 @@ $('#postImageFile').addEventListener('change', async e => {
     line.lastChild.textContent = 'picture ready — it uploads when you publish the post';
   }catch(err){ line.className = 'log-line err'; line.lastChild.textContent = 'picture failed: ' + err.message; }
 });
+$('#postAttachFile').addEventListener('change', e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if(!f) return;
+  if(!FILE_OK.test(f.name)){ log(f.name + ": that kind of file can't be attached (pdf, documents, spreadsheets, slides, zip and audio are fine)", 'err'); return; }
+  if(f.size > FILE_LIMIT){ log(f.name + ' is ' + fmtSize(f.size) + ' — files can be up to ' + fmtSize(FILE_LIMIT) + '. Try compressing it first.', 'err'); return; }
+  if(!f.size){ log(f.name + ' is empty', 'err'); return; }
+  const ext = f.name.match(/\.([^.]+)$/)[1].toLowerCase();
+  const name = slugify(f.name.replace(/\.[^.]+$/, '')).slice(0, 50) + '-' + Math.random().toString(36).slice(2, 7) + '.' + ext;
+  post.pendingFiles.set(name, { blob: f, size: f.size, title: f.name });
+  const label = f.name.replace(/[\[\]]/g, '');
+  insertAtCursor((postBody.selectionStart && postBody.value[postBody.selectionStart - 1] !== '\n' ? ' ' : '') + '[' + label + '](files/' + name + ')');
+  log(f.name + ' (' + fmtSize(f.size) + ') ready — it uploads when you publish the post', 'dim');
+});
 
 $('#postNew').addEventListener('click', () => {
   if(postDirty() && !confirm('Discard the changes to this post?')) return;
@@ -1255,6 +1359,8 @@ postForm.addEventListener('submit', async e => {
       const files = [];
       // new pictures that are still in the text
       st.pending.forEach((img, id) => { if(used.has(id)){ m[id] = img.entry; files.push(...img.files); } });
+      const usedFiles = fileRefsIn(body);
+      st.pendingFiles.forEach((f, name) => { if(usedFiles.has(name)){ c.files[name] = { size: f.size, name: f.title }; files.push({ path: 'files/' + name, blob: f.blob }); } });
       const idx = st.slug ? c.blog.findIndex(p => p.slug === st.slug) : -1;
       if(st.slug && idx < 0) throw new Error('that post was removed somewhere else');
       const old = idx >= 0 ? c.blog[idx] : null;
@@ -1270,6 +1376,7 @@ postForm.addEventListener('submit', async e => {
         const others = new Set();
         c.blog.forEach((p, i) => { if(i !== idx){ refsIn(p.body).forEach(x => others.add(x)); if(p.coverId) others.add(p.coverId); } });
         refsIn(old.body).forEach(id => { if(!used.has(id) && !others.has(id) && m[id]){ files.push(...imageFilesFor(id, m)); delete m[id]; } });
+        files.push(...unusedFiles(c, [...fileRefsIn(old.body)].filter(n => !usedFiles.has(n)), idx));
       }
       if(idx >= 0) c.blog[idx] = entry; else c.blog.unshift(entry);
       return files;
@@ -1300,7 +1407,7 @@ function renderPosts(){
           $('#postEditorPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
         } }),
         el('button', { type: 'button', class: 'del', text: 'delete', onclick: async () => {
-          if(!confirm('Delete the post "' + p.title + '"? Its pictures are deleted too.')) return;
+          if(!confirm('Delete the post "' + p.title + '"? Its pictures and attached files are deleted too.')) return;
           try{
             await commit('admin: delete post ' + p.title, (c, m) => {
               const target = c.blog.find(x => x.slug === p.slug);
@@ -1311,6 +1418,7 @@ function renderPosts(){
               const mine = refsIn(target.body); if(target.coverId) mine.add(target.coverId);
               const files = [];
               mine.forEach(id => { if(!others.has(id) && m[id]){ files.push(...imageFilesFor(id, m)); delete m[id]; } });
+              files.push(...unusedFiles(c, [...fileRefsIn(target.body)], -1));
               return files;
             });
             if(post && post.slug === p.slug) loadPost(null);

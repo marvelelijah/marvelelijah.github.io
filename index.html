@@ -709,7 +709,7 @@
     .inputrow{ padding:18px 0 28px; }
   }
 
-  /* empty directories (e.g. journal/blog) */
+  /* empty directories (e.g. blog) */
   .listing .is-empty{ opacity:0.4; }
 
   /* ---- floating windows (desktop contact) ---- */
@@ -862,6 +862,8 @@
   .post-body h2, .post-body h3, .post-body h4{ font-weight:normal; color:var(--dir); margin:1.4em 0 0.5em; }
   .post-body h2{ font-size:1.1em; } .post-body h3{ font-size:1em; } .post-body h4{ font-size:0.95em; }
   .post-body a{ color:var(--fg); text-decoration:underline; text-underline-offset:3px; }
+  .post-body a.post-file{ color:var(--media); }
+  .post-body a.post-file::before{ content:'\2193\00a0'; text-decoration:none; display:inline-block; }
   .post-body blockquote{ margin:0 0 1em; padding-left:12px; border-left:2px solid var(--line); color:var(--fg-dim); }
   .post-body ul{ margin:0 0 1em; padding-left:1.4em; }
   .post-body code{ background:var(--line); padding:0 4px; }
@@ -890,7 +892,7 @@
   /* each format button previews its own look */
   .listing .set-btn.look-geocity{
     font-family:"Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive;
-    background:linear-gradient(90deg, #ff3fa4, #ffd23f, #3fffd2, #7a5cff);
+    background:linear-gradient(90deg, #ff3fa4, #ffd23f, #3fffd2, #8a6fff);
     color:#1a0033; border-color:#ff3fa4; font-weight:bold;
   }
   .listing .set-btn.look-crt{
@@ -1095,7 +1097,7 @@
 </script>
 <script>
 (function(){
-  // All editable content (photos, journal links, music, blog posts) lives in
+  // All editable content (photos, time well spent links, music, blog posts) lives in
   // content/content.js, which the admin page (/admin) reads and writes.
   const C = window.SITE_CONTENT || {};
   const CP = C.photos || {};
@@ -1363,11 +1365,9 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       'videography': { type:'dir', files: buildVideoFiles(VIDEOS) },
     }},
 
-    'journal': { type:'dir', files:{
-      'time-well-spent': { type:'dir', files: buildLinkFiles(C.links) },
-      'blog': { type:'dir', files: buildPostFiles(C.blog) },
-      'music': { type:'dir', files: buildAlbumFiles(C.music) },
-    }},
+    'time-well-spent': { type:'dir', files: buildLinkFiles(C.links) },
+    'blog': { type:'dir', files: buildPostFiles(C.blog) },
+    'music': { type:'dir', files: buildAlbumFiles(C.music) },
   };
 
   let cwd = '';
@@ -2419,7 +2419,10 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     box.appendChild(rowButton('about.txt', 'cat about.txt', '', 'text'));
     box.appendChild(rowButton('contact.txt', 'cat contact.txt', '', 'text'));
     box.appendChild(rowButton('work/', 'ls work', 'tag-dir', 'dir · 3 items'));
-    box.appendChild(rowButton('journal/', 'ls journal', 'tag-dir', 'dir · 3 items'));
+    ['time-well-spent', 'blog', 'music'].forEach(d => {
+      const n = Object.keys(FS[d].files).length;
+      box.appendChild(rowButton(d + '/', 'ls ' + d, 'tag-dir', 'dir · ' + n + ' item' + (n === 1 ? '' : 's')));
+    });
     box.appendChild(buildSettingsRow());
     rootPanelBody.appendChild(box);
     if(isNarrow()) smoothScrollOutput(0); else scrollBottom();
@@ -2429,7 +2432,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     const node = resolveDirNode(pathStr);
     const body = printPanel('~/' + pathStr, true, 'ls ' + pathStr);
     const box = el('div', 'listing');
-    const isMusicDir = (pathStr === 'journal/music');
+    const isMusicDir = (pathStr === 'music');
     let entries = Object.keys(node.files);
     if(isMusicDir){
       entries = entries.sort((a, b) => node.files[a].year - node.files[b].year);
@@ -3037,7 +3040,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     let node = resolveNode(path);
 
     if(!node && !trimmed.includes('/')){
-      for(const d of ['work', 'journal', 'journal/dreams']){
+      for(const d of ['work']){
         const dirNode = resolveDirNode(d);
         if(dirNode && dirNode.files[trimmed]){
           node = dirNode.files[trimmed];
@@ -3086,7 +3089,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     () => 'float.tick dt=' + (0.014 + Math.random() * 0.004).toFixed(4) + ' vx=' + rint(-40, 40) + ' vy=' + rint(-40, 40),
     () => 'GET thumbnail?id=' + hex(10) + '… 200 ' + rint(18, 240) + 'kb',
     () => 'scramble[' + rint(0, 64) + "] '" + junk(6) + "' -> settle",
-    () => 'cd ~/journal/' + pick(['music', 'time-well-spent', 'blog']),
+    () => 'cd ~/' + pick(['music', 'time-well-spent', 'blog']),
     () => 'ls -la ~/work | wc -l    ' + rint(3, 9),
     () => '0x' + hex(4) + ':  ' + [0,0,0,0,0,0,0,0].map(() => hex(2)).join(' '),
     () => "panel.push('" + pick(['about.txt', 'contact.txt', 'equipment.txt', 'help']) + "')",
@@ -3143,17 +3146,48 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
     });
   }
 
+  /* WCAG 2.x contrast: relative luminance of sRGB colours, ratio (L1 + 0.05) / (L2 + 0.05) */
+  function hslRgb(h, sat, l){
+    sat /= 100; l /= 100;
+    const k = n => (n + h / 30) % 12, a = sat * Math.min(l, 1 - l);
+    const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1));
+    return [f(0), f(8), f(4)].map(v => Math.round(v * 255));
+  }
+  function luminance(rgb){
+    const [r, g, b] = rgb.map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  }
+  function contrast(a, b){
+    const la = luminance(a), lb = luminance(b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+  }
+  /* a loud random palette, nudged lighter (then paler) until every colour clears its WCAG bar
+     against the background: 7:1 (AAA) for body text, 4.5:1 (AA) for the other text colours,
+     3:1 for the border lines (non-text contrast, 1.4.11) */
   function garishPalette(){
     const h = Math.floor(Math.random() * 360);
-    const pick = (off, s, l) => 'hsl(' + ((h + off) % 360) + ',' + s + '%,' + l + '%)';
+    // yellows and greens are bright even when dark, so their background goes deeper:
+    // keep at least 10:1 against white so the brightest text colours have room
+    let bgL = 14 + Math.random() * 8, bg = hslRgb(h, 100, bgL);
+    while(contrast([255, 255, 255], bg) < 10 && bgL > 4){ bgL -= 1; bg = hslRgb(h, 100, bgL); }
+    const hex = rgb => '#' + rgb.map(v => v.toString(16).padStart(2, '0')).join('');
+    const pick = (off, s, l, min) => {
+      const hue = (h + off) % 360;
+      let rgb = hslRgb(hue, s, l);
+      while(contrast(rgb, bg) < min && (l < 98 || s > 0)){
+        if(l < 98) l += 1; else s -= 5;
+        rgb = hslRgb(hue, Math.max(0, s), l);
+      }
+      return hex(rgb);
+    };
     return {
-      '--bg': pick(0, 100, 22 + Math.random() * 10),
-      '--fg': pick(180, 100, 72),
-      '--fg-dim': pick(60, 100, 62),
-      '--line': pick(300, 100, 50),
-      '--dir': pick(120, 100, 60),
-      '--media': pick(240, 100, 65),
-      '--err': pick(30, 100, 60),
+      '--bg': hex(bg),
+      '--fg': pick(180, 100, 72, 7),
+      '--fg-dim': pick(60, 100, 62, 4.5),
+      '--line': pick(300, 100, 50, 3),
+      '--dir': pick(120, 100, 60, 4.5),
+      '--media': pick(240, 100, 65, 4.5),
+      '--err': pick(30, 100, 60, 4.5),
     };
   }
 
@@ -3530,7 +3564,7 @@ LENSES    Canon FD 28mm f/2.8, Canon FD 50mm f/1.4` },
       case 'contact': doCat('contact.txt'); break;
       case 'about': doCat('about.txt'); break;
       case 'work': doLs('work'); break;
-      case 'journal': doLs('journal'); break;
+      case 'blog': case 'music': doLs(cmd); break;
       case 'geocity': case 'geocities': applyTheme('geocity'); break;
       case 'crt': applyTheme('crt'); break;
       case 'darkroom': applyTheme('darkroom'); break;
