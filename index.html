@@ -1451,6 +1451,7 @@
   // Opens an outside link in a new tab. A real <a target=_blank> click is honoured by
   // mobile Safari/Chrome and most in-app browsers more reliably than window.open().
   function openExternal(url){
+    if(!/^(https?:|mailto:)/i.test(String(url || '').trim())) return;   // never javascript: or other schemes
     const a = document.createElement('a');
     a.href = url;
     a.target = '_blank';
@@ -2485,7 +2486,7 @@
     if(thumbEl) btn.appendChild(thumbEl);
     const nameSpan = el('span', tagCls, esc(name));
     btn.appendChild(nameSpan);
-    btn.appendChild(el('span', 'kind', kindText));
+    btn.appendChild(el('span', 'kind', esc(kindText)));   // artist, genre, author… can come from outside services
     btn.addEventListener('click', () => {
       // a directory that's already open closes again (the photo/video galleries already toggle)
       if(/^ls /.test(cmd) && currentPanel && currentPanelCmd === cmd){
