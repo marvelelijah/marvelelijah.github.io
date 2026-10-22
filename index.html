@@ -759,11 +759,6 @@
 
   /* ---- redecorate: colour themes ---- */
   body{ transition:background-color 0.6s ease, color 0.6s ease; }
-  /* TEMP-KEATON-MOM — keaton: a photo stretched over the whole window, behind everything, until refresh */
-  body.bg-keaton::before{
-    content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
-    background:url('img/site/keaton.jpg') center / 100% 100% no-repeat;
-  }
   body.theme-geocity{
     font-family:"Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive;
     background-image:
@@ -1480,8 +1475,6 @@
     output.scrollTo({ top: Math.max(0, top), behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
   }
   let panelScrollWatch = null;
-  // TEMP-KEATON-MOM: the keaton and mom commands stop working at this moment (Oct 22 2026, noon New York)
-  const TEMP_CMDS_UNTIL = Date.parse('2026-10-22T16:00:00Z');
 
   /* The list scrolls inside the centre column, so a wheel or trackpad over the empty
      black sides would do nothing. Pass those scrolls on to the column, unless the
@@ -3343,7 +3336,6 @@
     THEMES.forEach(t => document.body.classList.remove('theme-' + t));
     Object.keys(FX_LINES).forEach(f => document.documentElement.classList.remove('fx-' + f));
     restoreVars();
-    document.body.classList.remove('bg-keaton'); // TEMP-KEATON-MOM
     floatPhysics = 'drift';
     G = G_DEFAULT; BOUNCE = BOUNCE_DEFAULT;
     if(!quiet) printLine('back to normal.', 'dim');
@@ -3665,19 +3657,6 @@
       case 'about': doCat('about.txt'); break;
       case 'blog': case 'music': doLs(cmd); break;
       case 'geocity': case 'geocities': applyTheme('geocity'); break;
-      // TEMP-KEATON-MOM: keaton + mom only work until TEMP_CMDS_UNTIL; a scheduled cleanup then removes them
-      case 'keaton': {
-        if(Date.now() >= TEMP_CMDS_UNTIL){ printLine("command not found: " + cmd + ". try ls, cat, cd or settings.", 'err'); break; }
-        const on = !document.body.classList.contains('bg-keaton');
-        document.body.classList.toggle('bg-keaton', on);
-        printLine(on ? 'keaton.' : 'keaton has left the building.', 'dim');
-        break;
-      }
-      case 'mom':
-        if(Date.now() >= TEMP_CMDS_UNTIL){ printLine("command not found: " + cmd + ". try ls, cat, cd or settings.", 'err'); break; }
-        printLine('calling mom…', 'dim');
-        setTimeout(() => { location.href = 'https://graciemayphotography.com'; }, 700);
-        break;
       case 'crt': applyTheme('crt'); break;
       case 'darkroom': applyTheme('darkroom'); break;
       case 'negative': case 'inverted': case 'invert': toggleFx('negative'); break;
