@@ -72,8 +72,15 @@
     line-height:1.65;
     -webkit-font-smoothing:antialiased;
   }
+  /* "reduce motion" (e.g. Windows performance mode turning off "animate controls and elements
+     inside windows", or iOS/macOS Reduce Motion): animations finish instantly rather than being
+     cancelled, so anything that fades in still ends up visible */
   @media (prefers-reduced-motion: reduce){
-    *{ animation:none !important; transition:none !important; }
+    *, *::before, *::after{
+      animation-duration:0.001ms !important; animation-delay:0s !important; animation-iteration-count:1 !important;
+      transition-duration:0.001ms !important; transition-delay:0s !important;
+      scroll-behavior:auto !important;
+    }
   }
   ::selection{ background:var(--fg); color:var(--bg); }
   :focus-visible{ outline:1px solid var(--fg); outline-offset:2px; }
@@ -185,8 +192,7 @@
     background:none;
     padding:0;
     overflow:hidden;
-    opacity:0;
-    animation:thumbIn 0.35s ease forwards;
+    animation:thumbIn 0.35s ease both;
   }
   .gallery-thumb:hover, .gallery-thumb:focus-visible{ border-color:var(--fg-dim); }
   .gallery-thumb img{
@@ -195,7 +201,7 @@
     -webkit-user-drag:none; user-drag:none;
     -webkit-touch-callout:none;
   }
-  @keyframes thumbIn{ to{ opacity:1; } }
+  @keyframes thumbIn{ from{ opacity:0; } }   /* fades in; never the only thing making a thumbnail visible */
   img.blur-up{ opacity:0; transition:opacity 0.35s ease; }
   img.blur-up.is-loaded{ opacity:1; }
 
@@ -334,8 +340,7 @@
     border:1px solid var(--line);
     padding:0;
     overflow:hidden;
-    opacity:0;
-    animation:thumbIn 0.35s ease forwards;
+    animation:thumbIn 0.35s ease both;
   }
   .video-thumb{
     display:block;
@@ -863,7 +868,7 @@
   .post-share.is-done{ color:var(--fg); }
   .lightbox-share{ margin-top:14px; }
   .video-meta .post-share{ font-size:0.8em; margin-top:6px; }
-  .video-card.is-linked{ outline:1px solid var(--dir); outline-offset:3px; animation:thumbIn 0.35s ease forwards, linkedPulse 1.2s ease 0.4s 3; }
+  .video-card.is-linked{ outline:1px solid var(--dir); outline-offset:3px; animation:thumbIn 0.35s ease both, linkedPulse 1.2s ease 0.4s 3; }
   @keyframes linkedPulse{ 50%{ outline-color:transparent; } }
   .post-cover{ display:block; width:100%; height:auto; margin:0 0 16px; border:1px solid var(--line); }
   .post-body{ line-height:1.75; }
@@ -1515,7 +1520,8 @@
     if(!gliding){ side.last = performance.now(); side.raf = requestAnimationFrame(sideStep); }
   }
   function sideStep(now){
-    const dt = Math.min(64, now - side.last); side.last = now;
+    // the first frame's timestamp can be from just before the scroll began: never step backwards
+    const dt = Math.max(0, Math.min(64, now - side.last)); side.last = Math.max(side.last, now);
     const diff = side.target - side.pos;
     if(Math.abs(diff) < 0.5){ output.scrollTop = side.pos = side.target; side.raf = 0; return; }
     side.pos += diff * (1 - Math.exp(-dt / 55));   // settles in about a fifth of a second
