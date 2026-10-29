@@ -493,6 +493,160 @@ window.SITE_CONTENT = {
   ],
   "digital": [
    {
+    "id": "umvtudy4vpzuoi3",
+    "file": "10-17-26 (2).jpg",
+    "date": "2026-10-17 12:29:50",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 125,
+     "focal": 24
+    },
+    "description": "Fan man."
+   },
+   {
+    "id": "umvtue2uqbjiew3",
+    "file": "10-17-26 (7).jpg",
+    "date": "2026-10-17 13:03:14",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/320s",
+     "f": "2.8",
+     "iso": 100,
+     "focal": 24
+    },
+    "description": "Is this seat taken?"
+   },
+   {
+    "id": "umvtufbux1v1s8f",
+    "file": "10-17-26 (11).jpg",
+    "date": "2026-10-17 13:34:46",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/320s",
+     "f": "3.2",
+     "iso": 100,
+     "focal": 24
+    },
+    "description": "The seat is spoken for."
+   },
+   {
+    "id": "umvtufiy03i7yw1",
+    "file": "10-17-26 (16).jpg",
+    "date": "2026-10-17 14:04:04",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/400s",
+     "f": "4",
+     "iso": 100,
+     "focal": 24
+    },
+    "description": "The performer."
+   },
+   {
+    "id": "umvtufno25x2qg5",
+    "file": "10-17-26 (13).jpg",
+    "date": "2026-10-17 13:44:31",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/320s",
+     "f": "2.8",
+     "iso": 400,
+     "focal": 24
+    },
+    "description": "The bystander."
+   },
+   {
+    "id": "umvtug21srghw0g",
+    "file": "10-17-26 (25).jpg",
+    "date": "2026-10-17 15:48:38",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/320s",
+     "f": "3.2",
+     "iso": 100,
+     "focal": 24
+    },
+    "description": "Waiting, receiving."
+   },
+   {
+    "id": "umvtugb6g5obj97",
+    "file": "10-17-26 (28).jpg",
+    "date": "2026-10-17 16:08:36",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/320s",
+     "f": "3.2",
+     "iso": 100,
+     "focal": 24
+    },
+    "description": "The angel."
+   },
+   {
+    "id": "umvtugzo8pr8k1z",
+    "file": "10-17-26 (40).jpg",
+    "date": "2026-10-17 16:46:36",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/320s",
+     "f": "2.8",
+     "iso": 100,
+     "focal": 24
+    },
+    "description": "It's very Orlando, if you think about it."
+   },
+   {
+    "id": "umvtuha1kaa7gpp",
+    "file": "10-17-26 (49).jpg",
+    "date": "2026-10-17 18:22:40",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/320s",
+     "f": "2.8",
+     "iso": 160,
+     "focal": 24
+    },
+    "description": "Lake Eola."
+   },
+   {
+    "id": "umvtuhef6n52h2d",
+    "file": "10-17-26 (51).jpg",
+    "date": "2026-10-17 18:45:55",
+    "camera": "sony a7c",
+    "lens": "sony fe 24mm f/2.8 g",
+    "exif": {
+     "shutter": "1/160s",
+     "f": "2.8",
+     "iso": 250,
+     "focal": 24
+    },
+    "description": "Generation."
+   },
+   {
+    "id": "umvtuhnuw7p6g5s",
+    "file": "10-17-26 (54).jpg",
+    "date": "2026-10-17 19:17:15",
+    "camera": "sony a7c",
+    "lens": "sony fe 40mm f/2.5 g",
+    "exif": {
+     "shutter": "1/250s",
+     "f": "2.5",
+     "iso": 500,
+     "focal": 40
+    },
+    "description": "Who's That Pokémon?"
+   },
+   {
     "id": "18kkiwDnuTxGntJbfLf3-IGXA08-N1KVi",
     "file": "10-09-26 (84).jpg",
     "date": "2026-10-09 22:08:54",
